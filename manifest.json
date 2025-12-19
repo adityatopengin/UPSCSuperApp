@@ -1,0 +1,52 @@
+{
+  "name": "UPSCSuperApp - Mission Universal",
+  "short_name": "UPSCSuperApp",
+  "description": "A Serverless, Zero-Cost UPSC Preparation Ecosystem by Gyan Amala. Features Predictive AI, Behavioral Analytics, and Offline Sync.",
+  "id": "./?source=pwa",
+  "start_url": "./index.html?source=pwa",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait-primary",
+  "scope": "./",
+  "categories": [
+    "education",
+    "productivity",
+    "social"
+  ],
+  "icons": [
+    {
+      "src": "assets/images/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/images/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "assets/images/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/images/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "assets/images/screenshot-mobile.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "UPSCSuperApp Dashboard"
+    }
+  ]
+}
