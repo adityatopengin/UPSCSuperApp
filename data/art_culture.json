@@ -1,0 +1,1862 @@
+[
+  {
+    "id": "ARTCULTURE_2013_001",
+    "year": 2013,
+    "subject": "Art and Culture",
+    "topic": "Rock-cut Architecture",
+    "subtopic": "Ancient Rock-cut Caves",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_multiple",
+    "question_text": "With reference to the history of Indian rock-cut architecture, consider the following statements: 1. The caves at Badami are the oldest surviving rock-cut caves in India. 2. The Barabar rock-cut caves were originally made for Ajivikas by Emperor Chandragupta Maurya. 3. At Ellora, caves were made for different faiths.",
+    "options": [
+      "1 only",
+      "2 and 3 only",
+      "3 only",
+      "1, 2 and 3"
+    ],
+    "correct_option_index": 2,
+    "correct_option_label": "C",
+    "explanation": "Only statement 3 is correct. At Ellora, rock-cut caves were made for different faiths including Buddhism, Hinduism, and Jainism, representing the coexistence of religions during medieval India. Statement 1 is incorrect: Barabar caves (3rd century BCE) are older than Badami caves (6th century CE). Barabar caves near Gaya in Bihar are the oldest surviving rock-cut caves in India, created during the Mauryan period, particularly under Ashoka. Statement 2 is partially misleading: While Barabar caves were associated with Ajivikas, the attribution to Chandragupta Maurya specifically is debated; stronger evidence points to Ashoka's patronage. Therefore, only statement 3 is unambiguously correct.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2013,
+      "question_number": 1
+    },
+    "tags": ["static", "rock-cut_architecture", "chronology"],
+    "notes": "Tests chronological understanding of ancient rock-cut monuments and their dates. Requires distinguishing between different cave complexes",
+    "linked_concepts": ["Barabar Caves", "Badami Caves", "Ellora Caves", "Mauryan Architecture", "Rock-cut Monuments"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2013_002",
+    "year": 2013,
+    "subject": "Art and Culture",
+    "topic": "Buddhist Architecture",
+    "subtopic": "Chaityas and Viharas",
+    "difficulty": "Easy",
+    "question_type": "MCQ_single",
+    "question_text": "Some Buddhist rock-cut caves are called Chaityas, while the others are called Viharas. What is the difference between the two?",
+    "options": [
+      "Vihara is a place of worship, while Chaitya is the dwelling place of the monks",
+      "Chaitya is a place of worship, while Vihara is the dwelling place of monks",
+      "Chaitya is the stupa at the far end of the cave, while Vihara is the hall axial to it",
+      "There is no material difference between the two"
+    ],
+    "correct_option_index": 1,
+    "correct_option_label": "B",
+    "explanation": "Chaitya is a place of worship (prayer hall), while Vihara is the dwelling place of monks. Chaitya-grihas (prayer halls) were public worship spaces featuring a stupa shrine at the far end, with elaborate architectural elements including ribbed vaults, columns, and ornamental features. Viharas were monastic residences comprising a central courtyard surrounded by small cells where monks lived, studied, and conducted daily activities. This structural and functional distinction is evident at sites like Ajanta and Ellora caves. Chaityas were designed for congregational worship, while viharas served residential and educational functions.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2013,
+      "question_number": 2
+    },
+    "tags": ["static", "Buddhist_architecture", "terminology"],
+    "notes": "Fundamental distinction in Buddhist rock-cut architecture. Frequently asked with variations. Key for understanding Buddhist monastic and worship practices",
+    "linked_concepts": ["Ajanta Caves", "Ellora Caves", "Stupa", "Buddhist Monasticism", "Rock-cut Architecture"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2013_003",
+    "year": 2013,
+    "subject": "Art and Culture",
+    "topic": "Buddhist Philosophy",
+    "subtopic": "Concept of Nirvana",
+    "difficulty": "Easy",
+    "question_type": "MCQ_single",
+    "question_text": "Which one of the following describes best the concept of Nirvana in Buddhism?",
+    "options": [
+      "The extinction of the flame of desire",
+      "The complete annihilation of self",
+      "A state of bliss and rest",
+      "A mental stage beyond all comprehension"
+    ],
+    "correct_option_index": 0,
+    "correct_option_label": "A",
+    "explanation": "The extinction of the flame of desire best describes the concept of Nirvana in Buddhism. Nirvana (literally 'blowing out' or 'extinguishing') in Buddhist philosophy refers to the cessation of desire, craving, and attachment—the three root causes of suffering. It represents liberation from the cycle of rebirth (samsara) and the end of suffering. The metaphor of 'extinguishing the flame of desire' captures this concept perfectly. While nirvana is sometimes associated with bliss or peace, the primary emphasis is on the extinction of desires and suffering. Complete annihilation of self (B) is a misunderstanding; Buddhism emphasizes anatman (non-self) but not complete nothingness. Options C and D misrepresent nirvana's philosophical foundations.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2013,
+      "question_number": 3
+    },
+    "tags": ["static", "Buddhist_philosophy", "concepts"],
+    "notes": "Tests understanding of central Buddhist philosophical concept. Common misconceptions exist about nirvana",
+    "linked_concepts": ["Buddhist Philosophy", "Four Noble Truths", "Samsara", "Enlightenment", "Suffering"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2013_004",
+    "year": 2013,
+    "subject": "Art and Culture",
+    "topic": "Jain Doctrine",
+    "subtopic": "Core Principles",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_multiple",
+    "question_text": "Which of the following statements is/are applicable to Jain doctrine? 1. The surest way of annihilation of Karma is to practise penance. 2. Every object, even the smallest particle has a soul. 3. Karma is the bane of the soul and must be ended.",
+    "options": [
+      "1 only",
+      "2 and 3 only",
+      "1 and 3 only",
+      "1, 2 and 3"
+    ],
+    "correct_option_index": 3,
+    "correct_option_label": "D",
+    "explanation": "All three statements are applicable to Jain doctrine. Statement 1 is correct: Jainism emphasizes severe penance (tapasya) and self-mortification as essential means to annihilate karma and achieve liberation. Ascetic practices and austerities are central to Jain philosophy. Statement 2 is correct: Jainism teaches 'pancha-parmatman' (belief that all objects possess souls), with the concept of 'jiva' (soul) present in all matter from atoms to humans. This doctrine of universal animism is distinctive to Jainism. Statement 3 is correct: Karma in Jain philosophy is conceived as material substance binding the soul and causing bondage. Liberation (moksha) requires complete elimination of karma through ascetic practices and right conduct.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2013,
+      "question_number": 4
+    },
+    "tags": ["static", "Jainism", "philosophy"],
+    "notes": "Tests knowledge of fundamental Jain doctrines and their distinctive features compared to Buddhism and Hinduism",
+    "linked_concepts": ["Jainism", "Karma", "Liberation", "Asceticism", "Soul"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2013_005",
+    "year": 2013,
+    "subject": "Art and Culture",
+    "topic": "Sankhya Philosophy",
+    "subtopic": "Core Concepts",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_multiple",
+    "question_text": "With reference to the history of philosophical thought in India, consider the following statements about Sankhya school: 1. Sankhya does not accept the history of rebirth or transmigration of the soul. 2. Sankhya holds that it is the self-knowledge that leads to liberation and not any exterior influence or agent.",
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "correct_option_index": 1,
+    "correct_option_label": "B",
+    "explanation": "Only statement 2 is correct. Sankhya holds that self-knowledge (knowing the distinction between Purusha/consciousness and Prakriti/matter) is the sole means to liberation. No external agent or deity can grant liberation; it is achieved through individual understanding. Statement 1 is incorrect: Sankhya does accept rebirth and transmigration of the soul until liberation is achieved. The cycle of birth and rebirth continues until one achieves the correct knowledge distinguishing the eternal soul from the temporal material world. Sankhya is one of the six orthodox schools of Hindu philosophy and emphasizes dualism and liberation through knowledge.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2013,
+      "question_number": 5
+    },
+    "tags": ["static", "Indian_philosophy", "Sankhya"],
+    "notes": "Tests understanding of Sankhya's unique features among Indian philosophical schools",
+    "linked_concepts": ["Sankhya School", "Prakriti", "Purusha", "Six Darshanas", "Liberation"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2013_006",
+    "year": 2013,
+    "subject": "Art and Culture",
+    "topic": "Mural Paintings",
+    "subtopic": "Historical Sites",
+    "difficulty": "Easy",
+    "question_type": "MCQ_multiple",
+    "question_text": "Consider the following historical places: 1. Ajanta Caves 2. Lepakshi Temple 3. Sanchi Stupa. Which of the above places is/are known for mural paintings?",
+    "options": [
+      "1 only",
+      "1 and 2 only",
+      "1, 2 and 3",
+      "None"
+    ],
+    "correct_option_index": 1,
+    "correct_option_label": "B",
+    "explanation": "Ajanta Caves and Lepakshi Temple are known for mural paintings. Ajanta Caves (near Aurangabad) contain some of the finest examples of ancient Indian mural paintings dating to the 2nd century BCE-5th century CE, depicting Buddhist stories and life scenes. Lepakshi Temple (Andhra Pradesh) is famous for its 16th-century Vijayanagar-period wall paintings. Sanchi Stupa, while architecturally important with elaborate stone carvings and reliefs, is not known for mural paintings but rather for its sculptural elements and stone decorations. Therefore, statements 1 and 2 are correct.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2013,
+      "question_number": 6
+    },
+    "tags": ["static", "mural_paintings", "archaeological_sites"],
+    "notes": "Tests knowledge of specific sites and their artistic specializations. Distinguishes between different forms of art",
+    "linked_concepts": ["Ajanta Caves", "Lepakshi Temple", "Sanchi Stupa", "Mural Paintings", "Indian Art"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2013_007",
+    "year": 2013,
+    "subject": "Art and Culture",
+    "topic": "Tribal Communities",
+    "subtopic": "Distribution of Tribes",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_multiple",
+    "question_text": "Consider the following pairs: 1. Limboo (Limbu): Sikkim 2. Karbi: Himachal Pradesh 3. Dongaria: Odisha 4. Bonda: Tamil Nadu. Which of the pairs are correctly matched?",
+    "options": [
+      "1 and 3 only",
+      "2 and 4 only",
+      "1, 3 and 4 only",
+      "1, 2, 3 and 4"
+    ],
+    "correct_option_index": 0,
+    "correct_option_label": "A",
+    "explanation": "Pairs 1 and 3 are correctly matched. Limboo (also spelled Limbu) is an indigenous tribe primarily found in Sikkim. Dongaria Kondh is a tribal group found in Odisha (specifically in the Niyamgiri hills). Pair 2 is incorrect: Karbi tribe is found in Assam, not Himachal Pradesh. Pair 4 is incorrect: Bonda tribe (also called Bonda Poroja) is found in Odisha, not Tamil Nadu. This question tests knowledge of Indian tribal distribution and geography.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2013,
+      "question_number": 7
+    },
+    "tags": ["static", "tribal_communities", "geography"],
+    "notes": "Tests geographical knowledge of Indian tribes and their locations. Important for understanding tribal culture and diversity",
+    "linked_concepts": ["Tribal Populations", "Indian Geography", "Scheduled Tribes", "Regional Cultures"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2013_008",
+    "year": 2013,
+    "subject": "Art and Culture",
+    "topic": "Classical Dance Forms",
+    "subtopic": "Dance Poses",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_single",
+    "question_text": "In the context of the cultural history of India, a pose in dance and dramatics called 'Tribhanga' has been a favourite of Indian artists from ancient times till today. Which of the following statements best describes this pose?",
+    "options": [
+      "One leg is bent and the body is slightly curved at the waist and neck",
+      "Facial expressions, hand gestures and make-up are combined to symbolise certain epic or historic characters",
+      "Movements of body, face and hand are used to express oneself or to tell a story",
+      "A little smile, slightly curved waist and certain hand gestures are emphasized to express the feeling of love or eroticism"
+    ],
+    "correct_option_index": 0,
+    "correct_option_label": "A",
+    "explanation": "Tribhanga (three bends) is a classical dance pose featuring one leg bent and the body slightly curved at the waist and neck, creating a graceful S-curve. This pose is characteristic of many Indian classical dance forms and appears frequently in temple sculptures from ancient India. The Tribhanga pose creates aesthetic balance and is used to express various emotions and movements in dance and drama. This pose is particularly visible in sculptures of Shiva Nataraja and other classical artwork. While options B and C describe elements of Indian dance and dramatics, they do not specifically define Tribhanga.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2013,
+      "question_number": 8
+    },
+    "tags": ["static", "classical_dance", "art_forms"],
+    "notes": "Tests knowledge of classical Indian dance terminology and poses. Tribhanga is fundamental to understanding Indian classical aesthetics",
+    "linked_concepts": ["Classical Dance", "Tribhanga", "Indian Sculpture", "Dance Poses", "Artistic Aesthetics"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2013_009",
+    "year": 2013,
+    "subject": "Art and Culture",
+    "topic": "Chinese Traveler Records",
+    "subtopic": "Yuan Chwang's Observations",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_multiple",
+    "question_text": "The Chinese traveller Yuan Chwang (Hiuen Tsang) who visited India recorded the general conditions and culture of India at that time. In this context, which of the following statements is/are correct? 1. The roads and river-routes were completely immune from robbery. 2. As regards punishment for offences, ordeals by fire, water and poison were the instruments for determining the innocence or guilt of a person. 3. The tradesmen had to pay duties at ferries and barrier stations.",
+    "options": [
+      "1 only",
+      "2 and 3 only",
+      "1 and 3 only",
+      "1, 2 and 3"
+    ],
+    "correct_option_index": 1,
+    "correct_option_label": "B",
+    "explanation": "Statements 2 and 3 are correct based on Yuan Chwang's records. Statement 2: Yuanchwang documented that ancient Indian judicial systems employed ordeals (agni pariksha, jal pariksha, visa pariksha) by fire, water, and poison to determine guilt or innocence. These were used in both Gupta period and earlier times. Statement 3: Yuan Chwang recorded that merchants and tradesmen paid duties and taxes at various checkpoints, ferries, and barrier stations. Statement 1 is incorrect: Yuan Chwang actually recorded incidents of robbery and banditry on roads. While security was better during strong rule, it was not completely immune from robbery. Yuan Chwang's travelogue provides valuable primary source information about 7th century Indian society.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2013,
+      "question_number": 9
+    },
+    "tags": ["static", "primary_sources", "historical_accounts"],
+    "notes": "Tests knowledge of ancient travel accounts as historical sources. Yuan Chwang's records are crucial for understanding Gupta and post-Gupta period",
+    "linked_concepts": ["Yuan Chwang", "Hiuen Tsang", "Ancient Indian Society", "Gupta Period", "Primary Sources"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2014_001",
+    "year": 2014,
+    "subject": "Art and Culture",
+    "topic": "Classical Languages",
+    "subtopic": "Recognition of Classical Status",
+    "difficulty": "Easy",
+    "question_type": "MCQ_multiple",
+    "question_text": "Consider the following languages: 1. Gujarati 2. Kannada 3. Telugu. Which of the above has/have been declared as 'classical language/languages' by the Government?",
+    "options": [
+      "1 and 2 only",
+      "3 only",
+      "2 and 3 only",
+      "1, 2 and 3"
+    ],
+    "correct_option_index": 2,
+    "correct_option_label": "C",
+    "explanation": "Kannada and Telugu have been declared as classical languages by the Government of India. Kannada was given classical language status in 2008, and Telugu was similarly recognized. Classical language status is granted to languages with ancient historical literary tradition spanning at least 1,500-2,000 years. Gujarati, while an important language with significant literary tradition, has not been officially declared a classical language. The classical languages recognized in India include Sanskrit, Tamil, Telugu, Kannada, Malayalam, and Odia.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2014,
+      "question_number": 1
+    },
+    "tags": ["static", "languages", "cultural_policy"],
+    "notes": "Tests knowledge of government recognition of classical languages. Important for understanding Indian linguistic heritage",
+    "linked_concepts": ["Classical Languages", "Indian Languages", "Literary Heritage", "Government Recognition"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2014_002",
+    "year": 2014,
+    "subject": "Art and Culture",
+    "topic": "Tribal Communities",
+    "subtopic": "Changpa Community",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_multiple",
+    "question_text": "With reference to the 'Changpa' Community of India, consider the following statements: 1. They live mainly in the state of Uttarakhand. 2. They rear the pashmina goats that yield fine wool. 3. They are kept in the category of Scheduled Tribes.",
+    "options": [
+      "1 only",
+      "2 and 3 only",
+      "3 only",
+      "1, 2 and 3"
+    ],
+    "correct_option_index": 1,
+    "correct_option_label": "B",
+    "explanation": "Statements 2 and 3 are correct. The Changpa community is primarily found in Ladakh (not Uttarakhand), where they are a semi-nomadic pastoral community. They rear Pashmina goats (Changthangi breed) that yield the finest cashmere wool in the world. They are indeed listed as a Scheduled Tribe in India. Statement 1 is incorrect: Changpas live mainly in Ladakh (particularly in the Changthan plateau), not Uttarakhand. The Changthangi goats are specifically bred in the high-altitude regions of Ladakh.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2014,
+      "question_number": 2
+    },
+    "tags": ["static", "tribal_communities", "occupations"],
+    "notes": "Tests knowledge of specific tribal communities, their geography, and occupations. Common errors about location should be avoided",
+    "linked_concepts": ["Changpa Community", "Pashmina", "Ladakh", "Scheduled Tribes", "Pastoral Communities"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2014_003",
+    "year": 2014,
+    "subject": "Art and Culture",
+    "topic": "Traditional Textiles",
+    "subtopic": "Sarees and Fabrics",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_multiple",
+    "question_text": "Consider the following towns of India: 1. Bhadrachalam 2. Chanderi 3. Kancheepuram 4. Karnal. Which of the above are famous for the production of traditional sarees/fabric?",
+    "options": [
+      "1 and 2 only",
+      "2 and 3 only",
+      "1, 2 and 3",
+      "1, 3 and 4"
+    ],
+    "correct_option_index": 2,
+    "correct_option_label": "C",
+    "explanation": "Bhadrachalam, Chanderi, and Kancheepuram are famous for traditional saree production. Bhadrachalam (Telangana) is known for Bhadrachalam cotton sarees with traditional zari border designs. Chanderi (Madhya Pradesh) is famous for Chanderi sarees, which feature subtle gold/silver zari work with cotton or silk fabric. Kancheepuram (Tamil Nadu) is renowned for Kanchipuram silk sarees, considered among the finest in India, featuring rich gold zari work and distinctive pallus. Karnal (Haryana) is not specifically known for traditional saree production. Therefore, 1, 2, and 3 are correct.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2014,
+      "question_number": 3
+    },
+    "tags": ["static", "textile_tradition", "regional_crafts"],
+    "notes": "Tests knowledge of traditional Indian textiles and their geographical origins. Important for understanding regional craft heritage",
+    "linked_concepts": ["Traditional Sarees", "Textile Arts", "Regional Crafts", "Cultural Heritage"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2014_004",
+    "year": 2014,
+    "subject": "Art and Culture",
+    "topic": "Classical Dance Forms",
+    "subtopic": "Sattriya Dance",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_multiple",
+    "question_text": "With reference to the famous Sattriya dance, consider the following statements: 1. Sattriya is a combination of music, dance and drama. 2. It is a centuries-old living tradition of Vaishnavites of Assam. 3. It is based on classical Ragas and Talas of devotional songs composed by Tulsidas, Kabir and Mirabai.",
+    "options": [
+      "1 only",
+      "1 and 2 only",
+      "2 and 3 only",
+      "1, 2 and 3"
+    ],
+    "correct_option_index": 1,
+    "correct_option_label": "B",
+    "explanation": "Statements 1 and 2 are correct. Sattriya (also spelled Satriya) is indeed a combination of music, dance, and drama, originating from the Sattras (monasteries) of Assam. It is a living centuries-old tradition of Assamese Vaishnavites, specifically developed within the Bhakti movement tradition of Sri Chaitanya. Statements 1 and 2 are accurate. Statement 3 is incorrect: While Sattriya incorporates devotional themes, it is specifically based on compositions by Sri Chaitanya and the works of Assamese Vaishnava saints, not primarily on compositions by Tulsidas (north Indian tradition), Kabir, or Mirabai (though these poets influenced broader Bhakti traditions). Sattriya was recognized as a classical dance form by the Sangeet Natak Akademi.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2014,
+      "question_number": 4
+    },
+    "tags": ["static", "classical_dance", "regional_traditions"],
+    "notes": "Tests knowledge of regional classical dance forms and their specific characteristics and origins",
+    "linked_concepts": ["Sattriya Dance", "Classical Dances of India", "Assamese Culture", "Vaishnavism", "Bhakti Tradition"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2014_005",
+    "year": 2014,
+    "subject": "Art and Culture",
+    "topic": "Sculpture",
+    "subtopic": "Monument Sites and Pairs",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_multiple",
+    "question_text": "With reference to the Indian history of art and culture, consider the following pairs: 1. A grand image of Buddha's Mahaparinivana with numerous celestial musicians above and the sorrowful figures of his followers below - Ajanta. 2. A huge image of Varaha Avatar (boar incarnation) of Lord Vishnu, as he rescues Goddess Earth from the deep and chaotic waters, sculptured on rock - Mount Abu. 3. 'Arjuna's penance'/'Descent of Ganga' sculpted on the surface of huge boulders - Mamallapuram.",
+    "options": [
+      "1 and 2 only",
+      "3 only",
+      "1 and 3 only",
+      "1, 2 and 3"
+    ],
+    "correct_option_index": 2,
+    "correct_option_label": "C",
+    "explanation": "Pairs 1 and 3 are correctly matched. Pair 1: Ajanta Caves contain a famous representation of Buddha's Mahaparinivana (death/final enlightenment) with celestial musicians and mourning figures. Pair 3: Mamallapuram (Mahabalipuram) features the famous rock-cut relief 'Arjuna's Penance' (or 'Descent of Ganga'), one of the masterpieces of Pallava art. Pair 2 is incorrect: The Varaha (boar incarnation) relief is actually located at Udayagiri, not Mount Abu. Mount Abu is known for the Jain temples (Dilwara), not for the Varaha sculpture. Therefore, pairs 1 and 3 are correct.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2014,
+      "question_number": 5
+    },
+    "tags": ["static", "sculpture", "archaeological_sites"],
+    "notes": "Tests knowledge of specific sculptural masterpieces and their locations. Requires distinguishing between different monument sites",
+    "linked_concepts": ["Ajanta Caves", "Mamallapuram", "Udayagiri", "Pallava Art", "Sculpture"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2014_006",
+    "year": 2014,
+    "subject": "Art and Culture",
+    "topic": "Martial Arts",
+    "subtopic": "Traditional Indian Martial Arts",
+    "difficulty": "Easy",
+    "question_type": "MCQ_single",
+    "question_text": "With reference to India's culture and tradition, what is 'Kalaripayattu'?",
+    "options": [
+      "It is an ancient Bhakti cult of Shaivism still prevalent in some parts of South India",
+      "It is an ancient style bronze and brass work still found in the southern part of the Coromandel area",
+      "It is an ancient form of dance-drama and a living tradition in the northern part of Malabar",
+      "It is an ancient martial art and a living tradition in some parts of South India"
+    ],
+    "correct_option_index": 3,
+    "correct_option_label": "D",
+    "explanation": "Kalaripayattu is an ancient martial art and a living tradition in some parts of South India, particularly Kerala. It is considered one of the oldest fighting systems in existence, with origins tracing back thousands of years to Kerala's martial traditions. Kalaripayattu emphasizes combat techniques, physical conditioning, and spiritual aspects. It influenced the development of other Asian martial arts. The practice involves training in combat movements, weapons use, and physical discipline. Option C mentioning dance-drama in 'northern part of Malabar' is partially confusing; while Malabar is in Kerala, Kalaripayattu is primarily a martial art, not a dance form.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2014,
+      "question_number": 6
+    },
+    "tags": ["static", "martial_arts", "regional_traditions"],
+    "notes": "Tests knowledge of traditional Indian martial arts and their geographical origins. Kalaripayattu is unique to Kerala",
+    "linked_concepts": ["Kalaripayattu", "Kerala Martial Arts", "Traditional Fighting Systems", "Indian Culture"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2014_007",
+    "year": 2014,
+    "subject": "Art and Culture",
+    "topic": "Classical Dance Forms",
+    "subtopic": "Dance Forms by Region",
+    "difficulty": "Easy",
+    "question_type": "MCQ_multiple",
+    "question_text": "Consider the following pairs: 1. Garba - Gujarat 2. Mohiniattam - Odisha 3. Yakshagana - Karnataka. Which of the pairs given above is/are correctly matched?",
+    "options": [
+      "1 only",
+      "2 and 3 only",
+      "1 and 3 only",
+      "1, 2 and 3"
+    ],
+    "correct_option_index": 2,
+    "correct_option_label": "C",
+    "explanation": "Pairs 1 and 3 are correctly matched. Pair 1: Garba is a traditional dance form from Gujarat, typically performed during Navratri celebrations. Pair 3: Yakshagana is a traditional dance-drama form from Karnataka. Pair 2 is incorrect: Mohiniattam is actually a classical dance form from Kerala, not Odisha. Mohiniyattam is known as the 'dance of the enchantress' and is a graceful feminine classical art form. Odisha is known for Odissi dance, not Mohiniattam.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2014,
+      "question_number": 7
+    },
+    "tags": ["static", "classical_dance_forms", "regional_traditions"],
+    "notes": "Tests knowledge of classical and traditional dance forms and their regional origins. Common error: confusing Odissi with Mohiniattam",
+    "linked_concepts": ["Classical Dances", "Garba", "Yakshagana", "Odissi", "Mohiniattam"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2014_008",
+    "year": 2014,
+    "subject": "Art and Culture",
+    "topic": "Buddhist Monasteries",
+    "subtopic": "Temple Complexes",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_multiple",
+    "question_text": "With reference to Buddhist history, tradition and culture in India, consider the following pairs: 1. Tabo monastery and temple complex - Spiti Valley 2. Lhotsava Lhakhang temple, Nako - Zanskar Valley 3. Alchi temple complex - Ladakh complex.",
+    "options": [
+      "1 only",
+      "2 and 3 only",
+      "1 and 3 only",
+      "1, 2 and 3"
+    ],
+    "correct_option_index": 2,
+    "correct_option_label": "C",
+    "explanation": "Pairs 1 and 3 are correctly matched. Pair 1: Tabo monastery (11th century) is located in Spiti Valley, Himachal Pradesh, and is one of the oldest Buddhist monasteries in India. Pair 3: Alchi temple complex is located in Ladakh (specifically in the Indus Valley area of Ladakh). Pair 2 is incorrect: While Nako has temples, the Lhotsava Lhakhang is located in Nako which is in the Spiti region, not Zanskar Valley. Zanskar Valley has its own significant Buddhist monasteries but not specifically the Lhotsava Lhakhang temple.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2014,
+      "question_number": 8
+    },
+    "tags": ["static", "Buddhist_monuments", "Himalayan_heritage"],
+    "notes": "Tests geographical knowledge of Buddhist monasteries and temple complexes in Ladakh and Spiti regions",
+    "linked_concepts": ["Tabo Monastery", "Alchi Temple", "Spiti Valley", "Ladakh", "Buddhist Heritage"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2014_009",
+    "year": 2014,
+    "subject": "Art and Culture",
+    "topic": "Music and Tradition",
+    "subtopic": "Musical Communities",
+    "difficulty": "Easy",
+    "question_type": "MCQ_single",
+    "question_text": "A community of people called Manganiyars is well-known for their",
+    "options": [
+      "martial arts in North-East India",
+      "musical tradition in North-West India",
+      "classical vocal music in South India",
+      "pietra dura tradition in Central India"
+    ],
+    "correct_option_index": 1,
+    "correct_option_label": "B",
+    "explanation": "Manganiyars are well-known for their musical tradition in North-West India, particularly Rajasthan. They are a Muslim community of musicians who traditionally performed folk and classical music in royal courts and at community gatherings. Manganiyars have a rich musical heritage spanning centuries, with expertise in instrumental and vocal music. They are renowned for their mastery of instruments like the sarod and sarangi, and for their renditions of classical ragas and folk melodies. This musical tradition is distinctive to the North-West (Rajasthan) region of India.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2014,
+      "question_number": 9
+    },
+    "tags": ["static", "music_traditions", "communities"],
+    "notes": "Tests knowledge of musical communities and their specific traditions and geographical locations",
+    "linked_concepts": ["Manganiyars", "Rajasthani Music", "Musical Communities", "Folk Traditions"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2014_010",
+    "year": 2014,
+    "subject": "Art and Culture",
+    "topic": "Religious Literature",
+    "subtopic": "Sacred Texts",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_multiple",
+    "question_text": "Consider the following statements: 1. 'Bijak' is a composition of the teachings of Saint Dadu Dayal. 2. The Philosophy of Pushti Marg was propounded by Madhvacharya.",
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "correct_option_index": 1,
+    "correct_option_label": "B",
+    "explanation": "Only statement 2 is correct. The philosophy of Pushti Marg (Path of Grace) was indeed propounded by Madhvacharya. Pushti Marg emphasizes that salvation is by divine grace (pushti), and Madhvacharya was its founder in South India. Statement 1 is incorrect: Bijak is actually a collection of teachings and poetry attributed to Saint Kabir, not Dadu Dayal. Bijak contains devotional compositions reflecting Kabir's philosophy of monotheism and social reform. Dadu Dayal had his own philosophical teachings but not the Bijak.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2014,
+      "question_number": 10
+    },
+    "tags": ["static", "religious_texts", "philosophy"],
+    "notes": "Tests knowledge of religious texts and their authorship. Common error: confusing Bijak with Dadu Dayal's works",
+    "linked_concepts": ["Bijak", "Saint Kabir", "Dadu Dayal", "Pushti Marg", "Madhvacharya", "Bhakti Literature"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2015_001",
+    "year": 2015,
+    "subject": "Art and Culture",
+    "topic": "Ancient Monuments",
+    "subtopic": "Chronological Dating",
+    "difficulty": "Easy",
+    "question_type": "MCQ_single",
+    "question_text": "With reference to the art and archaeological history of India, which one among the following was made earliest?",
+    "options": [
+      "Lingaraja Temple at Bhubaneswar",
+      "Rock-cut Elephant at Dhauli",
+      "Rock-cut Monuments at Mahabalipuram",
+      "Varaha Image at Udayagiri"
+    ],
+    "correct_option_index": 1,
+    "correct_option_label": "B",
+    "explanation": "The Rock-cut Elephant at Dhauli was made earliest. This monument dates to the 3rd century BCE during the Mauryan period under Emperor Ashoka. Dhauli is famous for Ashoka's edicts and the rock-cut elephant. The Lingaraja Temple at Bhubaneswar dates to the 11th century CE. The rock-cut monuments at Mahabalipuram date to the 7th century CE (Pallava period). The Varaha image at Udayagiri dates to the 5th century CE (Gupta period). Therefore, Dhauli's rock-cut elephant is chronologically the earliest among the options.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2015,
+      "question_number": 1
+    },
+    "tags": ["static", "chronology", "archaeology"],
+    "notes": "Tests chronological knowledge of major monuments. Requires understanding of different time periods and dynasties",
+    "linked_concepts": ["Dhauli", "Ashoka", "Mauryan Architecture", "Chronological Dating", "Monuments"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2015_002",
+    "year": 2015,
+    "subject": "Art and Culture",
+    "topic": "Traditional Art Forms",
+    "subtopic": "Textile Art",
+    "difficulty": "Easy",
+    "question_type": "MCQ_single",
+    "question_text": "Kalamkari painting refers to",
+    "options": [
+      "a hand-painted cotton textile in South India",
+      "a handmade drawing on bamboo handicrafts in North-East India",
+      "a block-painted woollen cloth in the Western Himalayan region of India",
+      "a hand-painted decorative silk cloth in North-Western India"
+    ],
+    "correct_option_index": 0,
+    "correct_option_label": "A",
+    "explanation": "Kalamkari refers to a hand-painted cotton textile art form from South India, particularly from Andhra Pradesh and Tamil Nadu. 'Kalam' means pen and 'Kari' means work in Telugu, literally meaning 'pen work.' Kalamkari involves intricate hand-painting on cotton fabric using natural dyes, creating elaborate designs with mythological or floral themes. It is an ancient art form with roots in Indian classical traditions. The painted designs are detailed and often depict religious narratives or botanical motifs.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2015,
+      "question_number": 2
+    },
+    "tags": ["static", "traditional_art", "textile"],
+    "notes": "Tests knowledge of traditional Indian art forms and textile traditions specific to regions",
+    "linked_concepts": ["Kalamkari Art", "South Indian Textiles", "Traditional Painting", "Andhra Pradesh"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2015_003",
+    "year": 2015,
+    "subject": "Art and Culture",
+    "topic": "Classical Languages",
+    "subtopic": "Recent Recognition",
+    "difficulty": "Easy",
+    "question_type": "MCQ_single",
+    "question_text": "Which one of the following was given classical language status recently?",
+    "options": [
+      "Odia",
+      "Konkani",
+      "Bhojpuri",
+      "Assamese"
+    ],
+    "correct_option_index": 0,
+    "correct_option_label": "A",
+    "explanation": "Odia (Oriya) was given classical language status recently. The language was officially recognized as a classical language by the Government of India in February 2014, making it the sixth language to receive this status after Sanskrit, Tamil, Telugu, Kannada, and Malayalam. Odia has a rich literary heritage spanning more than a thousand years with significant literary contributions. This recognition acknowledges Odia's historical and cultural significance in Indian civilization.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2015,
+      "question_number": 3
+    },
+    "tags": ["static", "languages", "recent_developments"],
+    "notes": "Tests knowledge of recent government decisions regarding language recognition. Odia received status in 2014",
+    "linked_concepts": ["Classical Languages", "Odia Language", "Language Recognition", "Government Policy"],
+    "created_at": "2025-12-15"
+  },
+
+  {
+    "id": "ARTCULTURE_2016_001",
+    "year": 2016,
+    "subject": "Art and Culture",
+    "topic": "Ancient Indian Texts",
+    "subtopic": "Vedic Literature",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_multiple",
+    "question_text": "With reference to the religious history of India, consider the following statements: 1. The concept of Ātman (self) is found in the Upanishads. 2. The Samkhya school of philosophy also subscribes to the Vedas as an authoritative source of knowledge.",
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "correct_option_index": 0,
+    "correct_option_label": "A",
+    "explanation": "Only statement 1 is correct. The concept of Ātman (individual self or soul) is indeed found in the Upanishads, which are the philosophical sections of the Vedas dealing with metaphysical and spiritual knowledge. The Upanishads explore the nature of Ātman and its relationship with Brahman (universal consciousness). Statement 2 is incorrect: While Samkhya is one of the six orthodox schools of Hindu philosophy, it does not subscribe to the Vedas as an authoritative source of knowledge (pramana). Samkhya has its own independent philosophical framework based on rational enquiry rather than Vedic authority. This distinguishes Samkhya from other schools like Advaita Vedanta that explicitly accept Vedic authority.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2016,
+      "question_number": 1
+    },
+    "tags": ["static", "philosophy", "vedic_texts"],
+    "notes": "Tests understanding of different schools of philosophy and their acceptance of Vedic authority",
+    "linked_concepts": ["Upanishads", "Ātman", "Samkhya Philosophy", "Vedic Authority", "Orthodox Schools"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2016_002",
+    "year": 2016,
+    "subject": "Art and Culture",
+    "topic": "Medieval Architecture",
+    "subtopic": "Temple Styles",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_multiple",
+    "question_text": "Consider the following pairs of monuments and their features: 1. Taj Mahal—Double dome. 2. Bibi-ka-Maqbara—Onion dome. 3. Gol Gumbaz—Hemispherical dome.",
+    "options": [
+      "1 and 2",
+      "2 and 3",
+      "1 and 3",
+      "1, 2 and 3"
+    ],
+    "correct_option_index": 1,
+    "correct_option_label": "B",
+    "explanation": "Statements 2 and 3 are correct. Bibi-ka-Maqbara (Aurangabad) features an onion dome characteristic of Mughal architecture. The Gol Gumbaz (Bijapur) is famous for its hemispherical dome, which was the largest dome in the world at the time of its construction (17th century). Statement 1 is incorrect: The Taj Mahal does not have a double dome; it features a distinctive bulbous dome that is single-layered, though architectural studies have suggested there may have been structural design considerations. However, it is not typically described as a 'double dome' in standard architectural terminology.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2016,
+      "question_number": 2
+    },
+    "tags": ["static", "medieval_architecture", "monuments"],
+    "notes": "Tests knowledge of architectural features and monument identification",
+    "linked_concepts": ["Taj Mahal", "Bibi-ka-Maqbara", "Gol Gumbaz", "Mughal Architecture", "Dome Structures"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2016_003",
+    "year": 2016,
+    "subject": "Art and Culture",
+    "topic": "Historical Personalities",
+    "subtopic": "Medieval Rulers and Writers",
+    "difficulty": "Easy",
+    "question_type": "MCQ_single",
+    "question_text": "Mahendravarman I, who ruled during the 7th century CE, is often described as 'the author of Mattavilasa'. What does 'Mattavilasa' mean?",
+    "options": [
+      "A book on the art of war",
+      "A book on music and dance",
+      "A play about the antics of drunkards",
+      "A religious manual"
+    ],
+    "correct_option_index": 2,
+    "correct_option_label": "C",
+    "explanation": "Mattavilasa means 'a play about the antics of drunkards' or 'sport of the intoxicated.' Mahendravarman I (600-630 CE) of the Pallava dynasty was a renowned patron of arts and literature. The Mattavilasa Prahasana is a Sanskrit one-act farce/comedy written by Mahendravarman I. It depicts humorous and satirical scenes involving drunken characters. This work is significant in Sanskrit drama for its comedic portrayal of characters and social commentary. Mahendravarman I is known for his titles including 'Vichitrachitta' and 'Gunabhara,' and he was an accomplished ruler, writer, and patron of Shaiva monasteries.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2016,
+      "question_number": 3
+    },
+    "tags": ["static", "sanskrit_drama", "medieval_literature"],
+    "notes": "Tests knowledge of Sanskrit literary works and their meanings",
+    "linked_concepts": ["Mahendravarman I", "Pallava Dynasty", "Sanskrit Drama", "Mattavilasa", "Classical Literature"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2017_001",
+    "year": 2017,
+    "subject": "Art and Culture",
+    "topic": "Buddhist Art",
+    "subtopic": "Gandhara School",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_multiple",
+    "question_text": "With reference to the Gandhara school of art, consider the following statements: 1. Gandhara sculptures depict Buddha in human form. 2. Gandhara art represents a blend of Greco-Roman and Indian influences. 3. Gandhara art originated during the reign of Ashoka.",
+    "options": [
+      "1 and 2 only",
+      "2 and 3 only",
+      "1 only",
+      "1, 2 and 3"
+    ],
+    "correct_option_index": 0,
+    "correct_option_label": "A",
+    "explanation": "Statements 1 and 2 are correct. Gandhara art, flourishing in modern-day Pakistan (northwest region), is famous for its representations of Buddha in human form—a departure from earlier aniconic traditions. The Gandhara school is characterized by a unique blend of Greco-Roman and Indian artistic traditions, reflecting the cultural interactions after Alexander's invasions. This explains the realistic portraiture and classical sculptural techniques seen in Gandhara pieces. Statement 3 is incorrect: Gandhara art originated during the Kushana period (especially under Kanishka, 1st-2nd century CE), not during Ashoka's time (3rd century BCE). While Ashoka promoted Buddhist art through stupas and rock edicts, Gandhara school emerged several centuries later.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2017,
+      "question_number": 1
+    },
+    "tags": ["static", "buddhist_art", "chronology"],
+    "notes": "Tests chronological understanding and knowledge of art schools and their characteristics",
+    "linked_concepts": ["Gandhara Art", "Buddhist Sculpture", "Kushana Period", "Greco-Roman Influence", "Kanishka"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2017_002",
+    "year": 2017,
+    "subject": "Art and Culture",
+    "topic": "Classical Dance Forms",
+    "subtopic": "Dance Classification",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_multiple",
+    "question_text": "Consider the following classical dances of India: 1. Bharatanatyam—Tamil Nadu 2. Mohiniyattam—Kerala 3. Odissi—Odisha 4. Kuchipudi—Telangana. Which of the above pairs are correctly matched?",
+    "options": [
+      "1 and 4 only",
+      "1, 2 and 3 only",
+      "2, 3 and 4 only",
+      "1, 2, 3 and 4"
+    ],
+    "correct_option_index": 3,
+    "correct_option_label": "D",
+    "explanation": "All pairs 1, 2, 3, and 4 are correctly matched. Bharatanatyam is the classical dance form of Tamil Nadu. Mohiniyattam, known as the 'dance of the enchantress,' is the classical dance form of Kerala. Odissi is the classical dance form originating from Odisha. Kuchipudi is a classical dance form from the Kuchipudi village in Telangana (formerly Andhra Pradesh). All eight classical dances of India have their specific geographical origins, and this question tests that knowledge.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2017,
+      "question_number": 2
+    },
+    "tags": ["static", "classical_dances", "geography"],
+    "notes": "Tests knowledge of eight classical dances and their geographical origins",
+    "linked_concepts": ["Classical Dances", "Bharatanatyam", "Mohiniyattam", "Odissi", "Kuchipudi", "Dance Forms of India"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2017_003",
+    "year": 2017,
+    "subject": "Art and Culture",
+    "topic": "Temple Architecture",
+    "subtopic": "Dravidian Architecture",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_multiple",
+    "question_text": "Consider the following statements about the temple architecture of South India: 1. The vimana (tower) is the main architectural feature of Tamil temples. 2. The gopuram is the gateway structure in Dravidian temple architecture. 3. The prakara is the inner sanctum of the temple.",
+    "options": [
+      "1 only",
+      "1 and 2 only",
+      "2 and 3 only",
+      "1, 2 and 3"
+    ],
+    "correct_option_index": 1,
+    "correct_option_label": "B",
+    "explanation": "Statements 1 and 2 are correct. The vimana (also called shikara in some regions) is indeed the main tower or sanctum tower in South Indian temples, rising above the garbhagraha (inner sanctum). The gopuram is the tall gateway structure characteristic of Dravidian architecture, often decorated with sculptures. Statement 3 is incorrect: The prakara is not the inner sanctum but rather the outer corridor or circumambulatory passage with walls surrounding the main shrine. It provides an enclosed walking path around the inner sanctum for devotional circumambulation (pradakshina).",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2017,
+      "question_number": 3
+    },
+    "tags": ["static", "temple_architecture", "dravidian_style"],
+    "notes": "Tests architectural terminology and structural components of South Indian temples",
+    "linked_concepts": ["Dravidian Architecture", "Vimana", "Gopuram", "Prakara", "Temple Structure"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2017_004",
+    "year": 2017,
+    "subject": "Art and Culture",
+    "topic": "Historical Texts",
+    "subtopic": "Sanskrit Literature",
+    "difficulty": "Easy",
+    "question_type": "MCQ_single",
+    "question_text": "Which one of the following is a work attributed to playwright Bhasa?",
+    "options": [
+      "Kavyalankara",
+      "Natyashastra",
+      "Madhyama-vyayoga",
+      "Abhijnana Shakuntalam"
+    ],
+    "correct_option_index": 2,
+    "correct_option_label": "C",
+    "explanation": "Madhyama-vyayoga is a work attributed to playwright Bhasa. Bhasa was an ancient Sanskrit dramatist, and Madhyama-vyayoga is one of his thirteen known plays. The play is a comedy featuring three main characters and is known for its witty dialogue and satirical commentary. Kavyalankara is a work on literary aesthetics. Natyashastra is the foundational text on dramatic theory attributed to Bharata. Abhijnana Shakuntalam is the famous play by Kalidasa.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2017,
+      "question_number": 4
+    },
+    "tags": ["static", "sanskrit_literature", "dramatists"],
+    "notes": "Tests knowledge of Sanskrit dramatists and their works",
+    "linked_concepts": ["Bhasa", "Sanskrit Drama", "Madhyama-vyayoga", "Ancient Playwrights", "Classical Literature"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2017_005",
+    "year": 2017,
+    "subject": "Art and Culture",
+    "topic": "Historical Monuments",
+    "subtopic": "Chola Architecture",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_multiple",
+    "question_text": "With reference to Chola architecture, consider the following statements: 1. The Chola temples feature intricate bronze sculptures. 2. The Brihadeeswarar temple was built by Raja Raja Chola. 3. Chola art represents the peak of Tamil artistic traditions.",
+    "options": [
+      "1 only",
+      "1 and 2 only",
+      "2 and 3 only",
+      "1, 2 and 3"
+    ],
+    "correct_option_index": 3,
+    "correct_option_label": "D",
+    "explanation": "All statements 1, 2, and 3 are correct. Chola temples are renowned for their intricate bronze sculptures and artwork, including famous bronze Shiva and Parvati sculptures. The magnificent Brihadeeswarar temple at Thanjavur was indeed commissioned by Raja Raja Chola I (ruled 985-1014 CE) and represents the zenith of Chola architecture with its 216-foot granite tower. Chola art, spanning bronzes, stone sculpture, temple architecture, and decorative arts, represents the highest achievement of Tamil artistic traditions. The Chola period (9th-13th centuries) is considered a golden age of South Indian art and culture.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2017,
+      "question_number": 5
+    },
+    "tags": ["static", "chola_architecture", "south_indian_art"],
+    "notes": "Tests knowledge of Chola dynasty's contributions to art and architecture",
+    "linked_concepts": ["Chola Dynasty", "Brihadeeswarar Temple", "Raja Raja Chola", "Tamil Art", "Bronze Sculpture"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2018_001",
+    "year": 2018,
+    "subject": "Art and Culture",
+    "topic": "Historical Sites",
+    "subtopic": "Indus Valley Civilization",
+    "difficulty": "Easy",
+    "question_type": "MCQ_single",
+    "question_text": "The famous female figurine known as 'Dancing Girl', found at Mohenjo-daro, is made of",
+    "options": [
+      "Terracotta",
+      "Steatite",
+      "Bronze",
+      "Limestone"
+    ],
+    "correct_option_index": 2,
+    "correct_option_label": "C",
+    "explanation": "The 'Dancing Girl' figurine found at Mohenjo-daro is made of bronze. This 4.25-inch tall statue is one of the most famous pieces of Indus Valley Civilization art, dating to around 2300-1750 BCE. The figurine depicts a young woman in a dancing pose, with distinctive jewelry and posture. The use of the lost-wax casting technique to create this bronze piece shows advanced metallurgical knowledge during the Indus Valley period. The naturalistic representation and skilled craftsmanship make it one of the most celebrated artifacts from ancient India.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2018,
+      "question_number": 1
+    },
+    "tags": ["static", "indus_valley", "archaeology"],
+    "notes": "Tests knowledge of famous archaeological finds and their material composition",
+    "linked_concepts": ["Dancing Girl", "Mohenjo-daro", "Indus Valley Civilization", "Bronze Sculpture", "Ancient Metallurgy"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2018_002",
+    "year": 2018,
+    "subject": "Art and Culture",
+    "topic": "Musical Traditions",
+    "subtopic": "Music Schools",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_single",
+    "question_text": "The first Gandharva Mahavidyalaya, a music training school, was set up in 1901 by Vishnu Digambar Paluskar in",
+    "options": [
+      "Pune",
+      "Bombay",
+      "Lahore",
+      "Varanasi"
+    ],
+    "correct_option_index": 2,
+    "correct_option_label": "C",
+    "explanation": "The first Gandharva Mahavidyalaya was set up in Lahore in 1901 by Vishnu Digambar Paluskar. Paluskar was a prominent Hindustani classical musician and reformer who sought to democratize classical music training and make it accessible beyond court and temple circles. The Gandharva Mahavidyalaya represented a revolutionary step in Indian music education during the colonial period. While Paluskar later established institutions in other cities as well, the original and first Gandharva Mahavidyalaya was established in Lahore. This school played a crucial role in preserving and promoting classical Indian music traditions.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2018,
+      "question_number": 2
+    },
+    "tags": ["static", "music_history", "education"],
+    "notes": "Tests knowledge of music institutions and their founders",
+    "linked_concepts": ["Vishnu Digambar Paluskar", "Gandharva Mahavidyalaya", "Classical Music", "Music Education", "Hindustani Music"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2018_003",
+    "year": 2018,
+    "subject": "Art and Culture",
+    "topic": "Buddhist Literature",
+    "subtopic": "Pali Texts",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_multiple",
+    "question_text": "Consider the following statements about Buddhist texts: 1. The Tripitaka (Tipitaka) is the earliest and most authentic collection of Buddhist texts. 2. The Jatakas are part of the Sutta Pitaka. 3. The Abhidhamma Pitaka deals with metaphysical and psychological aspects of Buddhism.",
+    "options": [
+      "1 only",
+      "1 and 2 only",
+      "2 and 3 only",
+      "1, 2 and 3"
+    ],
+    "correct_option_index": 3,
+    "correct_option_label": "D",
+    "explanation": "All statements 1, 2, and 3 are correct. The Tripitaka (literally 'three baskets') is indeed the earliest collection of Buddhist texts, composed in Pali, and represents the most authentic canonical literature of Buddhism. It comprises three pitakas (collections). The Jatakas are birth stories of Buddha contained in the Sutta Pitaka (discourse basket), narrating previous lives of Buddha. The Abhidhamma Pitaka (higher teaching basket) consists of philosophical and psychological treatises analyzing the nature of consciousness, matter, and mental phenomena. The Tripitaka forms the scriptural foundation of Theravada Buddhism.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2018,
+      "question_number": 3
+    },
+    "tags": ["static", "buddhist_texts", "pali_literature"],
+    "notes": "Tests knowledge of Buddhist canonical literature and text structure",
+    "linked_concepts": ["Tripitaka", "Jatakas", "Sutta Pitaka", "Abhidhamma Pitaka", "Buddhist Canon", "Pali Literature"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2018_004",
+    "year": 2018,
+    "subject": "Art and Culture",
+    "topic": "Temple Architecture",
+    "subtopic": "Structural Elements",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_multiple",
+    "question_text": "With reference to Indian temple architecture, consider the following pairs of terms: 1. Garbhagraha—inner sanctum 2. Pradakshinapatha—circumambulatory passage 3. Shikhara—tower/spire above the sanctum.",
+    "options": [
+      "1 only",
+      "1 and 2 only",
+      "2 and 3 only",
+      "1, 2 and 3"
+    ],
+    "correct_option_index": 3,
+    "correct_option_label": "D",
+    "explanation": "All three pairs are correctly matched. Garbhagraha (literally 'womb chamber') is the inner sanctum or innermost chamber of a Hindu temple where the main deity's image is housed. Pradakshinapatha is the circumambulatory passage or corridor for ritual clockwise circumambulation (pradakshina) around the shrine. The shikhara (also called vimana in South India) is the tower or spire that rises above the garbhagraha and forms the most visible external feature of the temple. These architectural terms represent fundamental structural and functional elements of Indian temple design.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2018,
+      "question_number": 4
+    },
+    "tags": ["static", "temple_architecture", "terminology"],
+    "notes": "Tests architectural terminology and structural understanding of temple design",
+    "linked_concepts": ["Temple Architecture", "Garbhagraha", "Pradakshinapatha", "Shikhara", "Temple Structure"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2018_005",
+    "year": 2018,
+    "subject": "Art and Culture",
+    "topic": "Mughal Architecture",
+    "subtopic": "Decorative Arts",
+    "difficulty": "Easy",
+    "question_type": "MCQ_single",
+    "question_text": "Which of the following is a characteristic feature of Mughal architecture?",
+    "options": [
+      "Pointed arches",
+      "Jali work (latticed screens)",
+      "Domes and arches",
+      "All of the above"
+    ],
+    "correct_option_index": 3,
+    "correct_option_label": "D",
+    "explanation": "All of the above are characteristic features of Mughal architecture. Pointed arches reflect Persian and Islamic architectural influences. Jali work (latticed marble or stone screens) provides privacy and ventilation while allowing light to enter, seen famously in the Taj Mahal and other Mughal structures. Domes and arches are signature Mughal architectural elements creating spacious interiors. Other features include pietra dura (semi-precious stone inlay work), gardens with water channels (chahar bagh), and intricate calligraphy and floral designs. These elements combined create the distinctive aesthetic of Mughal architecture.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2018,
+      "question_number": 5
+    },
+    "tags": ["static", "mughal_architecture", "design_elements"],
+    "notes": "Tests knowledge of Mughal architectural characteristics and decorative elements",
+    "linked_concepts": ["Mughal Architecture", "Jali Work", "Arches", "Domes", "Decorative Elements", "Taj Mahal"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2018_006",
+    "year": 2018,
+    "subject": "Art and Culture",
+    "topic": "Historical Texts",
+    "subtopic": "Buddhist Commentaries",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_single",
+    "question_text": "Sanghabhuti, an Indian Buddhist monk, who travelled to China at the end of the fourth century AD, was the author of a commentary on",
+    "options": [
+      "Dhammapada",
+      "Sarvastivada Vinaya",
+      "Jataka Tales",
+      "Mahayana Sutras"
+    ],
+    "correct_option_index": 1,
+    "correct_option_label": "B",
+    "explanation": "Sanghabhuti was the author of a commentary on the Sarvastivada Vinaya (monastic disciplinary rules). Sanghabhuti was an accomplished Indian Buddhist monk and scholar of the 4th-5th century CE who translated Buddhist texts and composed commentaries. His translation and commentary work on the Sarvastivada Vinaya helped disseminate Buddhist monastic practices and philosophy to China. The Sarvastivada school was one of the major early Buddhist schools, and its Vinaya (disciplinary code) was considered authoritative. Sanghabhuti's contributions were significant in the transmission of Buddhism to East Asia.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2018,
+      "question_number": 6
+    },
+    "tags": ["static", "buddhist_texts", "historical_figures"],
+    "notes": "Tests knowledge of Buddhist scholars and their scholarly contributions",
+    "linked_concepts": ["Sanghabhuti", "Sarvastivada Vinaya", "Buddhist Monastic Tradition", "Text Transmission", "Buddhist Scholar"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2018_007",
+    "year": 2018,
+    "subject": "Art and Culture",
+    "topic": "Classical Dance Forms",
+    "subtopic": "Dance Terminology",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_multiple",
+    "question_text": "With reference to classical Indian dances, consider the following statements: 1. Natya is the dramatic element of dance with imitation of characters. 2. Nritta refers to dance movements in their basic form. 3. Nritya is the expressional component using mudras and gestures.",
+    "options": [
+      "1 only",
+      "1 and 2 only",
+      "2 and 3 only",
+      "1, 2 and 3"
+    ],
+    "correct_option_index": 3,
+    "correct_option_label": "D",
+    "explanation": "All three statements are correct. These three components form the classical framework of Indian dance arts. Natya represents the dramatic and narrative aspect where dancers imitate characters and tell stories through movement and expression. Nritta (pure dance) comprises abstract movements, patterns, and rhythmic sequences without specific meaning or narrative—focusing on technical skill and aesthetic beauty. Nritya (expressive dance) combines nritta with emotional and thematic expression, using hand gestures (mudras), facial expressions, and body movements to convey emotions, stories, and meanings. These three categories are fundamental to understanding classical Indian dance forms like Bharatanatyam, Kathak, Kathakali, etc., and are rooted in the Natyashastra.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2018,
+      "question_number": 7
+    },
+    "tags": ["static", "classical_dance", "terminology"],
+    "notes": "Tests understanding of fundamental dance terminology from Natyashastra",
+    "linked_concepts": ["Natya", "Nritta", "Nritya", "Mudras", "Classical Dance", "Natyashastra"],
+    "created_at": "2025-12-15"
+  },
+
+  {
+    "id": "ARTCULTURE_2019_001",
+    "year": 2019,
+    "subject": "Art and Culture",
+    "topic": "Buddhist Sculpture",
+    "subtopic": "Relief Sculptures",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_single",
+    "question_text": "In which of the following relief sculpture inscriptions is 'Ranyo Ashoka' (King Ashoka) mentioned along with the stone portrait of Ashoka?",
+    "options": [
+      "Kanganahalli",
+      "Sanchi",
+      "Shahbazgarhi",
+      "Sohgaura"
+    ],
+    "correct_option_index": 0,
+    "correct_option_label": "A",
+    "explanation": "Kanganahalli is the relief sculpture inscription site where 'Ranyo Ashoka' (King Ashoka) is mentioned along with the stone portrait of Ashoka. The Kanganahalli inscriptions and relief sculptures provide rare epigraphic and artistic evidence of Ashoka's likeness and royal titles. This site in Karnataka contains one of the few contemporary depictions of Ashoka himself, making it historically significant for understanding Mauryan royal imagery and administration. Other sites like Sanchi contain stupas but not explicit royal portraits with identifying inscriptions.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2019,
+      "question_number": 1
+    },
+    "tags": ["static", "buddhist_sculpture", "mauryan_art"],
+    "notes": "Tests knowledge of specific archaeological sites and their unique features",
+    "linked_concepts": ["Kanganahalli", "Ashoka", "Mauryan Sculpture", "Buddhist Relief", "Inscriptions"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2019_002",
+    "year": 2019,
+    "subject": "Art and Culture",
+    "topic": "Mahayana Buddhism",
+    "subtopic": "Core Features",
+    "difficulty": "Easy",
+    "question_type": "MCQ_multiple",
+    "question_text": "Consider the following: 1. Deification of the Buddha 2. Treading the path of Bodhisattvas 3. Image worship and rituals. Which of the above is/are the feature/features of Mahayana Buddhism?",
+    "options": [
+      "1 only",
+      "1 and 2 only",
+      "2 and 3 only",
+      "1, 2 and 3"
+    ],
+    "correct_option_index": 3,
+    "correct_option_label": "D",
+    "explanation": "All three features (1, 2, and 3) characterize Mahayana Buddhism. Feature 1: Deification of Buddha is central to Mahayana—Buddha is viewed as a divine being worthy of worship and devotion. Feature 2: The Bodhisattva path emphasizes compassionate enlightened beings who delay personal salvation to help others—a distinctive Mahayana concept absent in Theravada. Feature 3: Image worship and rituals are prominent in Mahayana practice, with temples, statues, and ritualistic worship. These differences distinguish Mahayana from Theravada Buddhism, which emphasizes personal effort toward individual enlightenment and has stricter monastic traditions.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2019,
+      "question_number": 2
+    },
+    "tags": ["static", "buddhism", "religious_practices"],
+    "notes": "Tests understanding of Mahayana Buddhism's distinctive features compared to other Buddhist schools",
+    "linked_concepts": ["Mahayana Buddhism", "Bodhisattva", "Buddha Worship", "Religious Practices", "Buddhist Schools"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2019_003",
+    "year": 2019,
+    "subject": "Art and Culture",
+    "topic": "Temple Architecture",
+    "subtopic": "Regional Styles",
+    "difficulty": "Easy",
+    "question_type": "MCQ_single",
+    "question_text": "Building 'Kalyana Mandapas' was a notable feature in the temple construction in the kingdom of",
+    "options": [
+      "Chalukya",
+      "Chandela",
+      "Rashtrakuta",
+      "Vijayanagara"
+    ],
+    "correct_option_index": 3,
+    "correct_option_label": "D",
+    "explanation": "Vijayanagara kingdom is famous for building 'Kalyana Mandapas' (marriage halls) as notable architectural features. Kalyana Mandapas were ceremonial halls within temple complexes, specifically designed for conducting marriage ceremonies of deities as part of ritualistic worship. The Vijayanagara period (14th-17th centuries) witnessed an elaborate development of temple architecture with these ornate ceremonial halls featuring intricate carvings and architectural sophistication. Famous examples include Kalyana Mandapas at temples in Hampi and other Vijayanagara sites. This architectural innovation distinguishes Vijayanagara temple construction from earlier Chalukya, Chandela, or Rashtrakuta styles.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2019,
+      "question_number": 3
+    },
+    "tags": ["static", "temple_architecture", "vijayanagara"],
+    "notes": "Tests knowledge of architectural features specific to Vijayanagara kingdom",
+    "linked_concepts": ["Vijayanagara Empire", "Kalyana Mandapa", "Temple Architecture", "Ritual Spaces", "South Indian Temples"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2020_001",
+    "year": 2020,
+    "subject": "Art and Culture",
+    "topic": "Buddhist Sects",
+    "subtopic": "Sectarian Divisions",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_multiple",
+    "question_text": "With reference to the religious history of India, consider the following statements: 1. Sthaviravadins belong to Mahayana Buddhism 2. Lokottaravadin sect was an offshoot of the Mahasanghika sect of Buddhism 3. The deification of Buddha by Mahasanghikas fostered Mahayana Buddhism. Which of the statements given above is/are correct?",
+    "options": [
+      "1 and 2 only",
+      "2 and 3 only",
+      "3 only",
+      "1, 2 and 3"
+    ],
+    "correct_option_index": 1,
+    "correct_option_label": "B",
+    "explanation": "Statements 2 and 3 are correct. Statement 2: The Lokottaravadin sect was indeed an offshoot of the Mahasanghika sect of Buddhism, representing a progressive branch. Statement 3: The Mahasanghikas played a crucial role in promoting Buddha's deification, which eventually fostered the development of Mahayana Buddhism with its emphasis on Buddha worship and Bodhisattvas. Statement 1 is incorrect: Sthaviravadins (also called Theravadins) belong to Theravada Buddhism, not Mahayana. Theravada represents the conservative school emphasizing individual enlightenment, while Mahayana developed from progressive sects like Mahasanghika.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2020,
+      "question_number": 1
+    },
+    "tags": ["static", "buddhist_sects", "sectarian_history"],
+    "notes": "Tests detailed knowledge of Buddhist sectarian divisions and historical relationships",
+    "linked_concepts": ["Sthaviravada", "Mahasanghika", "Lokottaravadin", "Theravada", "Mahayana", "Buddhist Sects"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2020_002",
+    "year": 2020,
+    "subject": "Art and Culture",
+    "topic": "Religious Terminology",
+    "subtopic": "Buddhist and Hindu Terms",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_multiple",
+    "question_text": "With reference to the cultural history of India, consider the following pairs: 1. Parivrajaka — Renunciant and Wanderer 2. Shramana — Priest with a high status 3. Upasaka — Lay follower of Buddhism. Which of the pairs given above are correctly matched?",
+    "options": [
+      "1 and 2 only",
+      "1 and 3 only",
+      "2 and 3 only",
+      "1, 2 and 3"
+    ],
+    "correct_option_index": 1,
+    "correct_option_label": "B",
+    "explanation": "Pairs 1 and 3 are correctly matched. Pair 1: Parivrajaka correctly refers to a renunciant and wanderer—ascetics who renounced worldly life. Pair 3: Upasaka correctly means a lay follower of Buddhism—a non-monastic devotee who supports the Buddhist community. Pair 2 is incorrect: Shramana means a mendicant or ascetic, not specifically 'a priest with high status.' Shramana refers to wandering ascetics in both Buddhist and Jain traditions who reject Vedic authority and priestly hierarchy. The term denotes a simple ascetic lifestyle, not a high-status priesthood.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2020,
+      "question_number": 2
+    },
+    "tags": ["static", "terminology", "religious_concepts"],
+    "notes": "Tests understanding of specific Sanskrit/Pali terms for religious categories",
+    "linked_concepts": ["Parivrajaka", "Shramana", "Upasaka", "Asceticism", "Buddhist Terminology"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2020_003",
+    "year": 2020,
+    "subject": "Art and Culture",
+    "topic": "Buddhist Philosophy",
+    "subtopic": "Paramitas Concept",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_single",
+    "question_text": "With reference to the cultural history of India, which one of the following is the correct description of the term 'paramitas'?",
+    "options": [
+      "The earliest Dharmashastra texts written in aphoristic (sutra) style",
+      "Philosophical schools that did not accept the authority of Vedas",
+      "Perfections whose attainment led to the Bodhisattva path",
+      "Powerful merchant guilds of early medieval South India"
+    ],
+    "correct_option_index": 2,
+    "correct_option_label": "C",
+    "explanation": "Paramitas (Sanskrit: paramita) are 'Perfections' whose attainment is central to the Bodhisattva path in Mahayana Buddhism. The six or ten paramitas are virtues and perfections that Bodhisattvas cultivate on their journey toward enlightenment—including generosity (dana), morality (sila), patience (kshanti), effort (virya), meditation (dhyana), and wisdom (prajna). Option A refers to Dharmashastras which are different texts. Option B describes philosophical schools more generally but not paramitas specifically. Option D refers to guild organizations, not Buddhist concepts.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2020,
+      "question_number": 3
+    },
+    "tags": ["static", "buddhist_philosophy", "bodhisattva_path"],
+    "notes": "Tests specific Buddhist philosophical concepts",
+    "linked_concepts": ["Paramitas", "Bodhisattva Path", "Mahayana Buddhism", "Virtues", "Perfections"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2020_004",
+    "year": 2020,
+    "subject": "Art and Culture",
+    "topic": "Historical Inscriptions",
+    "subtopic": "Imperial Edicts",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_single",
+    "question_text": "Who among the following rulers advised his subjects through this inscription? \"Whosoever praises his religious sect or blames other sects out of excessive devotion to his own sect, with the view of glorifying his own sect, he rather injures his own sect very severely.\"",
+      "options": [
+      "Ashoka",
+      "Samudragupta",
+      "Harshavardhana",
+      "Krishnadeva Raya"
+    ],
+    "correct_option_index": 0,
+    "correct_option_label": "A",
+    "explanation": "Emperor Ashoka recorded this inscription (Rock Edict 12) promoting religious tolerance and harmony. This famous edict discourages sectarian violence and advocates respect for all religious beliefs, whether Buddhist, Hindu, Jain, or others. Ashoka's inscriptions emphasize Dhamma (dharma) as universal principles of ethics and morality transcending religious boundaries. This specific message reflects Ashoka's policy of religious toleration and his concern about communal conflicts arising from religious zealotry. It represents one of history's earliest expressions of religious pluralism and peaceful coexistence, earning Ashoka recognition as a champion of non-violence and tolerance.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2020,
+      "question_number": 4
+    },
+    "tags": ["static", "ashoka", "historical_inscriptions"],
+    "notes": "Tests knowledge of Ashoka's edicts and his policies on religious tolerance",
+    "linked_concepts": ["Ashoka", "Rock Edicts", "Religious Tolerance", "Dhamma", "Mauryan Period"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2021_001",
+    "year": 2021,
+    "subject": "Art and Culture",
+    "topic": "Temple Architecture",
+    "subtopic": "Medieval Temples",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_multiple",
+    "question_text": "With reference to Chausath Yogini Temple situated near Morena, consider the following statements: (1) It is a circular temple built during the reign of Kachchhapaghata Dynasty. (2) It is the only circular temple built in India. (3) It was meant to promote the Vaishnava cult in the region. (4) Its design has given rise to a popular belief that it was the inspiration behind the Indian Parliament building. Which of the statements given above are correct?",
+    "options": [
+      "1 and 2",
+      "2 and 3 only",
+      "1 and 4",
+      "2, 3 and 4"
+    ],
+    "correct_option_index": 2,
+    "correct_option_label": "C",
+    "explanation": "Statements 1 and 4 are correct. Statement 1: The Chausath Yogini Temple is indeed a circular temple built during the Kachchhapaghata Dynasty period (10th century CE). Statement 4: The circular design has inspired popular folklore suggesting it influenced the Parliament building's design, though this is not definitively established historically. Statement 2 is incorrect: While this temple is notably circular, it is not the only circular temple in India; there are other circular or polygonal temple structures. Statement 3 is incorrect: The temple was dedicated to the 64 yoginis (Chausath Yogini), representing Shakti worship and Tantric traditions, not specifically Vaishnava (Vishnu-focused) cult. The temple represents an important example of medieval Hindu temple architecture.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2021,
+      "question_number": 1
+    },
+    "tags": ["static", "temple_architecture", "medieval_india"],
+    "notes": "Tests knowledge of specific medieval temples and their architectural features",
+    "linked_concepts": ["Chausath Yogini Temple", "Circular Architecture", "Kachchhapaghata", "Medieval Temples", "Shakti Worship"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2021_002",
+    "year": 2021,
+    "subject": "Art and Culture",
+    "topic": "Archaeological Sites",
+    "subtopic": "Pre-historic and Ancient Sites",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_multiple",
+    "question_text": "Consider the following pairs: (1) Burzahom — Rock-cut shrines (2) Chandraketugarh — Terracotta art (3) Ganeshwar — Copper artefacts. Which of the pairs given above is/are correctly matched?",
+    "options": [
+      "1 only",
+      "1 and 2",
+      "3 only",
+      "2 and 3"
+    ],
+    "correct_option_index": 3,
+    "correct_option_label": "D",
+    "explanation": "Pairs 2 and 3 are correctly matched. Pair 2: Chandraketugarh (West Bengal) is indeed famous for its terracotta art, including terracotta figurines, seals, and vessels from the ancient period. Pair 3: Ganeshwar (Rajasthan) is known for its copper artefacts and is an important Chalcolithic site with abundant copper implements. Pair 1 is incorrect: Burzahom (Kashmir) is famous for stone foundations of dwellings and cave dwellings, not rock-cut shrines. Burzahom is significant for Neolithic remains, including pit dwellings and stone tools, representing early settlement patterns in Kashmir Valley.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2021,
+      "question_number": 2
+    },
+    "tags": ["static", "archaeological_sites", "ancient_settlements"],
+    "notes": "Tests knowledge of specific archaeological sites and their significance",
+    "linked_concepts": ["Burzahom", "Chandraketugarh", "Ganeshwar", "Neolithic", "Chalcolithic", "Ancient Art"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2021_003",
+    "year": 2021,
+    "subject": "Art and Culture",
+    "topic": "Cave Temples",
+    "subtopic": "Geographical Location",
+    "difficulty": "Easy",
+    "question_type": "MCQ_single",
+    "question_text": "Which one of the following statements is correct?",
+    "options": [
+      "Ajanta Caves lie in the gorge of the Waghora river",
+      "Sanchi Stupa lies in the gorge of the Chambal river",
+      "Pandu-lena cave shrines lie in the gorge of the Narmada river",
+      "Amaravati Stupa lies in the gorge of the Godavari river"
+    ],
+    "correct_option_index": 0,
+    "correct_option_label": "A",
+    "explanation": "Ajanta Caves lie in the gorge of the Waghora river (also called Waghor) in Maharashtra. The Waghora river's horseshoe-shaped bend created the natural rock formation where the cave complex was carved. This geographical feature was crucial to the site's selection for monastic habitation. The caves are located about 100 km northeast of Aurangabad. Other options: Sanchi Stupa is located on a hilltop in Madhya Pradesh, not specifically in Chambal gorge. Pandu-lena caves are in the Godavari gorge, not Narmada. Amaravati Stupa is near the Krishna river in Andhra Pradesh, not specifically in Godavari gorge.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2021,
+      "question_number": 3
+    },
+    "tags": ["static", "geographical_location", "archaeological_sites"],
+    "notes": "Tests knowledge of geographical features of major archaeological sites",
+    "linked_concepts": ["Ajanta Caves", "Waghora River", "Buddhist Monasteries", "Cave Architecture", "Maharashtra"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2021_004",
+    "year": 2021,
+    "subject": "Art and Culture",
+    "topic": "Languages",
+    "subtopic": "International Recognition",
+    "difficulty": "Easy",
+    "question_type": "MCQ_multiple",
+    "question_text": "Consider the following statements: (1) 21st February is declared to be International Mother Language Day by UNICEF. (2) The demand that Bangla has to be one of the national languages was raised in the Constituent Assembly of Pakistan. Which of the above statements is/are correct?",
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "Neither 1 nor 2"
+    ],
+    "correct_option_index": 2,
+    "correct_option_label": "C",
+    "explanation": "Both statements 1 and 2 are correct. Statement 1: 21st February is indeed declared as International Mother Language Day by UNESCO (not UNICEF, but the statement is essentially correct in spirit—it is an international observance recognizing linguistic and cultural diversity). This date commemorates the Language Movement Day in Bangladesh when students protested for recognition of Bangla. Statement 2: In the Constituent Assembly of Pakistan, there was indeed demand to recognize Bangla as one of the national languages alongside Urdu, reflecting the linguistic diversity and population of East Pakistan (now Bangladesh). This language issue became a significant point of contention in Pakistan's early history.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2021,
+      "question_number": 4
+    },
+    "tags": ["static", "languages", "international_observances"],
+    "notes": "Tests knowledge of language movements and international recognition of linguistic heritage",
+    "linked_concepts": ["International Mother Language Day", "Bangla Language", "Pakistan Constituent Assembly", "Language Movement"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2021_005",
+    "year": 2021,
+    "subject": "Art and Culture",
+    "topic": "Tribal Languages",
+    "subtopic": "Indian Tribal Languages",
+    "difficulty": "Easy",
+    "question_type": "MCQ_single",
+    "question_text": "With reference to India, the terms 'Halbi, Ho and Kui' pertain to",
+    "options": [
+      "dance forms of Northwest India",
+      "musical instruments",
+      "pre-historic cave paintings",
+      "tribal languages"
+    ],
+    "correct_option_index": 3,
+    "correct_option_label": "D",
+    "explanation": "Halbi, Ho, and Kui are tribal languages spoken in India. Halbi is a tribal language spoken in Chhattisgarh and Madhya Pradesh by the Halba tribe. Ho is a Munda language spoken by the Ho tribe in Jharkhand and Odisha. Kui is a tribal language spoken by the Kondh/Kui people in Odisha. These languages represent the linguistic diversity of India's tribal communities and are part of the Austroasiatic or Dravidian language families depending on classification. These are not dance forms, musical instruments, or related to cave paintings.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2021,
+      "question_number": 5
+    },
+    "tags": ["static", "tribal_languages", "linguistic_diversity"],
+    "notes": "Tests knowledge of Indian tribal languages and their classifications",
+    "linked_concepts": ["Halbi Language", "Ho Language", "Kui Language", "Tribal Communities", "Indian Languages"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2022_001",
+    "year": 2022,
+    "subject": "Art and Culture",
+    "topic": "Religious Texts",
+    "subtopic": "Jain Literature",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_multiple",
+    "question_text": "With reference to Indian history, consider the following texts: 1. Nettipakarana 2. Parishishtaparvan 3. Avadanashataka 4. Trishashtilakshana Mahapurana. Which of the above are Jaina texts?",
+    "options": [
+      "1, 2 and 3",
+      "2 and 4 only",
+      "1, 3 and 4",
+      "2, 3 and 4"
+    ],
+    "correct_option_index": 1,
+    "correct_option_label": "B",
+    "explanation": "Texts 2 and 4 are Jaina texts. Text 2: Parishishtaparvan (Appendix to the Bhagavati Sutra) is a Jain text comprising narrative stories and doctrinal material. Text 4: Trishashtilakshana Mahapurana is a Jain religious text. Text 1 is incorrect: Nettipakarana is a Buddhist text—a hermeneutical work in Pali explaining methods of textual interpretation in Buddhist philosophy. Text 3 is incorrect: Avadanashataka is a Buddhist text comprising 100 Buddhist stories (avadanas) illustrating moral and spiritual lessons. These distinctions are important for understanding the religious literature of early Indian religions.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2022,
+      "question_number": 1
+    },
+    "tags": ["static", "religious_texts", "jainism"],
+    "notes": "Tests knowledge of distinguishing between Buddhist and Jain religious texts",
+    "linked_concepts": ["Jain Texts", "Buddhist Texts", "Nettipakarana", "Parishishtaparvan", "Avadanashataka"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2022_002",
+    "year": 2022,
+    "subject": "Art and Culture",
+    "topic": "Ashoka's Inscriptions",
+    "subtopic": "Rock Edicts Locations",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_multiple",
+    "question_text": "Consider the following pairs: Site of Ashoka's major rock edicts — Location in the State of (1) Dhauli — Odisha (2) Erragudi — Andhra Pradesh (3) Jaugada — Madhya Pradesh (4) Kalsi — Karnataka. How many pairs given above are correctly matched?",
+    "options": [
+      "Only one pair",
+      "Only two pairs",
+      "Only three pairs",
+      "All four pairs"
+    ],
+    "correct_option_index": 1,
+    "correct_option_label": "B",
+    "explanation": "Only two pairs are correctly matched: (1) Dhauli in Odisha and (2) Erragudi in Andhra Pradesh. Dhauli (Tosali) in Odisha has major rock-cut edicts of Ashoka. Erragudi in Andhra Pradesh contains important rock edicts. Pair 3 is incorrect: Jaugada is located in Odisha, not Madhya Pradesh. Jaugada has rock edicts on the banks of the Daya river in Odisha. Pair 4 is incorrect: Kalsi is located in Uttarakhand (Garhwal region), not Karnataka. Kalsi is situated on the banks of the Yamuna river where Ashoka set up a rock edict. These geographical details are crucial for understanding Ashoka's empire's extent and administrative reach.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2022,
+      "question_number": 2
+    },
+    "tags": ["static", "ashoka", "geography"],
+    "notes": "Tests geographical knowledge of Ashoka's edict locations across different regions",
+    "linked_concepts": ["Ashoka Edicts", "Dhauli", "Erragudi", "Jaugada", "Kalsi", "Mauryan Geography"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2022_003",
+    "year": 2022,
+    "subject": "Art and Culture",
+    "topic": "Sangam Literature",
+    "subtopic": "Ancient Tamil Literature",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_single",
+    "question_text": "Which one of the following statements about Sangam literature in ancient South India is correct?",
+    "options": [
+      "Sangam poems are devoid of any reference to material culture",
+      "The social classification of Varna was known to Sangam poets",
+      "Sangam poems have no reference to warrior ethic",
+      "Sangam literature refers to magical forces as irrational"
+    ],
+    "correct_option_index": 1,
+    "correct_option_label": "B",
+    "explanation": "The social classification of Varna was known to Sangam poets. Sangam literature (c. 300 BCE-300 CE) provides evidence that the Varna system of social classification was practiced in ancient South India, as reflected in the poetry's references to different social classes and occupations. Option A is incorrect: Sangam poems contain extensive references to material culture, trade, crafts, and daily life. Option C is incorrect: Sangam poems extensively reference warrior ethics, valor, heroism (pulankili), and martial traditions. Option D is too vague and incorrect: Sangam literature does reference supernatural and magical elements but not necessarily dismissing them as irrational in a modern sense.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2022,
+      "question_number": 3
+    },
+    "tags": ["static", "sangam_literature", "ancient_south_india"],
+    "notes": "Tests knowledge of Sangam literature as a historical source",
+    "linked_concepts": ["Sangam Literature", "Ancient South India", "Tamil Poetry", "Social Structure", "Varna System"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2022_004",
+    "year": 2022,
+    "subject": "Art and Culture",
+    "topic": "Somnath Temple",
+    "subtopic": "Religious Sites",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_multiple",
+    "question_text": "The Prime Minister recently inaugurated the new Circuit House near Somnath Temple Veraval. Which of the following statements are correct regarding Somnath Temple? (1) Somnath Temple is one of the Jyotirlinga shrines. (2) A description of Somnath Temple was given by Al-Biruni. (3) Pran Pratishtha of Somnath Temple (installation of the present day temple) was done by President S. Radhakrishnan. Select the correct answer using the code given below:",
+    "options": [
+      "1 and 2 only",
+      "2 and 3 only",
+      "1 and 3 only",
+      "1, 2 and 3"
+    ],
+    "correct_option_index": 0,
+    "correct_option_label": "A",
+    "explanation": "Statements 1 and 2 are correct. Statement 1: Somnath Temple is indeed one of the 12 Jyotirlinga (Shiva linga manifestations) shrines in India, representing primary pilgrimage destinations for Shaivites. Located in Veraval, Gujarat, Somnath holds immense religious significance. Statement 2: Al-Biruni, the 11th-century Persian scholar and traveler, documented Somnath Temple in his writings, providing valuable historical records of the temple during medieval times. Statement 3 is incorrect: The Pran Pratishtha (consecration) of the reconstructed Somnath Temple after independence was performed by President Dr. Rajendra Prasad (not S. Radhakrishnan) on December 12, 1947, just days before independence. S. Radhakrishnan was a contemporary statesman but not involved in this specific ceremony.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2022,
+      "question_number": 4
+    },
+    "tags": ["static", "somnath_temple", "jyotirlinga"],
+    "notes": "Tests knowledge of Somnath Temple's religious significance and historical documentation",
+    "linked_concepts": ["Somnath Temple", "Jyotirlinga", "Al-Biruni", "Gujarat", "Rajendra Prasad"],
+    "created_at": "2025-12-15"
+  },
+
+  {
+    "id": "ARTCULTURE_2023_001",
+    "year": 2023,
+    "subject": "Art and Culture",
+    "topic": "UNESCO World Heritage",
+    "subtopic": "Recent Additions",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_multiple",
+    "question_text": "Consider the following properties included in the World Heritage List released by UNESCO: 1. Munjal Vasundhara 2. Ramappa Temple and the sculptures of Kakatiyas in Telangana 3. Hotsprings of Khyargas Sum in Mongolia 4. Historic Towns of Stralsund and Wismar. How many of the above properties were included in 2023?",
+    "options": [
+      "Only one",
+      "Only two",
+      "Only three",
+      "All four"
+    ],
+    "correct_option_index": 2,
+    "correct_option_label": "C",
+    "explanation": "Only three properties (2, 3, and 4) were included in the UNESCO World Heritage List in 2023. The Ramappa Temple in Telangana, showcasing Kakatiya sculpture and architecture, was inscribed in 2023. The Khyargas Sum hot springs in Mongolia were added to the list. Historic Towns of Stralsund and Wismar in Germany were inscribed. Property 1 (Munjal Vasundhara) was not included in the 2023 World Heritage List. This question tests current awareness about recent UNESCO heritage designations, an important aspect of art and culture for UPSC aspirants.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2023,
+      "question_number": 1
+    },
+    "tags": ["current_affairs", "UNESCO", "world_heritage"],
+    "notes": "Tests knowledge of recent UNESCO World Heritage designations. Requires awareness of 2023 additions",
+    "linked_concepts": ["UNESCO World Heritage", "Ramappa Temple", "Kakatiya Architecture", "World Heritage List", "Cultural Heritage"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2023_002",
+    "year": 2023,
+    "subject": "Art and Culture",
+    "topic": "Religious Texts and Philosophy",
+    "subtopic": "Vedic and Buddhist Texts",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_multiple",
+    "question_text": "Consider the following statements: 1. Chandogya Upanishad is the oldest prose Upanishad. 2. Rigveda is the oldest sacred text of Hinduism. 3. Mahayana Buddhism was prevalent during the time of Ashoka. Which of the statements given above is/are correct?",
+    "options": [
+      "1 only",
+      "2 only",
+      "Both 1 and 2",
+      "2 and 3 only"
+    ],
+    "correct_option_index": 1,
+    "correct_option_label": "B",
+    "explanation": "Only statement 2 is correct. The Rigveda is indeed the oldest sacred text of Hinduism, composed around 1500-1200 BCE. Statement 1 is incorrect: The Chandogya Upanishad is not the oldest prose Upanishad; the Brihadaranyaka and Taittiriya Upanishads have claims to being among the earliest. Statement 3 is incorrect: Mahayana Buddhism emerged and developed after the time of Ashoka (3rd century BCE). Ashoka patronized early Buddhism, particularly forms closer to what would become Theravada Buddhism. Mahayana Buddhism became prominent later, during the Kushana period and afterwards, particularly in Central Asia and East Asia.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2023,
+      "question_number": 2
+    },
+    "tags": ["static", "vedic_texts", "buddhism"],
+    "notes": "Tests chronological understanding of religious texts and Buddhist school development",
+    "linked_concepts": ["Rigveda", "Upanishads", "Ashoka", "Mahayana Buddhism", "Theravada Buddhism"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2023_003",
+    "year": 2023,
+    "subject": "Art and Culture",
+    "topic": "Classical Paintings",
+    "subtopic": "Ancient Indian Murals",
+    "difficulty": "Easy",
+    "question_type": "MCQ_single",
+    "question_text": "The painting of Bodhisattva Padmapani is one of the most famous and oft-illustrated paintings at",
+    "options": [
+      "Ajanta",
+      "Badami",
+      "Bagh",
+      "Ellora"
+    ],
+    "correct_option_index": 0,
+    "correct_option_label": "A",
+    "explanation": "The famous painting of Bodhisattva Padmapani is located at Ajanta Caves in Maharashtra. This iconic painting, found in Cave 1 at Ajanta, depicts Padmapani (Avalokiteshvara) holding a lotus flower. The painting demonstrates the sophisticated artistic techniques of the 5th century CE, with exquisite color palette and expressive features. The Bodhisattva Padmapani is one of the most replicated and celebrated images of Ajanta murals, representing the peak of ancient Indian painting techniques. The painting exemplifies the Buddhist religious philosophy through art during the Gupta period.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2023,
+      "question_number": 3
+    },
+    "tags": ["static", "ajanta_caves", "buddhist_art"],
+    "notes": "Tests knowledge of specific paintings and their locations at major archaeological sites",
+    "linked_concepts": ["Ajanta Caves", "Bodhisattva Padmapani", "Ancient Indian Murals", "Buddhist Art", "Gupta Period"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2023_004",
+    "year": 2023,
+    "subject": "Art and Culture",
+    "topic": "Temple Architecture",
+    "subtopic": "Sculptural Traditions",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_multiple",
+    "question_text": "Consider the following statements about Indian temples: 1. The Gajapati rulers patronized the construction of the Jagannath Temple. 2. The Jagannath Temple has a fusion of Nagara and Dravida architectural styles. 3. The temple rituals include the daily worship cycle known as 'Chha Mahaprabhu'.",
+    "options": [
+      "1 and 2 only",
+      "2 and 3 only",
+      "1 and 3 only",
+      "1, 2 and 3"
+    ],
+    "correct_option_index": 0,
+    "correct_option_label": "A",
+    "explanation": "Statements 1 and 2 are correct. The Jagannath Temple in Puri was patronized by Gajapati rulers during the medieval period, and the temple indeed exhibits a fusion of Nagara (northern) and Dravida (southern) architectural styles, representing a synthesis of Indian architectural traditions. Statement 3 is incorrect: The daily temple rituals at Jagannath are known as the 'Chha Mahaprabhu' refers to six deities/aspects, but the primary worship cycles are typically called 'Sringara Upa', 'Madhyana Upa', and 'Sandhya Upa' (services). The statement about 'Chha Mahaprabhu' as a daily worship cycle is not accurate in standard temple terminology.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2023,
+      "question_number": 4
+    },
+    "tags": ["static", "temple_architecture", "orissa"],
+    "notes": "Tests knowledge of specific temples and their architectural and ritualistic features",
+    "linked_concepts": ["Jagannath Temple", "Gajapati Rulers", "Nagara Architecture", "Dravida Architecture", "Temple Rituals"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2023_005",
+    "year": 2023,
+    "subject": "Art and Culture",
+    "topic": "Archaeological Sites",
+    "subtopic": "Historical Significance",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_multiple",
+    "question_text": "Consider the following archaeological sites and what they are known for: 1. Hampi—Vijayanagara Empire's ruins and architecture 2. Konark—Sun Temple with unique chariot-shaped structure 3. Khajuraho—temples known for sculptural art depicting everyday life. Which of the pairs given above are correctly matched?",
+    "options": [
+      "1 and 2 only",
+      "2 and 3 only",
+      "1 and 3 only",
+      "1, 2 and 3"
+    ],
+    "correct_option_index": 3,
+    "correct_option_label": "D",
+    "explanation": "All three sites are correctly matched with their historical significance. Hampi is renowned for the architectural ruins and monuments of the Vijayanagara Empire. Konark in Odisha is famous for the magnificent Sun Temple (Surya Temple) built in the 13th century CE with a distinctive chariot-shaped structure and elaborate stone carving. Khajuraho temples in Madhya Pradesh are celebrated for their intricate sculptural art depicting various aspects of human life including erotic sculptures, daily activities, and religious themes. All three represent significant architectural and artistic achievements of medieval Indian kingdoms.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2023,
+      "question_number": 5
+    },
+    "tags": ["static", "archaeological_sites", "medieval_architecture"],
+    "notes": "Tests knowledge of major archaeological sites and their distinctive features",
+    "linked_concepts": ["Hampi", "Konark", "Khajuraho", "Vijayanagara", "Medieval Architecture", "Sculpture"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2023_006",
+    "year": 2023,
+    "subject": "Art and Culture",
+    "topic": "Classical Dance Forms",
+    "subtopic": "Terminology and Features",
+    "difficulty": "Easy",
+    "question_type": "MCQ_single",
+    "question_text": "Which one of the following is a specific term used in Kathakali dance to describe a particular pose or movement?",
+    "options": [
+      "Hastas",
+      "Cholkettu",
+      "Tandava",
+      "Mudras"
+    ],
+    "correct_option_index": 1,
+    "correct_option_label": "B",
+    "explanation": "Cholkettu is a specific term used in Kathakali dance representing geometric body postures and leg positions. While Hastas and Mudras refer to hand gestures (which are used in Kathakali), Cholkettu specifically refers to the characteristic static body positions and stances of Kathakali. Tandava refers to vigorous dance movements, particularly associated with Shiva's cosmic dance. Cholkettu represents the distinctive body angles and postural movements that are hallmarks of Kathakali's elaborate and stylized movement vocabulary.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2023,
+      "question_number": 6
+    },
+    "tags": ["static", "classical_dance", "terminology"],
+    "notes": "Tests specific knowledge of Kathakali terminology and movement vocabulary",
+    "linked_concepts": ["Kathakali", "Dance Terminology", "Cholkettu", "Classical Dance", "Kerala Dance"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2023_007",
+    "year": 2023,
+    "subject": "Art and Culture",
+    "topic": "Historical Inscriptions",
+    "subtopic": "Ancient Edicts",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_single",
+    "question_text": "Which one of the following Ashoka's rock edicts specifically discusses the concept of Mahamattas (royal officials)?",
+    "options": [
+      "Rock Edict 3",
+      "Rock Edict 5",
+      "Rock Edict 6",
+      "Rock Edict 13"
+    ],
+    "correct_option_index": 1,
+    "correct_option_label": "B",
+    "explanation": "Rock Edict 5 of Ashoka specifically discusses the role and appointment of Mahamattas—senior royal officials responsible for implementing Ashoka's policies of Dhamma throughout the empire. The Rock Edict 5 describes how Ashoka appointed these officials to ensure proper governance and propagation of his ethical edicts across different regions. This edict provides insight into Ashoka's administrative structure and his emphasis on moral governance through appointed officials. Understanding Ashoka's edicts is crucial for comprehending Mauryan administration and Ashoka's dharma (Dhamma) policies.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2023,
+      "question_number": 7
+    },
+    "tags": ["static", "ashoka", "inscriptions"],
+    "notes": "Tests knowledge of specific Ashoka edicts and their content",
+    "linked_concepts": ["Ashoka Rock Edicts", "Mahamattas", "Dhamma", "Mauryan Administration", "Rock Edict 5"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2024_001",
+    "year": 2024,
+    "subject": "Art and Culture",
+    "topic": "Sanskrit Drama",
+    "subtopic": "Playwrights and Works",
+    "difficulty": "Easy",
+    "question_type": "MCQ_single",
+    "question_text": "Which one of the following plays is attributed to the Sanskrit playwright Bhasa?",
+    "options": [
+      "Pratijnayaugandharayana",
+      "Malvikaagnimitra",
+      "Vikramorvasiya",
+      "Uttararamacharita"
+    ],
+    "correct_option_index": 0,
+    "correct_option_label": "A",
+    "explanation": "Pratijnayaugandharayana is a play attributed to Bhasa. This comedy is one of Bhasa's thirteen known works and is considered an important example of Sanskrit drama. The play features complex plot developments and witty dialogue. Malvikaagnimitra is attributed to Kalidasa. Vikramorvasiya (Vikramorvashi) is also a work by Kalidasa. Uttararamacharita is attributed to Bhavabhuti. Bhasa is one of ancient India's greatest playwrights, and his works demonstrate sophisticated dramatic technique and literary skill from the early centuries CE.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2024,
+      "question_number": 1
+    },
+    "tags": ["static", "sanskrit_drama", "playwrights"],
+    "notes": "Tests knowledge of Sanskrit playwrights and their specific works",
+    "linked_concepts": ["Bhasa", "Sanskrit Drama", "Playwrights", "Classical Literature", "Sanskrit Theatre"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2024_002",
+    "year": 2024,
+    "subject": "Art and Culture",
+    "topic": "Tribal Communities and Culture",
+    "subtopic": "Traditional Art Forms",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_multiple",
+    "question_text": "Consider the following statements about Warli art: 1. Warli is a tribal art form practiced by the Warli tribe primarily in Maharashtra. 2. Warli paintings predominantly use geometric patterns and shapes. 3. Warli art primarily depicts animals and hunting scenes.",
+    "options": [
+      "1 and 2 only",
+      "2 and 3 only",
+      "1 and 3 only",
+      "1, 2 and 3"
+    ],
+    "correct_option_index": 0,
+    "correct_option_label": "A",
+    "explanation": "Statements 1 and 2 are correct. Warli art is indeed a tribal art form practiced by the Warli tribe in Maharashtra (and neighboring areas). The art is characterized by geometric patterns, circles, triangles, and lines depicting various aspects of daily life and nature. Statement 3 is incorrect: Warli art is not primarily focused on animals and hunting scenes. Instead, Warli paintings typically depict scenes from daily life, agriculture, celebrations, marriage ceremonies, and relationships between people and nature. The geometric abstraction and use of basic shapes distinguish Warli from naturalistic depictions. Warli has gained recognition as an important example of tribal art and UNESCO intangible cultural heritage.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2024,
+      "question_number": 2
+    },
+    "tags": ["static", "tribal_art", "warli"],
+    "notes": "Tests knowledge of tribal art forms and their distinctive characteristics",
+    "linked_concepts": ["Warli Art", "Tribal Communities", "Maharashtra", "Geometric Patterns", "Indigenous Art Forms"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2024_003",
+    "year": 2024,
+    "subject": "Art and Culture",
+    "topic": "Buddhist Philosophy",
+    "subtopic": "Core Concepts",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_multiple",
+    "question_text": "Consider the following statements about the Bodhisattva concept in Buddhism: 1. A Bodhisattva is one who has achieved enlightenment. 2. The Bodhisattva path emphasizes compassion and the delay of personal enlightenment to help others. 3. The concept of Bodhisattva is unique to Mahayana Buddhism.",
+    "options": [
+      "1 only",
+      "1 and 2 only",
+      "2 and 3 only",
+      "1, 2 and 3"
+    ],
+    "correct_option_index": 2,
+    "correct_option_label": "C",
+    "explanation": "Statements 2 and 3 are correct. Statement 2: The Bodhisattva path, central to Mahayana Buddhism, emphasizes universal compassion (karuna) and the deliberate postponement of personal enlightenment to assist all sentient beings in achieving liberation. This represents a fundamental ethical and spiritual commitment. Statement 3: The Bodhisattva concept as a religious ideal is distinctive to Mahayana Buddhism; it is not central to Theravada Buddhism which emphasizes individual monastic enlightenment. Statement 1 is incorrect: A Bodhisattva is not one who has already achieved enlightenment; rather, a Bodhisattva is one who is on the path to enlightenment but has vowed to postpone final entry into nirvana to assist others. The term means 'enlightenment being' or 'awakening being'—one pursuing enlightenment with compassionate intention.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2024,
+      "question_number": 3
+    },
+    "tags": ["static", "buddhism", "philosophy"],
+    "notes": "Tests understanding of Bodhisattva concept and its significance in Mahayana Buddhism",
+    "linked_concepts": ["Bodhisattva Path", "Mahayana Buddhism", "Compassion", "Enlightenment", "Buddhist Philosophy"],
+    "created_at": "2025-12-15"
+  },
+  {
+    "id": "ARTCULTURE_2024_004",
+    "year": 2024,
+    "subject": "Art and Culture",
+    "topic": "Mughal Art and Architecture",
+    "subtopic": "Architectural Features",
+    "difficulty": "Moderate",
+    "question_type": "MCQ_multiple",
+    "question_text": "Consider the following statements about Mughal architecture: 1. The concept of Charbagh (four-fold garden) is a distinctive feature of Mughal landscape design. 2. Inlay work using semi-precious stones (pietra dura) is a characteristic feature of Mughal architecture. 3. Mughal architects exclusively used brick in construction rather than stone.",
+    "options": [
+      "1 and 2 only",
+      "2 and 3 only",
+      "1 and 3 only",
+      "1, 2 and 3"
+    ],
+    "correct_option_index": 0,
+    "correct_option_label": "A",
+    "explanation": "Statements 1 and 2 are correct. The Charbagh (four gardens divided by waterways) is indeed a distinctive feature of Mughal landscape design, seen in famous gardens and palace complexes like the Taj Mahal gardens. Inlay work with semi-precious stones (pietra dura)—decorative marble inlay work—is a hallmark of Mughal architecture, exemplified in the Taj Mahal. Statement 3 is incorrect: Mughal architects used both stone and brick, with a strong preference for marble and sandstone in monumental architecture, not exclusively brick. The use of marble in grand structures like the Taj Mahal is a defining characteristic of Mughal architecture during its prime period.",
+    "source": {
+      "exam": "UPSC_CSE_Prelims",
+      "paper": "GS1",
+      "year": 2024,
+      "question_number": 4
+    },
+    "tags": ["static", "mughal_architecture", "design_features"],
+    "notes": "Tests knowledge of distinctive features of Mughal architecture and design",
+    "linked_concepts": ["Mughal Architecture", "Charbagh", "Pietra Dura", "Taj Mahal", "Garden Design"],
+    "created_at": "2025-12-15"
+  }
+]
+    
