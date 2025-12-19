@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>UPSCSuperApp | Gyan Amala</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#3b82f6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="A Serverless, Zero-Cost UPSC Preparation Ecosystem by Gyan Amala.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Outfit:wght@700;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'view-enter': 'viewEnter 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        viewEnter: {
+                            '0%': { opacity: '0', transform: 'translateY(10px) scale(0.98)' },
+                            '100%': { opacity: '1', transform: 'translateY(0) scale(1)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-900 transition-colors duration-300 min-h-screen selection:bg-blue-500 selection:text-white">
+
+    <div id="loading-overlay" class="fixed inset-0 z-[100] bg-white/80 dark:bg-slate-900/90 backdrop-blur-md flex items-center justify-center hidden">
+        <div class="flex flex-col items-center">
+            <div class="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+            <p class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 animate-pulse">Gyan Amala AI</p>
+        </div>
+    </div>
+
+    <div id="modal-overlay" class="fixed inset-0 z-[90] bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 animate-fade-in">
+        <div class="bg-white dark:bg-slate-900 w-full max-w-sm rounded-[32px] shadow-2xl relative overflow-hidden animate-slide-up">
+            <div id="modal-content"></div>
+        </div>
+    </div>
+
+    <div id="app-container" class="max-w-md mx-auto min-h-screen p-6 relative pb-32">
+        </div>
+
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/store.js"></script>
+    
+    <script src="assets/js/StudyTracker.js"></script>
+    <script src="assets/js/PredictiveEngine.js"></script>
+    
+    <script src="assets/js/adapter.js"></script>
+    <script src="assets/js/engine.js"></script>
+    
+    <script src="assets/js/ui.js"></script>
+    <script src="assets/js/main.js"></script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .then(reg => console.log('SW Registered:', reg.scope))
+                    .catch(err => console.log('SW Error:', err));
+            });
+        }
+    </script>
+</body>
+</html>
