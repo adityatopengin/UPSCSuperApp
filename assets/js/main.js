@@ -1,349 +1,348 @@
 /**
- * MAIN.JS - The Master Controller
- * Version: 5.3.0 (Fixed Routing & Infinite Spinner)
- * Handles Routing, State Management, and App Initialization.
- * Organization: Gyan Amala | App: UPSCSuperApp
+ * Main.js - The Application Controller
+ * Orchestrates interaction between UI, Data Store, and Logic Engine.
  */
-
 const Main = {
-    // Application State
-    state: {
-        currentView: 'home',
-        darkMode: false,
-        activeSubject: null,
-        isQuizActive: false // Prevents accidental navigation
-    },
-
-    // ============================================================
-    // 1. INITIALIZATION (BOOT SEQUENCE)
-    // ============================================================
-
-    async init() {
-        console.log(`🚀 ${CONFIG.name} v${CONFIG.version} Initializing...`);
-
-        try {
-            // 1. Initialize the Hybrid Store (Wait for DB Connection)
-            if (window.Store) {
-                console.log("Main: Connecting to Database...");
-                await Store.init(); 
-            } else {
-                throw new Error("Store module is missing.");
-            }
-
-            // 2. Initialize Theme (Sync LocalStorage is fine here)
-            // We check if a setting exists, otherwise default to system preference
-            const savedTheme = Store.getAppSettings('settings', {}).theme;
-            const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            this.state.darkMode = savedTheme === 'dark' || (savedTheme === undefined && systemDark);
-            
-            if (window.UI) UI.updateTheme(this.state.darkMode);
-
-            // 3. Initialize The "Sensor" (StudyTracker)
-            if (window.StudyTracker) {
-                StudyTracker.init();
-            } else {
-                console.warn("Main: StudyTracker module missing.");
-            }
-
-            // 4. Handle Browser History (Back Button Support)
-            window.addEventListener('popstate', (e) => {
-                if (e.state && e.state.view) {
-                    this._renderView(e.state.view, false);
-                } else {
-                    this._renderView('home', false);
-                }
-            });
-
-            // 5. Check for "New User" (First Launch) -> Orientation
-            const visited = Store.checkVisited(); // Sync check is fine
-            if (!visited) {
-                setTimeout(() => {
-                    if (window.UI) UI.modals.orientation();
-                }, 1500);
-                Store.setVisited();
-            }
-
-            // 6. Initial Router Check (Handle refresh on #stats, etc.)
-            const initialHash = window.location.hash.replace('#', '');
-            const validViews = ['home', 'notes', 'stats', 'settings'];
-            const startView = validViews.includes(initialHash) ? initialHash : 'home';
-            
-            // Launch the app by navigating to the start view
-            this.navigate(startView);
-
-        } catch (error) {
-            console.error("Main: Critical Init Error", error);
-            alert("App initialization failed. Please reload.");
-        }
-    },
-
-    // ============================================================
-    // 2. ROUTING & NAVIGATION
-    // ============================================================
-
+    // State Tracking
+    currentView: 'home',
+    activeQuizSubject: null,
+    quizTimerInterval: null,
+    
     /**
-     * Universal Navigation Method
-     * @param {String} viewId - 'home', 'quiz', 'result', 'notes', 'stats', 'settings'
+     * SYSTEM BOOT SEQUENCE
+     * Called by index.html when scripts are loaded.
      */
-    navigate(viewId) {
-        // Safety: Don't navigate if undefined
-        if (!viewId) return;
+    init() {
+        console.log("Main: System Booting...");
 
-        // Push to History Stack (so Back button works)
-        if (this.state.currentView !== viewId) {
-            history.pushState({ view: viewId }, '', `#${viewId}`);
-        }
+        // 1. Initialize Data Layer
+        if (window.Store) Store.init();
         
-        // Render View (Now Async)
-        this._renderView(viewId, true);
-    },
+        // 2. Initialize Logic Layer
+        if (window.Engine) Engine.init();
 
-    // ... Continues in Part 2 (The Render Logic) ...
-        /**
-     * INTERNAL: Handles the actual DOM updates for views.
-     * FIX: This function contains the 'finally' block that removes the loading screen.
-     */
-    async _renderView(viewId, isNavigation = true) {
-        // Safety: If UI module isn't loaded yet, abort.
-        if (!window.UI) return;
+        // 3. Apply Theme Preference (Dark/Light)
+        this._applyTheme();
 
-        // 1. Show Loading briefly for smooth transition
-        UI.showLoading();
-        const container = document.getElementById('app-container');
-        
-        // 2. Clean Container & Reset Scroll
-        container.innerHTML = '';
-        this.state.currentView = viewId;
-        window.scrollTo(0, 0);
+        // 4. Determine Start Screen (The "Missing Link" Fix)
+        // We check if the user has completed the "Initiation Ceremony"
+        const settings = Store.getAppSettings('settings', {});
+        const isInitiated = settings.is_initiated; 
 
-        try {
-            // 3. Route Logic: Switch based on viewId
-            switch (viewId) {
-                case 'home':
-                    await UI._renderHome(container);
-                    break;
-                case 'notes':
-                    UI._renderNotes(container);
-                    break;
-                case 'stats':
-                    await UI._renderStats(container);
-                    break;
-                case 'settings':
-                    UI._renderSettings(container);
-                    break;
-                case 'quiz':
-                    // Quiz UI is handled by startQuiz
-                    break;
-                case 'result':
-                    // Result UI is handled by showResult
-                    break;
-                default:
-                    console.warn(`Main: Unknown view '${viewId}', defaulting to Home.`);
-                    await UI._renderHome(container);
-            }
-        } catch (e) {
-            console.error(`Main: Error rendering view '${viewId}'`, e);
-            container.innerHTML = `<div class="p-8 text-center text-rose-500">Error loading content.</div>`;
-        } finally {
-            // 4. CRITICAL FIX: Hide Loading Screen
-            // This is the specific part that removes the "Initializing AI Core" overlay.
+        if (!isInitiated) {
+            console.log("Main: New User Detected. Launching Intro Deck.");
+            
+            // Wait a moment for the loading spinner to spin, then show Deck
             setTimeout(() => {
                 UI.hideLoading();
-            }, 300);
+                UI.initSwipeDeck(); // Launch the Swipe Cards
+            }, 1200);
+        } else {
+            console.log("Main: Returning User. Loading Dashboard.");
+            this.navigate('home');
+        }
+
+        // 5. Global Error Handling (Prevents white screen of death)
+        window.onerror = function(msg, url, line) {
+            console.error(`Global Error: ${msg} at line ${line}`);
+            // If UI exists, try to show a toast
+            if (window.UI && UI.showToast) UI.showToast("System Error. Reloading...", "error");
+            return false;
+        };
+    },
+
+    /**
+     * NAVIGATION ROUTER
+     * Switches between different screens (Home, Settings, Quiz, etc.)
+     * @param {String} viewId - The ID of the view to show
+     */
+    navigate(viewId) {
+        const app = document.getElementById('app-container');
+        if (!app) return;
+
+        console.log(`Main: Navigating to [${viewId}]`);
+
+        // A. Cleanup: Stop any running quiz timers if leaving the quiz
+        if (this.currentView === 'quiz' && viewId !== 'quiz') {
+            this._stopQuizTimer();
+        }
+
+        // B. Update State
+        this.currentView = viewId;
+
+        // C. Render the requested View
+        switch (viewId) {
+            case 'home':
+                UI._renderHome(app);
+                break;
+
+            case 'settings':
+                UI._renderSettings(app);
+                break;
+
+            case 'stats':
+                // Placeholder for Stats View (Can be expanded later)
+                app.innerHTML = `
+                    <div class="p-8 text-center mt-20 animate-view-enter">
+                        <i class="fa-solid fa-chart-pie text-6xl text-slate-200 dark:text-slate-700 mb-4"></i>
+                        <h2 class="text-xl font-display font-bold text-slate-800 dark:text-white">Detailed Analytics</h2>
+                        <p class="text-slate-500 mb-6">Deep insights coming in the next update.</p>
+                        <button onclick="Main.navigate('home')" class="text-indigo-500 font-bold">Go Back</button>
+                    </div>
+                    ${UI._generateFooter('stats')}
+                `;
+                break;
+
+            case 'notes':
+                // Placeholder for Notes View
+                app.innerHTML = `
+                    <div class="p-8 text-center mt-20 animate-view-enter">
+                        <i class="fa-solid fa-book-open text-6xl text-slate-200 dark:text-slate-700 mb-4"></i>
+                        <h2 class="text-xl font-display font-bold text-slate-800 dark:text-white">My Notes</h2>
+                        <p class="text-slate-500 mb-6">Your digital notebook is being built.</p>
+                        <button onclick="Main.navigate('home')" class="text-indigo-500 font-bold">Go Back</button>
+                    </div>
+                    ${UI._generateFooter('notes')}
+                `;
+                break;
+
+            default:
+                UI._renderHome(app);
+        }
+
+        // D. Final Polish: Ensure Loading Screen is gone
+        UI.hideLoading();
+        
+        // E. Scroll to top
+        window.scrollTo(0, 0);
+    },
+
+    /**
+     * INTERNAL: Applies the saved theme on boot
+     */
+    _applyTheme() {
+        // Check LocalStorage first, then System Preference
+        const savedTheme = localStorage.getItem('theme');
+        const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        if (savedTheme === 'dark' || (!savedTheme && systemDark)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
         }
     },
 
+    /**
+     * Toggle Light/Dark Mode (Called from Settings)
+     */
+    toggleTheme() {
+        const html = document.documentElement;
+        const isDark = html.classList.toggle('dark');
+        
+        // Persist choice
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        
+        // Update UI (If we were using UI.updateTheme)
+        if (UI.updateTheme) UI.updateTheme(isDark);
+        
+        // Force re-render of current settings page to update the toggle switch visual
+        if (this.currentView === 'settings') {
+            UI._renderSettings(document.getElementById('app-container'));
+        }
+    },
+
+    // ... Continues in Part 2 ...
     // ============================================================
-    // 3. QUIZ CONTROLLER
+    // QUIZ WORKFLOW LOGIC
     // ============================================================
 
     /**
-     * Starts a new quiz session for a specific subject.
-     * @param {String} subjectId - The ID of the subject (from CONFIG)
+     * Starts a new Quiz Session.
+     * Called when a user clicks a Subject Card on the Dashboard.
+     * @param {String} subjectId - e.g., 'history', 'polity'
      */
     async startQuiz(subjectId) {
-        // 1. Get Filename from Registry
-        const fileName = CONFIG.getFileName(subjectId);
-        if (!fileName) {
-            console.error("Main: Subject ID not found in CONFIG:", subjectId);
-            alert("Subject data not found in configuration.");
-            return;
-        }
+        console.log(`Main: Starting Quiz for [${subjectId}]`);
 
+        // 1. Show Loading Curtain (Simulate data prep)
         UI.showLoading();
 
         try {
-            // 2. Fetch Data from the 'data' folder
-            const response = await fetch(`./data/${fileName}`);
-            if (!response.ok) {
-                throw new Error(`Network response was not ok: ${response.status}`);
-            }
-            
-            const rawData = await response.json();
-            
-            // 3. Normalize via Adapter (Uses the Universal Fix from Adapter.js)
-            const questions = Adapter.normalize(rawData);
-            
-            // 4. Initialize Engine
-            // We pass 'test' mode by default. Future: Add 'learning' mode toggle.
-            if (Engine.init(questions, 'test')) {
-                this.state.activeSubject = subjectId;
-                this.state.isQuizActive = true;
-                this.state.currentView = 'quiz';
-                
-                // 5. Render Quiz UI
-                const container = document.getElementById('app-container');
-                container.innerHTML = ''; // Clear previous view
-                UI._drawQuiz(container);
+            // 2. Initialize Engine Session
+            // Engine.startSession loads questions and resets state
+            const success = await Engine.startSession(subjectId);
 
-                // 6. Start the Engine Timer
-                // We pass callbacks to update the UI Timer and handle Finish
-                Engine.startTimer(
-                    (timeLeft) => UI._updateTimer(timeLeft), // Tick Callback
-                    () => this.finishQuiz() // End Callback (Time's up)
-                );
-            } else {
-                throw new Error("Engine initialization returned false.");
+            if (!success) {
+                throw new Error("Engine returned false");
             }
 
-        } catch (err) {
-            console.error("Main: Start Quiz Failed", err);
-            alert("Failed to load quiz data. Check if JSON file exists in /data folder.");
-            this.navigate('home');
-        } finally {
+            // 3. Update Main State
+            this.activeQuizSubject = subjectId;
+            this.currentView = 'quiz';
+
+            // 4. Start the Clock
+            this._startQuizTimer();
+
+            // 5. Render the Quiz View
+            // We use a short timeout to allow the transition to look smooth
+            setTimeout(() => {
+                const app = document.getElementById('app-container');
+                UI._drawQuiz(app);
+                UI.hideLoading();
+            }, 600);
+
+        } catch (error) {
+            console.error("Main: Failed to start quiz", error);
             UI.hideLoading();
+            UI.showToast("Failed to load module. check config.", "error");
+        }
+    },
+
+    /**
+     * Handles User Selection during Quiz.
+     * Called when user clicks an Option button.
+     * @param {Number} optionIndex - 0, 1, 2, or 3
+     */
+    handleAnswer(optionIndex) {
+        // 1. Register answer in Engine (Updates state.answers)
+        Engine.submitAnswer(optionIndex);
+
+        // 2. Trigger UI Refresh
+        // We re-render the quiz frame to show the visual selection state (blue border/check)
+        // Since UI._drawQuiz reads directly from Engine state, this updates the UI perfectly.
+        const app = document.getElementById('app-container');
+        UI._drawQuiz(app);
+    },
+
+    /**
+     * Finishes the Quiz and saves data.
+     * Called when user clicks "Submit Test".
+     */
+    async finishQuiz() {
+        console.log("Main: Finishing Quiz...");
+
+        // 1. Stop Timer
+        this._stopQuizTimer();
+
+        // 2. Show Processing UI
+        UI.showLoading();
+
+        try {
+            // 3. Calculate Results & Save to Store (via Engine)
+            // Engine.endSession returns the ID of the saved result
+            const resultId = await Engine.endSession();
+
+            // 4. Navigate to Analysis View
+            // We wait 1 sec to make it feel like "Calculating..."
+            setTimeout(() => {
+                this.showResult(resultId);
+            }, 1000);
+
+        } catch (error) {
+            console.error("Main: Error saving results", error);
+            UI.hideLoading();
+            UI.showToast("Error saving data.", "error");
+            this.navigate('home');
+        }
+    },
+
+    /**
+     * INTERNAL: Starts the MM:SS timer.
+     */
+    _startQuizTimer() {
+        // Clear any existing timer first
+        this._stopQuizTimer();
+
+        let seconds = 0;
+        
+        this.quizTimerInterval = setInterval(() => {
+            seconds++;
+            
+            // Format time: MM:SS
+            const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const s = (seconds % 60).toString().padStart(2, '0');
+            const timeString = `${m}:${s}`;
+
+            // Update the Timer UI directly (Efficient DOM update)
+            UI._updateTimer(timeString);
+
+        }, 1000);
+    },
+
+    /**
+     * INTERNAL: Stops the timer.
+     */
+    _stopQuizTimer() {
+        if (this.quizTimerInterval) {
+            clearInterval(this.quizTimerInterval);
+            this.quizTimerInterval = null;
         }
     },
 
     // ... Continues in Part 3 ...
-        /**
-     * Bridge between UI and Engine for handling answer selection.
-     * Called when a user clicks an option button in the UI.
-     * @param {Number} optionIndex - Index of the selected option (0-3)
-     */
-    handleAnswer(optionIndex) {
-        // 1. Submit to Engine (Records choice & time spent)
-        Engine.submitAnswer(optionIndex);
-        
-        // 2. Refresh UI (Shows selection state immediately)
-        // We re-draw the quiz to reflect the "Active" state of the button
-        if (window.UI) {
-            UI._drawQuiz(document.getElementById('app-container'));
-        }
-    },
-
-    /**
-     * Finishes the quiz, calculates score, and saves data.
-     * Triggered by: "Submit" button OR Timer running out.
-     */
-    async finishQuiz() {
-        // 1. Stop the Timer immediately
-        Engine.stopTimer();
-        this.state.isQuizActive = false;
-
-        // 2. Calculate Result using Engine's Logic
-        const result = Engine.calculateResult(this.state.activeSubject);
-        
-        if (!result) {
-            console.error("Main: Result calculation failed.");
-            this.navigate('home');
-            return;
-        }
-
-        // 3. Save to Persistence Layer (Async Store)
-        let resultId = result.id; // Use generated ID by default
-        
-        if (window.Store) {
-            if (window.UI) UI.showLoading(); // Show spinner while saving
-            
-            try {
-                // Await the IndexedDB write operation
-                // This returns the confirmed ID from the DB
-                resultId = await Store.saveResult(result);
-                
-                // 4. Save "Mistakes" for Revision Mode
-                // If there are mistakes, push them to the specific 'mistakes' store
-                if (result.mistakes && result.mistakes.length > 0) {
-                    Store.saveMistakes(result.mistakes);
-                }
-            } catch (error) {
-                console.error("Main: Failed to save result to DB", error);
-                // Note: We continue even if save fails, so the user can at least see their score.
-            } finally {
-                // UI.hideLoading() is handled by the next view render,
-                // but we can call it here if we weren't navigating immediately.
-            }
-        } else {
-            console.warn("Main: Store unavailable, result not saved.");
-        }
-
-        // 5. Navigate to Result View
-        this.showResult(resultId);
-    },
-
-    /**
-     * Direct navigation to the Result Analysis screen.
-     * @param {String} resultId - The ID of the result to fetch and display
-     */
-    showResult(resultId) {
-        this.state.currentView = 'result';
-        const container = document.getElementById('app-container');
-        window.scrollTo(0, 0);
-        
-        // UI._drawAnalysis will handle fetching the specific result from DB
-        if (window.UI) {
-            UI._drawAnalysis(container, resultId);
-        }
-    },
-
-    // ... Continues in Part 4 ...
-        // ============================================================
-    // 4. SYSTEM PREFERENCES
+    // ============================================================
+    // RESULT & NAVIGATION HELPERS
     // ============================================================
 
     /**
-     * Toggles between Dark and Light mode.
-     * Updates UI immediately and saves preference to LocalStorage.
+     * Loads and displays a specific Result Analysis.
+     * Called after a quiz finishes OR from the "Continue Learning" card.
+     * @param {String} resultId - unique ID of the result
      */
-    toggleTheme() {
-        this.state.darkMode = !this.state.darkMode;
+    showResult(resultId) {
+        console.log(`Main: Showing Result [${resultId}]`);
         
-        // 1. Update Visuals
-        if (window.UI) {
-            UI.updateTheme(this.state.darkMode);
-        }
-        
-        // 2. Save to Store (Sync LocalStorage is fine for settings)
-        if (window.Store) {
-            const currentSettings = Store.getAppSettings('settings', {});
-            // Merge with existing settings to avoid overwriting other keys
-            Store.setAppSettings('settings', { 
-                ...currentSettings, 
-                theme: this.state.darkMode ? 'dark' : 'light' 
+        // 1. Update State
+        this.currentView = 'analysis';
+
+        // 2. Show Loading (fetching data from IndexedDB can take a few ms)
+        UI.showLoading();
+
+        // 3. Render Analysis View
+        // We use the UI helper which handles the async data fetch
+        const app = document.getElementById('app-container');
+        UI._drawAnalysis(app, resultId)
+            .then(() => {
+                UI.hideLoading();
+                window.scrollTo(0, 0);
+            })
+            .catch(err => {
+                console.error("Main: Result render failed", err);
+                UI.hideLoading();
+                UI.showToast("Could not load result.", "error");
+                this.navigate('home');
             });
-        }
     }
-};
+
+}; // END OF MAIN OBJECT
 
 // ============================================================
-// 5. BOOTSTRAP (ENTRY POINT)
+// SYSTEM IGNITION (The Spark)
 // ============================================================
 
-// Initialize App when DOM is fully loaded
-document.addEventListener('DOMContentLoaded', () => {
-    // strict check: Are all dependent modules loaded?
-    if (!window.CONFIG || !window.Store || !window.UI) {
-        console.error("CRITICAL: Core modules (Config, Store, UI) are missing!");
-        alert("System Error: Core modules failed to load. Check console for details.");
-    } else {
-        // Start the Main Engine
+/**
+ * Wait for the DOM and all scripts to fully load before starting.
+ * This ensures UI, Store, and Engine objects are ready.
+ */
+window.addEventListener('load', () => {
+    // 1. Start the App
+    if (window.Main) {
         Main.init();
+    } else {
+        console.error("CRITICAL: Main.js failed to load!");
+        document.body.innerHTML = '<h1 style="color:red; padding:20px;">System Error: Core missing.</h1>';
     }
+
+    // 2. Handle Browser Back Button
+    // If user presses physical back button, we go to Home instead of closing app
+    window.addEventListener('popstate', (event) => {
+        if (Main.currentView !== 'home') {
+            Main.navigate('home');
+        }
+    });
+
+    // 3. Prevent accidental refresh on mobile (Pull-to-refresh)
+    // We disable this because it feels "App-like" and prevents losing quiz state
+    document.body.style.overscrollBehavior = 'none';
 });
-
-// Expose to Window for global access (e.g., onclick handlers in HTML)
-window.Main = Main;
-
-
-
 
