@@ -1,16 +1,16 @@
 /**
  * ADAPTER.JS - Data Normalization Layer
- * Version: 5.3.0 (Universal Fix)
+ * Version: 5.2.0 (Universal Fix)
  * Standardizes raw JSON data into the app's internal schema.
- * Features: Crash Protection, Null Safety, and Pro Schema Support.
+ * Fix: Supports both { questions: [] } and raw [] Array formats.
  * Organization: Gyan Amala | App: UPSCSuperApp
  */
 
 const Adapter = {
     /**
      * Main entry point to normalize a subject file.
-     * wrapping in try-catch to prevent global app crash on bad data.
-     * @param {Object|Array} rawData - The JSON object loaded from fetch()
+     * Uses defensive programming to prevent crashes on invalid data.
+     * @param {Object|Array} rawData - The JSON object/array loaded from fetch()
      */
     normalize(rawData) {
         // 1. Safety Check: Is the data completely empty or null?
@@ -19,27 +19,30 @@ const Adapter = {
             return [];
         }
 
-        // 2. Universal Fix: Handle both Array and Object formats
-        let questionsArray = [];
-
+        // 2. UNIVERSAL FIX: Handle both Array and Object formats
+        // Some files might be [ {q1}, {q2} ] (List)
+        // Others might be { questions: [ {q1}, {q2} ] } (Object)
+        let sourceArray = [];
+        
         if (Array.isArray(rawData)) {
-            // Case A: The file is just a list [{}, {}, {}]
-            // This matches your current ancient_history.json format
-            questionsArray = rawData;
-        } else if (rawData && Array.isArray(rawData.questions)) {
-            // Case B: The file is an object { questions: [...] }
-            // This is for future compatibility
-            questionsArray = rawData.questions;
+            // Case A: The file is just a raw list/array
+            console.log("Adapter: Detected Raw Array Format.");
+            sourceArray = rawData;
+        } else if (rawData.questions && Array.isArray(rawData.questions)) {
+            // Case B: The file is an object with a 'questions' key
+            console.log("Adapter: Detected Standard Object Format.");
+            sourceArray = rawData.questions;
         } else {
-            console.error("Adapter: Invalid Data Format - No array found.", rawData);
+            // Case C: Invalid format
+            console.error("Adapter: Invalid Data Format - Missing 'questions' array or valid list.", rawData);
             return [];
         }
 
-        console.log(`Adapter: Processing ${questionsArray.length} items...`);
+        console.log(`Adapter: Processing ${sourceArray.length} items...`);
 
         // 3. Process each question safely
         // We use .reduce instead of .map to filter out invalid items immediately
-        return questionsArray.reduce((validQuestions, q, index) => {
+        return sourceArray.reduce((validQuestions, q, index) => {
             try {
                 const normalized = this._normalizeQuestion(q, index);
                 if (normalized) {
@@ -52,7 +55,8 @@ const Adapter = {
         }, []);
     },
 
-    /**
+    // ... Continues in Part 2 ...
+        /**
      * Normalizes a single question object with defensive programming.
      * @param {Object} q - Raw question object
      * @param {Number} index - Index for fallback ID generation
@@ -61,8 +65,11 @@ const Adapter = {
         // 1. Basic Validation: Must have text and options
         // Some JSONs use 'question', others 'text'
         const qText = q.question || q.text;
+        
+        // Safety: If no text or options are present, drop this question
         if (!qText || !Array.isArray(q.options)) {
-            console.warn(`Adapter: Question at index ${index} missing text or options. Dropping.`);
+            // Optional: Log specific missing fields for debugging
+            // console.warn(`Adapter: Question at index ${index} missing text or options.`);
             return null; // Signals the reduce loop to skip this
         }
 
@@ -130,4 +137,5 @@ const Adapter = {
 
 // Expose to Window
 window.Adapter = Adapter;
+
 
