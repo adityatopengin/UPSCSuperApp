@@ -1,8 +1,7 @@
 /**
- * UI.JS - The View Layer (Part 1: Core & Navigation)
- * Version: 5.0.0 (Gyan Amala Edition)
- * Handles Header, Footer, and Core Utility Methods.
- * Organization: Gyan Amala | App: UPSCSuperApp
+ * UI.JS - THE VIEW LAYER
+ * Version: 5.1.0 (Fixed Navigation & Crash Protection)
+ * Batch 1: Core, Header, Footer, Modals
  */
 
 const UI = {
@@ -11,7 +10,7 @@ const UI = {
     // ============================================================
     
     /**
-     * Sanitizes input to prevent XSS
+     * Sanitizes input to prevent XSS attacks
      */
     sanitize(str) {
         if (!str) return '';
@@ -28,6 +27,9 @@ const UI = {
         if (loader) loader.classList.remove('hidden');
     },
 
+    /**
+     * Hides the Loading Spinner
+     */
     hideLoading() {
         const loader = document.getElementById('loading-overlay');
         if (loader) loader.classList.add('hidden');
@@ -35,17 +37,18 @@ const UI = {
 
     /**
      * Updates the global background based on theme
+     * @param {boolean} isDark - True for dark mode
      */
     updateTheme(isDark) {
         const body = document.body;
         if (isDark) {
             body.classList.add('dark');
-            // Premium Dark Gradient
+            // Premium Dark Gradient: Slate Blue depth
             body.style.background = 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)'; 
         } else {
             body.classList.remove('dark');
-            // Premium Light Fusion
-            body.style.background = 'linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%)'; 
+            // Premium Light Fusion: Soft White/Blue
+            body.style.background = 'linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%)'; 
         }
     },
 
@@ -55,15 +58,16 @@ const UI = {
 
     renderHeader(container, user) {
         const timeOfDay = new Date().getHours() < 12 ? 'Good Morning' : 'Good Evening';
+        const streak = window.Store ? Store.get('streak', 1) : 1; // Safety check for Store
         
         container.innerHTML = `
-        <div class="flex items-center justify-between pb-6 animate-fade-in-down">
+        <div class="flex items-center justify-between pb-6 animate-fade-in-down select-none">
             <div class="flex items-center gap-4">
-                <div class="relative group">
+                <div class="relative group cursor-pointer" onclick="UI.modals.aboutCreator()">
                     <div class="absolute inset-0 bg-blue-500 rounded-full blur opacity-40 group-hover:opacity-60 transition-opacity"></div>
                     <img src="assets/images/Omg.jpg" 
                          alt="Profile" 
-                         class="w-14 h-14 rounded-full object-cover border-2 border-white dark:border-slate-700 relative z-10 shadow-lg"
+                         class="w-14 h-14 rounded-full object-cover border-2 border-white dark:border-slate-700 relative z-10 shadow-lg bg-slate-200"
                          onerror="this.src='https://ui-avatars.com/api/?name=Aspirant&background=0D8ABC&color=fff'">
                     <div class="absolute bottom-0 right-0 w-4 h-4 bg-emerald-500 border-2 border-white dark:border-slate-800 rounded-full z-20"></div>
                 </div>
@@ -78,35 +82,40 @@ const UI = {
             <div class="premium-card px-4 py-2 rounded-2xl flex items-center gap-2 bg-white/50 dark:bg-slate-800/50 backdrop-blur-md">
                 <i class="fa-solid fa-fire text-orange-500 animate-pulse"></i>
                 <span class="text-sm font-black text-slate-700 dark:text-slate-200">
-                    ${Store.get('streak', 1)} <span class="text-[9px] text-slate-400 uppercase">DAYS</span>
+                    ${streak} <span class="text-[9px] text-slate-400 uppercase">DAYS</span>
                 </span>
             </div>
         </div>`;
     },
 
     // ============================================================
-    // 3. FOOTER NAVIGATION (3D Floating Dock)
+    // 3. FOOTER NAVIGATION (FIXED)
     // ============================================================
 
+    /**
+     * Renders the 3D Floating Dock.
+     * Crucial Fix: ensure this is called at the end of every view render.
+     */
     renderFooter(container, activeTab = 'home') {
         const tabs = [
             { id: 'home', icon: 'fa-house', label: 'Home' },
             { id: 'notes', icon: 'fa-book-open', label: 'Notes' },
-            { id: 'stats', icon: 'fa-chart-pie', label: 'Stats' }, // Command Center
+            { id: 'stats', icon: 'fa-chart-pie', label: 'Stats' },
             { id: 'settings', icon: 'fa-gear', label: 'Settings' }
         ];
 
-        container.innerHTML = `
-        <div class="absolute bottom-6 left-4 right-4 h-20 bg-white/80 dark:bg-slate-800/90 backdrop-blur-xl rounded-[32px] shadow-2xl shadow-blue-900/10 flex items-center justify-evenly border border-white/20 z-50 animate-slide-up">
+        // Create footer wrapper to prevent layout shift
+        const footerHTML = `
+        <div class="fixed bottom-6 left-4 right-4 h-20 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl rounded-[32px] shadow-2xl shadow-blue-900/10 flex items-center justify-evenly border border-white/20 z-50 animate-slide-up select-none">
             ${tabs.map(tab => {
                 const isActive = tab.id === activeTab;
                 return `
                 <button onclick="Main.navigate('${tab.id}')" 
-                        class="relative group flex flex-col items-center justify-center w-16 h-16 transition-all duration-300 ${isActive ? '-translate-y-4' : 'hover:-translate-y-1'}">
+                        class="relative group flex flex-col items-center justify-center w-16 h-16 transition-all duration-300 ${isActive ? '-translate-y-4' : 'hover:-translate-y-1 active:scale-95'}">
                     
                     ${isActive ? `
-                    <div class="absolute -top-4 w-12 h-12 bg-blue-500/20 rounded-full blur-xl"></div>
-                    <div class="absolute inset-0 bg-blue-600 rounded-[20px] shadow-lg shadow-blue-600/40 rotate-12 transition-transform"></div>
+                    <div class="absolute -top-4 w-12 h-12 bg-blue-500/20 rounded-full blur-xl pointer-events-none"></div>
+                    <div class="absolute inset-0 bg-blue-600 rounded-[20px] shadow-lg shadow-blue-600/40 rotate-12 transition-transform pointer-events-none"></div>
                     ` : ''}
 
                     <div class="relative z-10 w-12 h-12 flex items-center justify-center rounded-[18px] 
@@ -122,10 +131,16 @@ const UI = {
                 </button>`;
             }).join('')}
         </div>`;
+
+        // Append to container instead of overwriting, ensuring content isn't lost
+        // We wrap it in a div to ensure it sits on top
+        const footerContainer = document.createElement('div');
+        footerContainer.innerHTML = footerHTML;
+        container.appendChild(footerContainer);
     },
 
     // ============================================================
-    // 4. MODAL SYSTEM (Base)
+    // 4. MODAL SYSTEM (BASE)
     // ============================================================
 
     showModal(contentHTML) {
@@ -134,8 +149,8 @@ const UI = {
         if (modal && content) {
             content.innerHTML = contentHTML;
             modal.classList.remove('hidden');
-            // Disable scroll on body
-            document.body.style.overflow = 'hidden';
+            // Prevent background scrolling
+            document.body.style.overflow = 'hidden'; 
         }
     },
 
@@ -147,7 +162,7 @@ const UI = {
         }
     },
 
-    // IMPORTANT: Orientation Audio Logic moved here to be globally accessible
+    // Modals Registry - Populated further in Batch 5
     modals: {
         orientation() {
             UI.showModal(`
@@ -172,33 +187,45 @@ const UI = {
                 </button>
             </div>`);
         }
-        // Other specific modals (Disclaimer, About) will be added in Section 5
     },
-
-    // ... Continues in Part 2 ...
-// ... Continues from Part 1 ...
-
-    // ============================================================
-    // 5. HOME VIEW (The Dashboard)
+        // ============================================================
+    // 5. HOME VIEW (THE DASHBOARD)
     // ============================================================
 
-    _renderHome(container) {
-        // 1. Header
+    async _renderHome(container) {
+        // 1. Header (Synchronous part)
+        // Note: Make sure renderHeader uses Store.getAppSettings if you updated Batch 1,
+        // otherwise it might default to 0.
         this.renderHeader(container);
 
-        // 2. Resume Card (If history exists)
-        const history = Store.get('history', []);
-        if (history.length > 0) {
-            const last = history[0];
+        // 2. Resume Card (Async Fetch from IndexedDB)
+        let lastResult = null;
+        if (window.Store) {
+            try {
+                // Fetch only the latest 1 item for efficiency
+                const history = await Store.getHistory(1);
+                if (history && history.length > 0) {
+                    lastResult = history[0];
+                }
+            } catch (e) {
+                console.warn("UI: Failed to load resume card data", e);
+            }
+        }
+        
+        if (lastResult) {
+            // Safe subject name lookup
+            // If subject object is stored, use name, else use ID string
+            const subName = lastResult.subject ? lastResult.subject.toUpperCase() : 'UNKNOWN';
+            
             container.innerHTML += `
-            <div onclick="Main.showResult('${last.id}')" class="premium-card p-5 rounded-[28px] mb-8 flex items-center justify-between cursor-pointer active:scale-95 transition-transform animate-slide-up">
+            <div onclick="Main.showResult('${lastResult.id}')" class="premium-card p-5 rounded-[28px] mb-8 flex items-center justify-between cursor-pointer active:scale-95 transition-transform animate-slide-up select-none">
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 rounded-2xl bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 flex items-center justify-center text-xl">
                         <i class="fa-solid fa-clock-rotate-left"></i>
                     </div>
                     <div>
                         <h3 class="text-sm font-black text-slate-800 dark:text-white">Resume Learning</h3>
-                        <p class="text-[10px] font-bold text-slate-400 uppercase">LAST: ${last.subject.toUpperCase()} &bull; ${last.score} PTS</p>
+                        <p class="text-[10px] font-bold text-slate-400 uppercase">LAST: ${subName} &bull; ${lastResult.score || 0} PTS</p>
                     </div>
                 </div>
                 <div class="w-8 h-8 rounded-full border-2 border-slate-100 dark:border-slate-700 flex items-center justify-center text-slate-300">
@@ -213,9 +240,11 @@ const UI = {
         const gridGS = document.createElement('div');
         gridGS.className = "grid grid-cols-2 gap-4 mb-8";
         
-        CONFIG.subjectsGS1.forEach((sub, idx) => {
-            gridGS.innerHTML += this._generateSubjectCard(sub, idx);
-        });
+        if (window.CONFIG && CONFIG.subjectsGS1) {
+            CONFIG.subjectsGS1.forEach((sub, idx) => {
+                gridGS.innerHTML += this._generateSubjectCard(sub, idx);
+            });
+        }
         container.appendChild(gridGS);
 
         // 4. Subject Grid (CSAT)
@@ -224,10 +253,15 @@ const UI = {
         const gridCSAT = document.createElement('div');
         gridCSAT.className = "grid grid-cols-2 gap-4 pb-24"; // Padding for footer
         
-        CONFIG.subjectsCSAT.forEach((sub, idx) => {
-            gridCSAT.innerHTML += this._generateSubjectCard(sub, idx + 10);
-        });
+        if (window.CONFIG && CONFIG.subjectsCSAT) {
+            CONFIG.subjectsCSAT.forEach((sub, idx) => {
+                gridCSAT.innerHTML += this._generateSubjectCard(sub, idx + 10);
+            });
+        }
         container.appendChild(gridCSAT);
+
+        // 5. Render Footer
+        this.renderFooter(container, 'home');
     },
 
     _generateSubjectCard(sub, delayIdx) {
@@ -248,7 +282,7 @@ const UI = {
 
         return `
         <div onclick="Main.startQuiz('${sub.id}')" 
-             class="premium-card p-5 rounded-[24px] flex flex-col gap-4 cursor-pointer active:scale-95 transition-transform animate-view-enter"
+             class="premium-card p-5 rounded-[24px] flex flex-col gap-4 cursor-pointer active:scale-95 transition-transform animate-view-enter select-none"
              style="animation-delay: ${delayIdx * 50}ms">
             <div class="w-10 h-10 rounded-2xl ${style} flex items-center justify-center text-lg shadow-sm">
                 <i class="fa-solid fa-${sub.icon}"></i>
@@ -261,10 +295,18 @@ const UI = {
     },
 
     // ============================================================
-    // 6. QUIZ INTERFACE (The Arena)
+    // 6. QUIZ INTERFACE (THE ARENA)
     // ============================================================
 
     _drawQuiz(container) {
+        // CRASH PROTECTION: Check if Engine has questions
+        if (!Engine.state.questions || Engine.state.questions.length === 0) {
+            console.error("Quiz Draw Error: No questions found.");
+            alert("Error loading quiz data. Returning home.");
+            Main.navigate('home');
+            return;
+        }
+
         const q = Engine.getCurrentQuestion();
         const total = Engine.state.questions.length;
         const current = Engine.state.currentIndex + 1;
@@ -277,7 +319,7 @@ const UI = {
         container.innerHTML = `
         <div class="h-full flex flex-col pb-6 animate-fade-in">
             <div class="flex items-center justify-between mb-6">
-                <button onclick="Main.navigate('home')" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 flex items-center justify-center hover:bg-slate-200">
+                <button onclick="Main.navigate('home')" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 flex items-center justify-center hover:bg-slate-200 active:scale-95 transition-transform">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
                 
@@ -338,7 +380,7 @@ const UI = {
 
             <div class="pt-4 flex items-center justify-between gap-4">
                 <button onclick="Engine.prevQuestion() && UI._drawQuiz(document.getElementById('app-container'))" 
-                        class="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center hover:bg-slate-200 disabled:opacity-50"
+                        class="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center hover:bg-slate-200 disabled:opacity-50 active:scale-95 transition-transform"
                         ${Engine.state.currentIndex === 0 ? 'disabled' : ''}>
                     <i class="fa-solid fa-arrow-left"></i>
                 </button>
@@ -364,140 +406,193 @@ const UI = {
             el.textContent = `${m}:${s}`;
             
             // Visual Alarm for last 60 seconds
-            if (seconds < 60) el.classList.add('text-rose-500', 'animate-pulse');
+            if (seconds < 60) {
+                el.classList.add('text-rose-500', 'animate-pulse');
+            } else {
+                el.classList.remove('text-rose-500', 'animate-pulse');
+            }
         }
     },
-    
-    // ... Continues in Part 3 ...
-  // ... Continues from Part 2 ...
-
-    // ============================================================
-    // 7. RESULT ANALYSIS (The Post-Mortem)
+        // ============================================================
+    // 7. RESULT ANALYSIS (THE POST-MORTEM)
     // ============================================================
 
-    _drawAnalysis(container, resultId) {
-        const history = Store.get('history', []);
-        const result = history.find(r => r.id === resultId);
+    async _drawAnalysis(container, resultId) {
+        // Show loading while we fetch from DB
+        this.showLoading();
         
-        if (!result) {
-            Main.navigate('home');
-            return;
-        }
-
-        // Calculate visual metrics
-        const percentage = (result.score / result.totalMarks) * 100;
-        const colorClass = percentage >= 50 ? 'text-emerald-500' : 'text-rose-500';
-        const bgClass = percentage >= 50 ? 'bg-emerald-50 dark:bg-emerald-900/20' : 'bg-rose-50 dark:bg-rose-900/20';
-        const icon = percentage >= 50 ? 'fa-trophy' : 'fa-chart-simple';
-
-        container.innerHTML = `
-        <div class="h-full flex flex-col pb-6 animate-slide-up">
-            <div class="flex items-center justify-between mb-6">
-                <button onclick="Main.navigate('home')" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 flex items-center justify-center hover:bg-slate-200">
-                    <i class="fa-solid fa-arrow-left"></i>
-                </button>
-                <h2 class="text-xs font-black text-slate-400 uppercase tracking-widest">Performance Report</h2>
-                <div class="w-10"></div> </div>
-
-            <div class="premium-card p-6 rounded-[32px] mb-8 text-center relative overflow-hidden">
-                <div class="absolute top-0 left-0 w-full h-2 ${percentage >= 50 ? 'bg-emerald-500' : 'bg-rose-500'}"></div>
+        try {
+            // 1. Fetch History from IndexedDB (Async)
+            // We fetch the last 20 items to be safe
+            let result = null;
+            if (window.Store) {
+                const history = await Store.getHistory(20);
+                // Try to find by specific ID
+                result = history.find(r => r.id === resultId);
                 
-                <div class="w-20 h-20 mx-auto rounded-full ${bgClass} ${colorClass} flex items-center justify-center text-3xl mb-4 shadow-sm">
-                    <i class="fa-solid ${icon}"></i>
+                // Fallback: If not found (rare timing issue), grab the absolute latest
+                if (!result && history.length > 0) {
+                    result = history[0];
+                }
+            }
+
+            // Safety: If still no result, go home
+            if (!result) {
+                console.warn("UI: Result not found in DB, redirecting.");
+                Main.navigate('home');
+                return;
+            }
+
+            // 2. Render Logic
+            const percentage = (result.score / result.totalMarks) * 100;
+            const colorClass = percentage >= 50 ? 'text-emerald-500' : 'text-rose-500';
+            const bgClass = percentage >= 50 ? 'bg-emerald-50 dark:bg-emerald-900/20' : 'bg-rose-50 dark:bg-rose-900/20';
+            const icon = percentage >= 50 ? 'fa-trophy' : 'fa-chart-simple';
+
+            container.innerHTML = `
+            <div class="h-full flex flex-col pb-6 animate-slide-up select-none">
+                <div class="flex items-center justify-between mb-6">
+                    <button onclick="Main.navigate('home')" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 flex items-center justify-center hover:bg-slate-200 active:scale-95 transition-transform">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                    <h2 class="text-xs font-black text-slate-400 uppercase tracking-widest">Performance Report</h2>
+                    <div class="w-10"></div> 
                 </div>
-                
-                <h1 class="text-5xl font-black text-slate-800 dark:text-white mb-1 font-display tracking-tight">
-                    ${result.score.toFixed(1)}
-                </h1>
-                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-6">OUT OF ${result.totalMarks}</p>
 
-                <div class="grid grid-cols-3 gap-2 border-t border-slate-100 dark:border-slate-700 pt-6">
-                    <div>
-                        <div class="text-emerald-500 font-black text-xl">${result.correct}</div>
-                        <div class="text-[8px] text-slate-400 uppercase font-bold">Correct</div>
+                <div class="premium-card p-6 rounded-[32px] mb-8 text-center relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-2 ${percentage >= 50 ? 'bg-emerald-500' : 'bg-rose-500'}"></div>
+                    
+                    <div class="w-20 h-20 mx-auto rounded-full ${bgClass} ${colorClass} flex items-center justify-center text-3xl mb-4 shadow-sm">
+                        <i class="fa-solid ${icon}"></i>
                     </div>
-                    <div>
-                        <div class="text-rose-500 font-black text-xl">${result.wrong}</div>
-                        <div class="text-[8px] text-slate-400 uppercase font-bold">Wrong</div>
-                    </div>
-                    <div>
-                        <div class="text-blue-500 font-black text-xl">${result.accuracy}%</div>
-                        <div class="text-[8px] text-slate-400 uppercase font-bold">Accuracy</div>
-                    </div>
-                </div>
-            </div>
+                    
+                    <h1 class="text-5xl font-black text-slate-800 dark:text-white mb-1 font-display tracking-tight">
+                        ${result.score.toFixed(1)}
+                    </h1>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-6">OUT OF ${result.totalMarks}</p>
 
-            <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 pl-2">Detailed Solutions</h3>
-            <div class="flex-1 overflow-y-auto space-y-8 px-1 custom-scrollbar">
-                ${Engine.state.questions.map((q, idx) => {
-                    const userAns = Engine.state.userAnswers[idx];
-                    const isCorrect = userAns && userAns.selected === q.correctIndex;
-                    const isSkipped = !userAns || userAns.selected === null;
-                    const isWrong = !isCorrect && !isSkipped;
-
-                    // Determine Status Badge
-                    let statusBadge = '';
-                    if (isCorrect) statusBadge = `<span class="px-2 py-1 bg-emerald-100 text-emerald-700 rounded-md text-[9px] font-bold uppercase"><i class="fa-solid fa-check"></i> Correct (+2.0)</span>`;
-                    else if (isWrong) statusBadge = `<span class="px-2 py-1 bg-rose-100 text-rose-700 rounded-md text-[9px] font-bold uppercase"><i class="fa-solid fa-xmark"></i> Wrong (-0.66)</span>`;
-                    else statusBadge = `<span class="px-2 py-1 bg-slate-100 text-slate-500 rounded-md text-[9px] font-bold uppercase">Skipped</span>`;
-
-                    return `
-                    <div class="group relative">
-                        ${idx !== Engine.state.questions.length - 1 ? '<div class="absolute left-6 top-16 bottom-[-32px] w-0.5 bg-slate-100 dark:bg-slate-800 group-hover:bg-blue-100 transition-colors"></div>' : ''}
-                        
-                        <div class="flex gap-4">
-                            <div class="flex-shrink-0 w-12 h-12 rounded-2xl bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 flex items-center justify-center font-black text-slate-300 shadow-sm z-10">
-                                ${idx + 1}
-                            </div>
-                            
-                            <div class="flex-1 pb-2">
-                                <div class="flex items-center justify-between mb-2">
-                                    ${statusBadge}
-                                    <span class="text-[9px] font-mono text-slate-400">⏱️ ${userAns?.timeSpent || 0}s</span>
-                                </div>
-                                
-                                <p class="text-sm font-bold text-slate-800 dark:text-slate-200 mb-4 leading-relaxed">
-                                    ${this.sanitize(q.text)}
-                                </p>
-
-                                <div class="space-y-2 mb-4">
-                                    ${q.options.map((opt, oIdx) => {
-                                        let optClass = "border-transparent bg-slate-50 dark:bg-slate-800/50 text-slate-500";
-                                        let icon = `<div class="w-5 h-5 rounded-md bg-slate-200 dark:bg-slate-700 text-[10px] flex items-center justify-center font-bold">${String.fromCharCode(65+oIdx)}</div>`;
-                                        
-                                        // Highlight Logic
-                                        if (oIdx === q.correctIndex) {
-                                            // Always show correct answer in Green
-                                            optClass = "border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400";
-                                            icon = `<div class="w-5 h-5 rounded-md bg-emerald-500 text-white text-[10px] flex items-center justify-center"><i class="fa-solid fa-check"></i></div>`;
-                                        } else if (isWrong && oIdx === userAns.selected) {
-                                            // Show user's wrong choice in Red
-                                            optClass = "border-rose-500 bg-rose-50 dark:bg-rose-900/20 text-rose-700 dark:text-rose-400";
-                                            icon = `<div class="w-5 h-5 rounded-md bg-rose-500 text-white text-[10px] flex items-center justify-center"><i class="fa-solid fa-xmark"></i></div>`;
-                                        }
-
-                                        return `
-                                        <div class="p-3 rounded-xl border ${optClass} flex items-center gap-3 text-xs">
-                                            ${icon}
-                                            <span class="flex-1">${this.sanitize(opt)}</span>
-                                        </div>`;
-                                    }).join('')}
-                                </div>
-
-                                ${this._renderExplanation(q)}
-                            </div>
+                    <div class="grid grid-cols-3 gap-2 border-t border-slate-100 dark:border-slate-700 pt-6">
+                        <div>
+                            <div class="text-emerald-500 font-black text-xl">${result.correct}</div>
+                            <div class="text-[8px] text-slate-400 uppercase font-bold">Correct</div>
                         </div>
-                    </div>`;
-                }).join('')}
-            </div>
-        </div>`;
+                        <div>
+                            <div class="text-rose-500 font-black text-xl">${result.wrong}</div>
+                            <div class="text-[8px] text-slate-400 uppercase font-bold">Wrong</div>
+                        </div>
+                        <div>
+                            <div class="text-blue-500 font-black text-xl">${result.accuracy}%</div>
+                            <div class="text-[8px] text-slate-400 uppercase font-bold">Accuracy</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 pl-2">Detailed Solutions</h3>
+                
+                <div class="flex-1 overflow-y-auto space-y-8 px-1 custom-scrollbar">
+                    ${this._generateSolutionList(result)}
+                </div>
+            </div>`;
+
+        } catch (e) {
+            console.error("UI: Error drawing analysis", e);
+            container.innerHTML = `<div class="p-8 text-center text-rose-500">Error loading result.</div>`;
+        } finally {
+            this.hideLoading();
+        }
     },
 
-    // NEW: Structured Explanation Logic (Recreating your screenshot)
+    // Helper to generate the list of questions/answers
+    _generateSolutionList(result) {
+        // If Engine questions are lost (e.g. reload), we can't show full text easily 
+        // without complex re-fetching. We assume standard flow here.
+        const questions = Engine.state.questions && Engine.state.questions.length > 0 
+                          ? Engine.state.questions 
+                          : []; // Fallback empty if refresh
+
+        if (questions.length === 0) {
+            return `<div class="text-center p-4 text-slate-400 text-xs">
+                Detailed solutions are available immediately after the test.<br>
+                Please view "Mistakes" in Revision mode for saved errors.
+            </div>`;
+        }
+
+        return questions.map((q, idx) => {
+            // We need to look up what the user answered for THIS question ID
+            // The result object has 'correct', 'wrong', 'skipped' counts, 
+            // but we need the specific selection index.
+            // Engine.state.userAnswers has it.
+            const userAns = Engine.state.userAnswers[idx];
+            
+            const isCorrect = userAns && userAns.selected === q.correctIndex;
+            const isSkipped = !userAns || userAns.selected === null;
+            const isWrong = !isCorrect && !isSkipped;
+
+            let statusBadge = '';
+            if (isCorrect) statusBadge = `<span class="px-2 py-1 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 rounded-md text-[9px] font-bold uppercase"><i class="fa-solid fa-check"></i> Correct</span>`;
+            else if (isWrong) statusBadge = `<span class="px-2 py-1 bg-rose-100 dark:bg-rose-900/30 text-rose-700 dark:text-rose-400 rounded-md text-[9px] font-bold uppercase"><i class="fa-solid fa-xmark"></i> Wrong</span>`;
+            else statusBadge = `<span class="px-2 py-1 bg-slate-100 dark:bg-slate-700 text-slate-500 rounded-md text-[9px] font-bold uppercase">Skipped</span>`;
+
+            return `
+            <div class="group relative">
+                ${idx !== questions.length - 1 ? '<div class="absolute left-6 top-16 bottom-[-32px] w-0.5 bg-slate-100 dark:bg-slate-800 group-hover:bg-blue-100 transition-colors"></div>' : ''}
+                
+                <div class="flex gap-4">
+                    <div class="flex-shrink-0 w-12 h-12 rounded-2xl bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 flex items-center justify-center font-black text-slate-300 shadow-sm z-10">
+                        ${idx + 1}
+                    </div>
+                    
+                    <div class="flex-1 pb-2">
+                        <div class="flex items-center justify-between mb-2">
+                            ${statusBadge}
+                            <span class="text-[9px] font-mono text-slate-400">⏱️ ${userAns?.timeSpent || 0}s</span>
+                        </div>
+                        
+                        <p class="text-sm font-bold text-slate-800 dark:text-slate-200 mb-4 leading-relaxed">
+                            ${this.sanitize(q.text)}
+                        </p>
+
+                        <div class="space-y-2 mb-4">
+                            ${q.options.map((opt, oIdx) => {
+                                let optClass = "border-transparent bg-slate-50 dark:bg-slate-800/50 text-slate-500";
+                                let icon = `<div class="w-5 h-5 rounded-md bg-slate-200 dark:bg-slate-700 text-[10px] flex items-center justify-center font-bold">${String.fromCharCode(65+oIdx)}</div>`;
+                                
+                                // Highlight Logic
+                                if (oIdx === q.correctIndex) {
+                                    optClass = "border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400";
+                                    icon = `<div class="w-5 h-5 rounded-md bg-emerald-500 text-white text-[10px] flex items-center justify-center"><i class="fa-solid fa-check"></i></div>`;
+                                } else if (isWrong && oIdx === userAns.selected) {
+                                    optClass = "border-rose-500 bg-rose-50 dark:bg-rose-900/20 text-rose-700 dark:text-rose-400";
+                                    icon = `<div class="w-5 h-5 rounded-md bg-rose-500 text-white text-[10px] flex items-center justify-center"><i class="fa-solid fa-xmark"></i></div>`;
+                                }
+
+                                return `
+                                <div class="p-3 rounded-xl border ${optClass} flex items-center gap-3 text-xs">
+                                    ${icon}
+                                    <span class="flex-1">${this.sanitize(opt)}</span>
+                                </div>`;
+                            }).join('')}
+                        </div>
+
+                        ${this._renderExplanation(q)}
+                    </div>
+                </div>
+            </div>`;
+        }).join('');
+    },
+
+    // NEW: Structured Explanation Logic
     _renderExplanation(q) {
-        // Safe access for Legacy vs Pro schema
-        const exp = typeof q.explanation === 'object' ? q.explanation : { core: q.explanation };
-        const notes = exp.expert_note || q.notes || "Conceptual clarity is key.";
+        // Safe access: ensure exp is an object
+        // NOTE: Adapter.js should have normalized this, but this is a fail-safe
+        let exp = q.explanation;
+        if (!exp) exp = { core: "No explanation provided." };
+        if (typeof exp === 'string') exp = { core: exp };
+
+        const coreText = exp.core || "Detailed explanation not available.";
+        const expertNote = exp.expert_note || q.notes || "Conceptual clarity is key.";
+        const elimination = exp.elimination; // Might be null
+        const mnemonics = exp.mnemonics; // Might be null
         
         return `
         <div class="mt-4 space-y-3 animate-view-enter">
@@ -506,15 +601,33 @@ const UI = {
                     <i class="fa-solid fa-lightbulb"></i> Explanation
                 </h4>
                 <p class="text-xs text-slate-700 dark:text-slate-200 leading-relaxed text-justify">
-                    ${this.sanitize(exp.core)}
+                    ${this.sanitize(coreText)}
                 </p>
             </div>
+            
+            ${elimination ? `
+            <div class="p-3 bg-blue-50/80 dark:bg-blue-900/20 rounded-[16px] border-l-4 border-blue-500 flex gap-3 items-start">
+                <i class="fa-solid fa-scissors text-blue-500 text-xs mt-0.5"></i>
+                <div>
+                    <h4 class="text-[8px] font-black text-blue-600 uppercase tracking-widest mb-1">Elimination Logic</h4>
+                    <p class="text-[10px] text-slate-600 dark:text-slate-300 italic">"${this.sanitize(elimination)}"</p>
+                </div>
+            </div>` : ''}
+
+            ${mnemonics ? `
+            <div class="p-3 bg-purple-50/80 dark:bg-purple-900/20 rounded-[16px] border-l-4 border-purple-500 flex gap-3 items-start">
+                <i class="fa-solid fa-brain text-purple-500 text-xs mt-0.5"></i>
+                <div>
+                    <h4 class="text-[8px] font-black text-purple-600 uppercase tracking-widest mb-1">Mnemonic</h4>
+                    <p class="text-[10px] text-slate-600 dark:text-slate-300 font-bold">"${this.sanitize(mnemonics)}"</p>
+                </div>
+            </div>` : ''}
             
             <div class="p-3 bg-amber-50/80 dark:bg-amber-900/20 rounded-[16px] border-l-4 border-amber-500 flex gap-3 items-start">
                 <i class="fa-solid fa-triangle-exclamation text-amber-500 text-xs mt-0.5"></i>
                 <div>
                     <h4 class="text-[8px] font-black text-amber-600 uppercase tracking-widest mb-1">Gyan Amala Insight</h4>
-                    <p class="text-[10px] text-slate-600 dark:text-slate-300 italic">"${this.sanitize(notes)}"</p>
+                    <p class="text-[10px] text-slate-600 dark:text-slate-300 italic">"${this.sanitize(expertNote)}"</p>
                 </div>
             </div>
 
@@ -528,7 +641,7 @@ const UI = {
     },
 
     // ============================================================
-    // 8. NOTES LIBRARY (Topper Resources)
+    // 8. NOTES LIBRARY (TOPPER RESOURCES)
     // ============================================================
 
     _renderNotes(container) {
@@ -540,7 +653,7 @@ const UI = {
             
             <div class="grid grid-cols-2 gap-4">
                 ${CONFIG.notesLibrary.map((note, idx) => `
-                <div class="premium-card p-4 rounded-[24px] flex flex-col gap-3 group active:scale-95 transition-transform cursor-pointer relative overflow-hidden">
+                <div class="premium-card p-4 rounded-[24px] flex flex-col gap-3 group active:scale-95 transition-transform cursor-pointer relative overflow-hidden select-none">
                     <div class="absolute inset-0 bg-gradient-to-br from-white to-${note.gradient}-50 dark:from-slate-800 dark:to-slate-900 opacity-50"></div>
                     
                     <div class="relative z-10 w-10 h-10 rounded-xl bg-white dark:bg-slate-700 shadow-sm flex items-center justify-center text-${note.gradient}-500 text-lg">
@@ -575,12 +688,8 @@ const UI = {
 
         this.renderFooter(container, 'notes');
     },
-
-    // ... Continues in Part 4 ...
-  // ... Continues from Part 3 ...
-
     // ============================================================
-    // 9. COMMAND CENTER (The Stats Dashboard)
+    // 9. COMMAND CENTER (THE STATS DASHBOARD)
     // ============================================================
 
     async _renderStats(container) {
@@ -588,7 +697,6 @@ const UI = {
         this.renderHeader(container);
 
         // 2. Skeleton Loading State (The "Thinking" Phase)
-        // Gives the user a sense that the AI is crunching numbers
         const skeletonHTML = `
             <div class="space-y-6 animate-pulse px-1">
                 <div class="h-48 bg-slate-200 dark:bg-slate-800 rounded-[30px]"></div>
@@ -603,69 +711,93 @@ const UI = {
         contentDiv.innerHTML = skeletonHTML;
         container.appendChild(contentDiv);
 
-        // 3. Fetch Data from Analytics Engines (Async)
-        // We predict for 'General Studies' overall context
-        const prediction = await PredictiveEngine.predictScore('gs_overall'); 
-        const sleepData = StudyTracker.getLastSleepData();
-        const studyHours = StudyTracker.getTodayStudyHours();
+        try {
+            // 3. Fetch Data from Analytics Engines (Async)
+            // We fetch history once here and pass it down to avoid multiple DB calls
+            let history = [];
+            if (window.Store) {
+                // Get last 50 tests for charts
+                history = await Store.getHistory(50);
+            }
 
-        // 4. Render Actual Dashboard
-        contentDiv.innerHTML = `
-            <div class="space-y-6 pb-24 animate-view-enter">
+            // Safety check for Engines
+            const prediction = window.PredictiveEngine 
+                ? await PredictiveEngine.predictScore('gs_overall', history) // Pass history if engine needs it
+                : { status: 'cold_start', trend: 'stable', projectedScore: 'N/A', factors: [] };
+            
+            // StudyTracker data is lightweight/sync (from LocalStorage part of Hybrid Store)
+            const sleepData = window.StudyTracker 
+                ? StudyTracker.getLastSleepData() 
+                : { duration: 0, quality: 'Unknown' };
                 
-                ${this._generateOracleCard(prediction)}
+            const studyHours = window.StudyTracker 
+                ? StudyTracker.getTodayStudyHours() 
+                : 0;
 
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="premium-card p-5 rounded-[24px] relative overflow-hidden flex flex-col justify-between">
-                        <div class="absolute top-0 right-0 p-3 opacity-10">
-                            <i class="fa-solid fa-clock text-4xl"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Today's Focus</h4>
-                            <div class="flex items-baseline gap-1">
-                                <span class="text-3xl font-display font-black text-slate-800 dark:text-white">${studyHours}</span>
-                                <span class="text-xs text-slate-500 font-bold">hrs</span>
+            // 4. Render Actual Dashboard
+            contentDiv.innerHTML = `
+                <div class="space-y-6 pb-24 animate-view-enter select-none">
+                    
+                    ${this._generateOracleCard(prediction)}
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="premium-card p-5 rounded-[24px] relative overflow-hidden flex flex-col justify-between">
+                            <div class="absolute top-0 right-0 p-3 opacity-10">
+                                <i class="fa-solid fa-clock text-4xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Today's Focus</h4>
+                                <div class="flex items-baseline gap-1">
+                                    <span class="text-3xl font-display font-black text-slate-800 dark:text-white">${studyHours}</span>
+                                    <span class="text-xs text-slate-500 font-bold">hrs</span>
+                                </div>
+                            </div>
+                            <div class="w-full bg-slate-100 dark:bg-slate-700 h-1.5 rounded-full overflow-hidden mt-2">
+                                <div class="bg-blue-500 h-full rounded-full" style="width: ${Math.min((studyHours/8)*100, 100)}%"></div>
                             </div>
                         </div>
-                        <div class="w-full bg-slate-100 dark:bg-slate-700 h-1.5 rounded-full overflow-hidden mt-2">
-                            <div class="bg-blue-500 h-full rounded-full" style="width: ${Math.min((studyHours/8)*100, 100)}%"></div>
-                        </div>
-                    </div>
 
-                    <div class="premium-card p-5 rounded-[24px] relative overflow-hidden flex flex-col justify-between">
-                        <div class="absolute top-0 right-0 p-3 opacity-10">
-                            <i class="fa-solid fa-bed text-4xl"></i>
-                        </div>
-                        <div>
-                            <h4 class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Rest Level</h4>
-                            <div class="flex items-baseline gap-1">
-                                <span class="text-3xl font-display font-black text-slate-800 dark:text-white">${sleepData.duration}</span>
-                                <span class="text-xs text-slate-500 font-bold">hrs</span>
+                        <div class="premium-card p-5 rounded-[24px] relative overflow-hidden flex flex-col justify-between">
+                            <div class="absolute top-0 right-0 p-3 opacity-10">
+                                <i class="fa-solid fa-bed text-4xl"></i>
                             </div>
+                            <div>
+                                <h4 class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Rest Level</h4>
+                                <div class="flex items-baseline gap-1">
+                                    <span class="text-3xl font-display font-black text-slate-800 dark:text-white">${sleepData.duration}</span>
+                                    <span class="text-xs text-slate-500 font-bold">hrs</span>
+                                </div>
+                            </div>
+                            <span class="inline-block px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-wider w-fit ${this._getSleepColor(sleepData.quality)}">
+                                ${sleepData.quality}
+                            </span>
                         </div>
-                        <span class="inline-block px-2 py-0.5 rounded text-[9px] font-black uppercase tracking-wider w-fit ${this._getSleepColor(sleepData.quality)}">
-                            ${sleepData.quality}
-                        </span>
+                    </div>
+
+                    <div class="premium-card p-6 rounded-[30px]">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="font-display font-bold text-lg text-slate-800 dark:text-white leading-none">Performance<br><span class="text-slate-400 text-xs font-sans font-normal">SPEED VS ACCURACY</span></h3>
+                            <span class="px-3 py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-300 rounded-full text-[9px] font-black uppercase tracking-wide">
+                                Last 10 Tests
+                            </span>
+                        </div>
+                        <div class="relative h-48 w-full">
+                            <canvas id="performanceChart"></canvas>
+                        </div>
                     </div>
                 </div>
+            `;
 
-                <div class="premium-card p-6 rounded-[30px]">
-                    <div class="flex items-center justify-between mb-6">
-                        <h3 class="font-display font-bold text-lg text-slate-800 dark:text-white leading-none">Performance<br><span class="text-slate-400 text-xs font-sans font-normal">SPEED VS ACCURACY</span></h3>
-                        <span class="px-3 py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-300 rounded-full text-[9px] font-black uppercase tracking-wide">
-                            Last 10 Tests
-                        </span>
-                    </div>
-                    <div class="relative h-48 w-full">
-                        <canvas id="performanceChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        `;
+            // 5. Initialize Charts (Must happen after DOM insertion)
+            // We pass the fetched history data to the chart function
+            setTimeout(() => this._initStatsCharts(history), 50);
 
-        // 5. Initialize Charts (Must happen after DOM insertion)
-        setTimeout(() => this._initStatsCharts(), 50);
+        } catch (e) {
+            console.error("Stats Render Error:", e);
+            contentDiv.innerHTML = `<div class="p-4 text-center text-rose-500">Failed to load analytics.</div>`;
+        }
 
+        // 6. Render Footer
         this.renderFooter(container, 'stats');
     },
 
@@ -738,10 +870,10 @@ const UI = {
     },
 
     // ============================================================
-    // 10. CHART.JS INTEGRATION (The "Science" Layer)
+    // 10. CHART.JS INTEGRATION (THE "SCIENCE" LAYER)
     // ============================================================
     
-    _initStatsCharts() {
+    _initStatsCharts(historyData) {
         const ctx = document.getElementById('performanceChart');
         if (!ctx) return;
 
@@ -750,14 +882,17 @@ const UI = {
             window.myStatsChart.destroy();
         }
 
-        // Fetch Data from Store
-        const history = Store.get('history', []);
+        // Use the passed history data directly
+        const history = historyData || [];
         
         // Prepare Data Points: X=Time (sec), Y=Accuracy (%)
         // Limit to last 10 tests for readability
+        // Note: IndexedDB returns oldest->newest or newest->oldest depending on cursor.
+        // Batch 2 of Store.js returned 'prev' (newest first).
         const recentHistory = history.slice(0, 10);
+        
         const dataPoints = recentHistory.map(h => ({
-            x: h.totalDuration ? (h.totalDuration / (h.correct + h.wrong + h.skipped)) : 60, // Avg time/question
+            x: h.totalDuration ? (h.totalDuration / Math.max(1, (h.correct + h.wrong + h.skipped))) : 60, // Avg time/question
             y: parseFloat(h.accuracy)
         }));
 
@@ -813,18 +948,15 @@ const UI = {
         });
     },
 
-    // ... Continues in Part 5 ...
-// ... Continues from Part 4 ...
-
     // ============================================================
-    // 11. SETTINGS DASHBOARD (Advanced)
+    // 11. SETTINGS DASHBOARD (ADVANCED)
     // ============================================================
 
     _renderSettings(container) {
         this.renderHeader(container);
 
         container.innerHTML += `
-        <div class="px-2 pt-2 space-y-8 pb-32 animate-view-enter">
+        <div class="px-2 pt-2 space-y-8 pb-32 animate-view-enter select-none">
             
             <div class="space-y-3">
                 <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest pl-4">System Preferences</label>
@@ -914,19 +1046,17 @@ const UI = {
             </div>
         </div>`;
         
+        // CRITICAL FIX: Render Footer
         this.renderFooter(container, 'settings');
-    },
+    }
 
-    // ============================================================
-    // 12. SETTINGS MODALS (Content Implementation)
-    // ============================================================
+}; // CLOSING THE MAIN UI OBJECT
 
-    // Extends the 'modals' object initiated in Part 1
-    // Note: We use Object.assign to merge these new methods into UI.modals if needed, 
-    // but in this single-file assembly structure, we can just define them on the object.
-};
+// ============================================================
+// 12. SETTINGS MODALS (CONTENT INJECTION)
+// ============================================================
 
-// Merging the rest of the modals into UI.modals manually for clarity in this snippet
+// We inject these additional modals into the existing UI.modals object
 Object.assign(UI.modals, {
     
     motive() {
@@ -974,7 +1104,7 @@ Object.assign(UI.modals, {
                         <span class="text-rose-500 font-bold">Important:</span> Do not offer me security guard roles! I am currently serving the <b>RAJA OF DHOLAKPUR</b> in his security detail, and I am quite satisfied! 🛡️
                     </p>
                     
-                    <a href="mailto:?subject=Professional Opportunity: Creator of UPSCSuperApp&body=Dear Creator,%0D%0A%0D%0AI was impressed by the UPSCSuperApp architecture you built in one week.%0D%0A%0D%0AI would like to discuss a potential opportunity:%0D%0A[Enter Details Here]%0D%0A%0D%0ABest regards," 
+                    <a href="mailto:hello@gyanamala.org" 
                        class="block w-full py-3 bg-blue-600 text-white text-center rounded-xl font-black uppercase text-[10px] tracking-widest shadow-lg shadow-blue-600/30 active:scale-95 transition-transform">
                         Offer a Job (Plan B)
                     </a>
@@ -1053,6 +1183,4 @@ Object.assign(UI.modals, {
 
 // Expose to Window
 window.UI = UI;
-
-  
 
