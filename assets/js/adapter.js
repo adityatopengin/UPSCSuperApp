@@ -1,141 +1,163 @@
 /**
- * ADAPTER.JS - Data Normalization Layer
- * Version: 5.2.0 (Universal Fix)
- * Standardizes raw JSON data into the app's internal schema.
- * Fix: Supports both { questions: [] } and raw [] Array formats.
- * Organization: Gyan Amala | App: UPSCSuperApp
+ * ADAPTER.JS - The Universal Translator
+ * Version: 6.1.0 (Smart Scan Edition)
+ * Purpose: Ensures the Engine receives clean data, regardless of the JSON format.
+ * Feature: Case-insensitive key mapping (Fixes "Question" vs "question" mismatches).
  */
 
 const Adapter = {
     /**
-     * Main entry point to normalize a subject file.
-     * Uses defensive programming to prevent crashes on invalid data.
-     * @param {Object|Array} rawData - The JSON object/array loaded from fetch()
+     * Main Entry Point: Normalizes raw data into App Schema.
+     * @param {Object|Array} rawData - The JSON loaded from the file.
      */
     normalize(rawData) {
-        // 1. Safety Check: Is the data completely empty or null?
+        // 1. Safety Check: Dead Data
         if (!rawData) {
-            console.error("Adapter: Received null or undefined data.");
+            console.error("Adapter: Received null data.");
             return [];
         }
 
-        // 2. UNIVERSAL FIX: Handle both Array and Object formats
-        // Some files might be [ {q1}, {q2} ] (List)
-        // Others might be { questions: [ {q1}, {q2} ] } (Object)
+        // 2. Format Detection (Array vs Object)
         let sourceArray = [];
         
+        // Scenario A: It's already a list [ {q1}, {q2} ]
         if (Array.isArray(rawData)) {
-            // Case A: The file is just a raw list/array
-            console.log("Adapter: Detected Raw Array Format.");
             sourceArray = rawData;
-        } else if (rawData.questions && Array.isArray(rawData.questions)) {
-            // Case B: The file is an object with a 'questions' key
-            console.log("Adapter: Detected Standard Object Format.");
+        } 
+        // Scenario B: It's wrapped { "questions": [...] }
+        else if (rawData.questions && Array.isArray(rawData.questions)) {
             sourceArray = rawData.questions;
-        } else {
-            // Case C: Invalid format
-            console.error("Adapter: Invalid Data Format - Missing 'questions' array or valid list.", rawData);
+        }
+        // Scenario C: It's wrapped { "data": [...] }
+        else if (rawData.data && Array.isArray(rawData.data)) {
+            sourceArray = rawData.data;
+        }
+        // Scenario D: Case-insensitive scan for any array
+        else {
+            const keys = Object.keys(rawData);
+            for (let key of keys) {
+                if (Array.isArray(rawData[key])) {
+                    console.log(`Adapter: Auto-detected array in key ['${key}']`);
+                    sourceArray = rawData[key];
+                    break;
+                }
+            }
+        }
+
+        if (sourceArray.length === 0) {
+            console.error("Adapter: Could not find a question array inside the JSON.");
             return [];
         }
 
         console.log(`Adapter: Processing ${sourceArray.length} items...`);
 
-        // 3. Process each question safely
-        // We use .reduce instead of .map to filter out invalid items immediately
-        return sourceArray.reduce((validQuestions, q, index) => {
-            try {
-                const normalized = this._normalizeQuestion(q, index);
-                if (normalized) {
-                    validQuestions.push(normalized);
-                }
-            } catch (err) {
-                console.warn(`Adapter: Skipped corrupt question at index ${index}`, err);
+        // 3. Process & Clean
+        return sourceArray.reduce((validItems, item, index) => {
+            const cleanItem = this._normalizeItem(item, index);
+            if (cleanItem) {
+                validItems.push(cleanItem);
             }
-            return validQuestions;
+            return validItems;
         }, []);
     },
 
-    // ... Continues in Part 2 ...
-        /**
-     * Normalizes a single question object with defensive programming.
-     * @param {Object} q - Raw question object
-     * @param {Number} index - Index for fallback ID generation
+    /**
+     * Smart Item Normalizer
+     * Uses fuzzy matching to find text/options/answer fields.
      */
-    _normalizeQuestion(q, index) {
-        // 1. Basic Validation: Must have text and options
-        // Some JSONs use 'question', others 'text'
-        const qText = q.question || q.text;
-        
-        // Safety: If no text or options are present, drop this question
-        if (!qText || !Array.isArray(q.options)) {
-            // Optional: Log specific missing fields for debugging
-            // console.warn(`Adapter: Question at index ${index} missing text or options.`);
-            return null; // Signals the reduce loop to skip this
-        }
-
-        // 2. Safe Explanation Handling (The Crash Fix)
-        // Detect if it's a simple string (Legacy), null, or a Pro Object
-        let finalExplanation = {
-            core: "Detailed explanation not available for this question.",
-            expert_note: "Focus on the core concept.",
-            elimination: null,
-            mnemonics: null
+    _normalizeItem(q, index) {
+        // HELPER: Case-insensitive property finder
+        // usage: findKey(q, 'question', 'text', 'title')
+        const getVal = (obj, ...candidates) => {
+            const keys = Object.keys(obj).map(k => k.toLowerCase());
+            for (let c of candidates) {
+                // Exact match check
+                if (obj[c]) return obj[c];
+                // Case-insensitive check
+                const matchIndex = keys.indexOf(c.toLowerCase());
+                if (matchIndex > -1) {
+                    const realKey = Object.keys(obj)[matchIndex];
+                    return obj[realKey];
+                }
+            }
+            return null;
         };
 
-        if (q.explanation) {
-            if (typeof q.explanation === 'string') {
-                // Legacy Format: Convert string to Pro Schema
-                finalExplanation.core = q.explanation;
-                // Check if there's a separate 'notes' field in raw data
-                if (q.notes) finalExplanation.expert_note = q.notes;
+        // 1. Extract Core Fields (Smart Scan)
+        const qText = getVal(q, 'question', 'text', 'q', 'title', 'statement');
+        const qOptions = getVal(q, 'options', 'choices', 'answers', 'alternatives');
+        
+        // 2. Validate
+        if (!qText || !Array.isArray(qOptions) || qOptions.length < 2) {
+            // console.warn(`Adapter: Item ${index} is malformed (missing text or options).`);
+            return null; 
+        }
+
+        // 3. Extract Correct Answer
+        // Supports index (0-3) or string ("A", "Option A")
+        let rawAns = getVal(q, 'answer', 'correct', 'correctIndex', 'ans');
+        let correctIndex = 0; // Default
+
+        if (typeof rawAns === 'number') {
+            correctIndex = rawAns;
+        } else if (typeof rawAns === 'string') {
+            // Logic to convert "B" or "Option B" to index 1
+            const char = rawAns.trim().charAt(0).toUpperCase();
+            const map = { 'A': 0, 'B': 1, 'C': 2, 'D': 3 };
+            if (map[char] !== undefined) correctIndex = map[char];
+        }
+
+        // ... Continues in Part 2 ...
+
+        // 4. Safe Explanation Handling (The "Crash Fix")
+        // Converts legacy string explanations into the new "Pro Object" format
+        // This ensures the UI never crashes when trying to read explanation.core
+        
+        const rawExpl = getVal(q, 'explanation', 'solution', 'rationale', 'desc');
+        
+        let finalExplanation = {
+            core: "Detailed explanation not available for this question.",
+            expert_note: null,
+            elimination: null
+        };
+
+        if (rawExpl) {
+            if (typeof rawExpl === 'string') {
+                // Case A: It's just a string -> Put it in 'core'
+                finalExplanation.core = rawExpl;
+                
+                // Check if there's a separate 'notes' field for extra info
+                const notes = getVal(q, 'notes', 'remark', 'tip');
+                if (notes) finalExplanation.expert_note = notes;
             } 
-            else if (typeof q.explanation === 'object') {
-                // Pro Format: Validate keys
+            else if (typeof rawExpl === 'object') {
+                // Case B: It's already an object -> Map keys safely
                 finalExplanation = {
-                    core: q.explanation.core || finalExplanation.core,
-                    expert_note: q.explanation.expert_note || q.notes || finalExplanation.expert_note,
-                    elimination: q.explanation.elimination || null,
-                    mnemonics: q.explanation.mnemonics || null
+                    core: getVal(rawExpl, 'core', 'text', 'main') || finalExplanation.core,
+                    expert_note: getVal(rawExpl, 'expert_note', 'note', 'extra') || null,
+                    elimination: getVal(rawExpl, 'elimination', 'trick') || null
                 };
             }
         }
 
-        // 3. Return Standardized Internal Schema
+        // 5. Construct & Return the Clean Object
+        // This schema matches exactly what Engine.js expects
         return {
-            // Generate ID if missing (Essential for React/DOM keys later)
-            id: q.id || `q_${Date.now()}_${index}`,
-            
-            // Core Content
+            id: q.id || `q_${Date.now()}_${index}`, // Fallback ID
             text: qText,
-            options: q.options, // Array of strings ["A", "B", "C", "D"]
+            options: qOptions,
+            correctIndex: correctIndex,
             
-            // Answer Handling: Support 'answer' (Legacy) or 'correctIndex'
-            // Default to 0 if missing to prevent calculation errors
-            correctIndex: (typeof q.answer === 'number') ? q.answer : (q.correctIndex || 0),
-            
-            // Metadata for "Syllabus Tracker" & "Stats"
-            topic: q.topic || "General", 
-            difficulty: q.difficulty || "Moderate",
-            tags: Array.isArray(q.tags) ? q.tags : ["General"],
+            // Metadata
+            topic: getVal(q, 'topic', 'subject', 'category') || "General",
+            difficulty: getVal(q, 'difficulty', 'level') || "Moderate",
+            tags: getVal(q, 'tags', 'keywords') || [],
 
-            // The Enriched Learning Content
+            // The Rich Content
             explanation: finalExplanation
         };
-    },
-
-    /**
-     * Utility: Shuffles options for Learning Mode.
-     * Currently returns question as-is for Test Mode stability.
-     */
-    shuffleOptions(question) {
-        if (!question) return null;
-        // Future implementation: Logic to shuffle options array 
-        // and adjust correctIndex accordingly.
-        return question;
     }
 };
 
 // Expose to Window
 window.Adapter = Adapter;
-
-
