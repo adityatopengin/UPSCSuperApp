@@ -85,6 +85,72 @@
             });
         }
     </script>
+        <div id="debug-console" style="
+    position: fixed; 
+    bottom: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 35vh; 
+    background: rgba(0, 0, 0, 0.9); 
+    color: #00ff00; 
+    font-family: 'Courier New', monospace; 
+    font-size: 11px; 
+    padding: 10px; 
+    overflow-y: scroll; 
+    z-index: 99999; 
+    border-top: 2px solid #00ff00;
+    word-wrap: break-word;
+">
+    <div style="color: #fff; font-weight: bold; border-bottom: 1px solid #333; padding-bottom: 5px; margin-bottom: 5px;">
+        ⚠️ LIVE DEBUGGER ACTIVE
+    </div>
+</div>
+
+<script>
+    (function() {
+        const debugBox = document.getElementById('debug-console');
+
+        function printToScreen(message, color) {
+            const div = document.createElement('div');
+            div.style.color = color;
+            div.style.marginBottom = '4px';
+            div.style.borderBottom = '1px solid #222';
+            div.innerText = `> ${message}`;
+            debugBox.appendChild(div);
+            debugBox.scrollTop = debugBox.scrollHeight; // Auto-scroll to bottom
+        }
+
+        // 1. Capture Standard Logs
+        const oldLog = console.log;
+        console.log = function(...args) {
+            const msg = args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ');
+            printToScreen(msg, '#ffffff'); // White text
+            oldLog.apply(console, args);
+        };
+
+        // 2. Capture Errors (The most important part)
+        const oldError = console.error;
+        console.error = function(...args) {
+            const msg = args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ');
+            printToScreen(`❌ ERROR: ${msg}`, '#ff4444'); // Red text
+            oldError.apply(console, args);
+        };
+
+        // 3. Capture "Silent" Syntax Errors (e.g., missing brackets)
+        window.onerror = function(message, source, lineno, colno, error) {
+            const file = source ? source.split('/').pop() : 'Unknown';
+            printToScreen(`☠️ CRITICAL: ${message} \n   at ${file}:${lineno}`, '#ff00ff'); // Magenta text
+        };
+        
+        // 4. Capture Unhandled Promise Rejections (Async errors)
+        window.addEventListener('unhandledrejection', function(event) {
+            printToScreen(`⚠️ ASYNC ERROR: ${event.reason}`, '#ffa500'); // Orange text
+        });
+
+        console.log("Debug Console Ready. Waiting for App...");
+    })();
+</script>
+
 </body>
 </html>
 
