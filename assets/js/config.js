@@ -1,16 +1,16 @@
 /**
  * CONFIG.JS - The Central Registry
- * Version: 5.0.0 (Gyan Amala Edition)
+ * Version: 5.1.0 (Bulletproof Edition)
  * Handles Subject Mappings, Resource Links, and UI Constants.
  * Organization: Gyan Amala | App: UPSCSuperApp
  */
 
 const CONFIG = {
     // 1. APP METADATA
-    version: "5.0.0",
+    version: "5.1.0",
     name: "UPSCSuperApp",
     org: "Gyan Amala",
-    targetYear: "Universal", // Applicable for all aspirants (No batch restriction)
+    targetYear: "Universal",
 
     // 2. QUIZ PROTOCOLS (Strict Production Values)
     defaults: {
@@ -45,7 +45,7 @@ const CONFIG = {
         ]
     },
 
-    // 4. NOTES LIBRARY (Eyecatcher Cards)
+    // 4. NOTES LIBRARY (Eyecatcher Cards for Home Screen)
     notesLibrary: [
         { title: "Ancient India", subtitle: "Timeline & Maps", icon: "monument", gradient: "gold" },
         { title: "Modern History", subtitle: "Freedom Struggle", icon: "scroll", gradient: "royal" },
@@ -61,7 +61,7 @@ const CONFIG = {
         { title: "Maps & Places", subtitle: "News Locations", icon: "map-location-dot", gradient: "emerald" }
     ],
 
-    // 5. SUBJECTS REGISTRY
+    // 5. SUBJECTS REGISTRY (Used by UI.js to build grids)
     subjectsGS1: [
         { id: 'ancient', name: 'Ancient History', icon: 'land-mine-on', color: 'amber', file: 'ancient_history.json' },
         { id: 'medieval', name: 'Medieval History', icon: 'chess-rook', color: 'amber', file: 'medieval_history.json' },
@@ -83,12 +83,25 @@ const CONFIG = {
     ],
 
     // 6. UTILITY METHODS
-    getFileName(subjectName) {
+    /**
+     * Retrieves the JSON filename for a given subject ID.
+     * @param {String} subjectId 
+     * @returns {String|null} Filename or null if not found
+     */
+    getFileName(subjectId) {
+        if (!subjectId) return null;
+        
         const all = [...this.subjectsGS1, ...this.subjectsCSAT];
-        const match = all.find(s => s.name === subjectName || s.id === subjectName);
-        return match ? match.file : 'ancient_history.json';
+        const match = all.find(s => s.name === subjectId || s.id === subjectId);
+        
+        // Return file if found, else return null (Main.js will handle the error)
+        return match ? match.file : null;
     }
 };
 
 // Freeze object to prevent runtime tampering in production
 Object.freeze(CONFIG);
+
+// Expose to Window
+window.CONFIG = CONFIG;
+
