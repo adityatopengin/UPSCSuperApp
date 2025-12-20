@@ -1,175 +1,305 @@
 /**
- * STORE.JS - Production Data Persistence
- * Version: 5.0.0 (Cloudless Sync Edition)
- * Handles LocalStorage, Quota Management, and Backup/Restore.
+ * STORE.JS - The Hybrid Persistence Layer
+ * Version: 5.2.0 (IndexedDB + LocalStorage)
+ * Strategy: 
+ * - LocalStorage: For lightweight Settings, Streaks, and User Metadata (Sync)
+ * - IndexedDB: For massive History, Mistakes, and Analytics Data (Async)
  * Organization: Gyan Amala | App: UPSCSuperApp
  */
 
 const Store = {
-    _prefix: 'upsc_pro_',
+    // Configuration
+    _dbName: 'UPSCSuperApp_DB',
+    _dbVersion: 1,
+    _prefix: 'upsc_lite_', // Prefix for LocalStorage keys
+
+    // ============================================================
+    // 1. SYNCHRONOUS LAYER (LocalStorage)
+    // Used for: Settings, Theme, Auth Tokens, Simple Flags
+    // ============================================================
 
     /**
-     * Internal: Safe Storage Set with Quota Handling
+     * Get lightweight setting (Sync)
      */
-    _safeSet(key, value) {
-        try {
-            localStorage.setItem(this._prefix + key, JSON.stringify(value));
-            return true;
-        } catch (e) {
-            // Check if it's a QuotaExceededError
-            if (e.name === 'QuotaExceededError' || e.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
-                console.warn('Storage Quota Exceeded. Attempting automatic cleanup...');
-                this._cleanupOldHistory();
-                // Try one more time after cleanup
-                try {
-                    localStorage.setItem(this._prefix + key, JSON.stringify(value));
-                    return true;
-                } catch (retryError) {
-                    console.error('Critical Storage Failure:', retryError);
-                    return false;
-                }
-            }
-            console.error('Storage Write Error:', e);
-            return false;
-        }
-    },
-
-    /**
-     * Internal: Automatic Cleanup for Quota Management
-     * Removes oldest history items if storage is full.
-     */
-    _cleanupOldHistory() {
-        const history = this.get('history', []);
-        if (history.length > 5) {
-            // Keep only the 5 most recent results to free up space
-            const reduced = history.slice(0, 5);
-            this.set('history', reduced);
-        }
-    },
-
-    /**
-     * Get data with safe parsing
-     */
-    get(key, fallback = null) {
+    getAppSettings(key, fallback = null) {
         try {
             const data = localStorage.getItem(this._prefix + key);
             return data ? JSON.parse(data) : fallback;
         } catch (e) {
-            console.error(`Storage Read Error [${key}]:`, e);
+            console.error(`Store (Sync): Read Error [${key}]`, e);
             return fallback;
         }
     },
 
     /**
-     * Set data safely
+     * Save lightweight setting (Sync)
      */
-    set(key, value) {
-        return this._safeSet(key, value);
+    setAppSettings(key, value) {
+        try {
+            localStorage.setItem(this._prefix + key, JSON.stringify(value));
+            return true;
+        } catch (e) {
+            console.warn('Store (Sync): Write Error. Storage might be full.', e);
+            return false;
+        }
     },
 
     /**
-     * Specialized: Save Quiz Result with Unique ID and Timestamp
+     * Specific helper for the "Visited" flag (Orientation)
+     */
+    checkVisited() {
+        return this.getAppSettings('visited', false);
+    },
+
+    setVisited() {
+        return this.setAppSettings('visited', true);
+    },
+
+    // ============================================================
+    // 2. ASYNCHRONOUS LAYER (IndexedDB Setup)
+    // Used for: Quiz History, Mistake Logs, Detailed Analytics
+    // ============================================================
+
+    db: null, // Will hold the DB connection object
+
+    /**
+     * Opens the IndexedDB connection.
+     * Must be called during App Initialization.
+     */
+    async init() {
+        if (this.db) return this.db; // Already open
+
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open(this._dbName, this._dbVersion);
+
+            // 1. Schema Upgrade (Runs only on version change/first run)
+            request.onupgradeneeded = (event) => {
+                const db = event.target.result;
+                console.log(`💾 Store: Upgrading Database to v${this._dbVersion}`);
+
+                // Store A: Quiz History
+                // KeyPath: 'id' (Unique ID for every test result)
+                // Indices: 'subject' (for filtering), 'timestamp' (for sorting)
+                if (!db.objectStoreNames.contains('history')) {
+                    const historyStore = db.createObjectStore('history', { keyPath: 'id' });
+                    historyStore.createIndex('subject', 'subject', { unique: false });
+                    historyStore.createIndex('timestamp', 'timestamp', { unique: false });
+                }
+
+                // Store B: Mistakes (The Revision Deck)
+                // KeyPath: 'id' (Question ID)
+                if (!db.objectStoreNames.contains('mistakes')) {
+                    const mistakesStore = db.createObjectStore('mistakes', { keyPath: 'id' });
+                    mistakesStore.createIndex('subject', 'topic', { unique: false });
+                }
+            };
+
+            // 2. Success Handler
+            request.onsuccess = (event) => {
+                this.db = event.target.result;
+                console.log("💾 Store: IndexedDB Connected Successfully.");
+                resolve(this.db);
+            };
+
+            // 3. Error Handler
+            request.onerror = (event) => {
+                console.error("💾 Store: IndexedDB Connection Failed", event.target.error);
+                reject("Database Error");
+            };
+        });
+    },
+
+    // ... Continues in Batch 2 ...
+
+    // ============================================================
+    // 3. CORE ASYNC METHODS (The Heavy Lifting)
+    // ============================================================
+
+    /**
+     * Saves a quiz result to IndexedDB (Async).
+     * @param {Object} result - The result object from Engine
+     * @returns {Promise<String>} The ID of the saved result
      */
     saveResult(result) {
-        if (!result) return null;
+        return new Promise((resolve, reject) => {
+            if (!this.db) {
+                console.warn("Store: DB not initialized, attempting init...");
+                this.init().then(() => this.saveResult(result).then(resolve));
+                return;
+            }
 
-        const history = this.get('history', []);
-        
-        // Add unique ID and collision-proof metadata
-        const enrichedResult = {
-            ...result,
-            id: `res_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
-            savedAt: new Date().toISOString()
-        };
+            const transaction = this.db.transaction(['history'], 'readwrite');
+            const store = transaction.objectStore('history');
 
-        // Add to top of list
-        history.unshift(enrichedResult);
+            // Add collision-proof ID if missing
+            if (!result.id) {
+                result.id = `res_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+            }
+            result.savedAt = new Date().toISOString();
 
-        // Maintain a healthy history limit (50 items)
-        const cappedHistory = history.slice(0, 50);
-        
-        const success = this.set('history', cappedHistory);
-        return success ? enrichedResult.id : null;
+            const request = store.add(result);
+
+            request.onsuccess = () => {
+                // Also update the "Streak" in Sync Storage
+                this._updateStreak(result.timestamp);
+                resolve(result.id);
+            };
+
+            request.onerror = (e) => {
+                console.error("Store: Save Result Failed", e);
+                reject(e);
+            };
+        });
     },
 
     /**
-     * Specialized: Save Mistake questions for future revision
+     * Retrieves history items (Async).
+     * @param {Number} limit - Max items to return (default 50)
+     * @returns {Promise<Array>} List of result objects
      */
-    saveMistakes(newMistakes) {
-        if (!Array.isArray(newMistakes) || newMistakes.length === 0) return;
+    getHistory(limit = 50) {
+        return new Promise((resolve, reject) => {
+            if (!this.db) {
+                // Fallback: If DB isn't ready, try init or return empty
+                this.init().then(() => this.getHistory(limit).then(resolve)).catch(() => resolve([]));
+                return;
+            }
 
-        const current = this.get('mistakes', []);
-        
-        // Merge and remove duplicates based on question text
-        const merged = [...newMistakes, ...current];
-        const unique = merged.filter((q, index, self) =>
-            index === self.findIndex((t) => t.text === q.text)
-        );
+            const transaction = this.db.transaction(['history'], 'readonly');
+            const store = transaction.objectStore('history');
+            const index = store.index('timestamp');
+            
+            // We want latest first, so we iterate backwards (prev)
+            const request = index.openCursor(null, 'prev');
+            const results = [];
 
-        // Keep top 100 hard questions for the user
-        this.set('mistakes', unique.slice(0, 100));
+            request.onsuccess = (event) => {
+                const cursor = event.target.result;
+                if (cursor && results.length < limit) {
+                    results.push(cursor.value);
+                    cursor.continue();
+                } else {
+                    resolve(results);
+                }
+            };
+
+            request.onerror = (e) => {
+                console.error("Store: Get History Failed", e);
+                resolve([]); // Fail safe: return empty array
+            };
+        });
     },
 
     /**
-     * Clear all specific app data
+     * Saves unique mistakes to the 'mistakes' store.
+     * Uses 'put' to overwrite if ID exists (updating the record).
      */
-    clearAll() {
-        const appKeys = ['history', 'mistakes', 'settings', 'visited', 'study_stats', 'last_sleep'];
-        appKeys.forEach(k => localStorage.removeItem(this._prefix + k));
-        window.location.reload();
+    saveMistakes(mistakesArray) {
+        if (!this.db || !Array.isArray(mistakesArray) || mistakesArray.length === 0) return;
+
+        const transaction = this.db.transaction(['mistakes'], 'readwrite');
+        const store = transaction.objectStore('mistakes');
+
+        mistakesArray.forEach(q => {
+            // Ensure ID exists
+            if (!q.id) q.id = `q_${Date.now()}_${Math.random()}`;
+            store.put(q);
+        });
+
+        transaction.oncomplete = () => console.log(`💾 Store: Saved ${mistakesArray.length} mistakes.`);
     },
 
+    /**
+     * Internal: Updates the daily streak counter in LocalStorage
+     */
+    _updateStreak(timestamp) {
+        const lastDate = this.getAppSettings('last_activity_date');
+        const today = new Date(timestamp).toLocaleDateString();
+        
+        if (lastDate !== today) {
+            // It's a new day
+            let currentStreak = this.getAppSettings('streak', 0);
+            
+            // Check if it's consecutive (yesterday)
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            
+            if (lastDate === yesterday.toLocaleDateString()) {
+                currentStreak++;
+            } else {
+                currentStreak = 1; // Streak broken or new
+            }
+            
+            this.setAppSettings('streak', currentStreak);
+            this.setAppSettings('last_activity_date', today);
+        }
+    },
+
+    // ... Continues in Batch 3 ...
     // ============================================================
-    // NEW: CLOUDLESS BACKUP & RESTORE SYSTEMS
+    // 4. CLOUDLESS BACKUP & RESTORE (Hybrid)
     // ============================================================
 
     /**
-     * Packages all app data into a JSON file and triggers download
+     * Packages all app data (Sync + Async) into a JSON file.
      */
-    exportData() {
+    async exportData() {
+        if (window.UI) UI.showLoading();
+        console.log("Store: Starting Export...");
+
         try {
-            const data = {
+            // 1. Fetch LocalStorage Data (Sync)
+            const backup = {
                 meta: {
                     app: "UPSCSuperApp",
                     version: CONFIG.version,
-                    org: CONFIG.org,
                     exportedAt: new Date().toISOString()
                 },
-                history: this.get('history', []),
-                mistakes: this.get('mistakes', []),
-                settings: this.get('settings', {}),
-                study_stats: this.get('study_stats', {}),
-                last_sleep: this.get('last_sleep', null),
-                visited: this.get('visited', false)
+                settings: this.getAppSettings('settings', {}),
+                study_stats: this.getAppSettings('study_stats', {}),
+                last_sleep: this.getAppSettings('last_sleep', null),
+                streak: this.getAppSettings('streak', 0),
+                visited: this.getAppSettings('visited', false)
             };
 
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            // 2. Fetch IndexedDB Data (Async)
+            // We need to fetch ALL history and mistakes, not just the top 50
+            if (this.db) {
+                backup.history = await this._getAllFromStore('history');
+                backup.mistakes = await this._getAllFromStore('mistakes');
+            } else {
+                console.warn("Store: DB not ready, exporting only settings.");
+                backup.history = [];
+                backup.mistakes = [];
+            }
+
+            // 3. Generate File
+            const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             
-            // Create invisible link to trigger download
             const a = document.createElement('a');
             a.href = url;
             a.download = `GyanAmala_Backup_${new Date().toISOString().slice(0, 10)}.json`;
             document.body.appendChild(a);
             a.click();
             
-            // Cleanup
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
             
-            // Simple visual feedback (alert is acceptable for MVP, UI.showModal better later)
             alert("✅ Backup downloaded successfully!");
+
         } catch (err) {
             console.error("Export Failed:", err);
-            alert("❌ Export failed. Check storage permissions.");
+            alert("❌ Export failed. Check console for details.");
+        } finally {
+            if (window.UI) UI.hideLoading();
         }
     },
 
     /**
-     * Opens file picker and overwrites local data with backup
+     * Restores data from a JSON file to both LocalStorage and IndexedDB.
      */
     importData() {
-        // Create invisible file input
         const input = document.createElement('input');
         input.type = 'file';
         input.accept = '.json';
@@ -178,40 +308,102 @@ const Store = {
             const file = e.target.files[0];
             if (!file) return;
 
+            if (window.UI) UI.showLoading();
             const reader = new FileReader();
-            reader.onload = (event) => {
+            
+            reader.onload = async (event) => {
                 try {
                     const backup = JSON.parse(event.target.result);
                     
-                    // Basic Validation
-                    if (backup.meta && backup.meta.app === "UPSCSuperApp") {
-                        if (confirm(`Restore backup from ${new Date(backup.meta.exportedAt).toLocaleDateString()}? This will overwrite current data.`)) {
-                            
-                            // Restore Keys
-                            if (backup.history) this.set('history', backup.history);
-                            if (backup.mistakes) this.set('mistakes', backup.mistakes);
-                            if (backup.settings) this.set('settings', backup.settings);
-                            if (backup.study_stats) this.set('study_stats', backup.study_stats);
-                            if (backup.last_sleep) this.set('last_sleep', backup.last_sleep);
-                            this.set('visited', true); // Ensure they don't see orientation again
+                    // Validation
+                    if (!backup.meta || backup.meta.app !== "UPSCSuperApp") {
+                        throw new Error("Invalid Backup File");
+                    }
 
-                            alert("✅ Restore Complete! Reloading...");
-                            window.location.reload();
+                    if (confirm(`Restore data from ${new Date(backup.meta.exportedAt).toLocaleDateString()}? Current data will be merged/overwritten.`)) {
+                        
+                        // 1. Restore LocalStorage
+                        if (backup.settings) this.setAppSettings('settings', backup.settings);
+                        if (backup.study_stats) this.setAppSettings('study_stats', backup.study_stats);
+                        if (backup.last_sleep) this.setAppSettings('last_sleep', backup.last_sleep);
+                        if (backup.streak) this.setAppSettings('streak', backup.streak);
+                        this.setAppSettings('visited', true);
+
+                        // 2. Restore IndexedDB
+                        if (this.db) {
+                            await this._restoreStore('history', backup.history);
+                            await this._restoreStore('mistakes', backup.mistakes);
                         }
-                    } else {
-                        alert("❌ Invalid Backup File: Not a UPSCSuperApp file.");
+
+                        alert("✅ Restore Complete! Reloading app...");
+                        window.location.reload();
                     }
                 } catch (err) {
-                    console.error("Import Parse Error:", err);
-                    alert("❌ Failed to read backup file.");
+                    console.error("Import Failed:", err);
+                    alert("❌ Failed to restore backup. Invalid file format.");
+                } finally {
+                    if (window.UI) UI.hideLoading();
                 }
             };
             reader.readAsText(file);
         };
 
         input.click();
+    },
+
+    /**
+     * Helper: Get all items from an Object Store
+     */
+    _getAllFromStore(storeName) {
+        return new Promise((resolve) => {
+            const tx = this.db.transaction([storeName], 'readonly');
+            const store = tx.objectStore(storeName);
+            const request = store.getAll();
+
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => resolve([]);
+        });
+    },
+
+    /**
+     * Helper: Bulk add items to an Object Store
+     */
+    _restoreStore(storeName, items) {
+        return new Promise((resolve, reject) => {
+            if (!Array.isArray(items) || items.length === 0) {
+                resolve();
+                return;
+            }
+
+            const tx = this.db.transaction([storeName], 'readwrite');
+            const store = tx.objectStore(storeName);
+
+            items.forEach(item => store.put(item)); // 'put' updates if exists
+
+            tx.oncomplete = () => resolve();
+            tx.onerror = (e) => reject(e);
+        });
+    },
+
+    /**
+     * Clear everything (Factory Reset)
+     */
+    async clearAll() {
+        if (confirm("⚠️ Factory Reset: This will delete ALL history and settings. Are you sure?")) {
+            // Clear LocalStorage
+            localStorage.clear();
+
+            // Clear IndexedDB
+            if (this.db) {
+                const tx = this.db.transaction(['history', 'mistakes'], 'readwrite');
+                tx.objectStore('history').clear();
+                tx.objectStore('mistakes').clear();
+            }
+
+            window.location.reload();
+        }
     }
 };
 
-// Ensure Store is globally accessible
+// Expose to Window
 window.Store = Store;
