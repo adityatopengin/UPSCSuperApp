@@ -88,7 +88,8 @@ const Main = {
         } catch (error) {
             console.error("Main: Critical Init Error", error);
             if(window.UI) UI.hideLoading(); // Ensure spinner goes away
-            alert("App Initialization Error: " + error.message);
+            alert("DEBUG ERROR: " + error.name + " - " + error.message);
+ 
         }
     },
 
