@@ -1,6 +1,6 @@
 /**
  * ADAPTER.JS - Data Normalization Layer
- * Version: 5.1.0 (Bulletproof Edition)
+ * Version: 5.3.0 (Universal Fix)
  * Standardizes raw JSON data into the app's internal schema.
  * Features: Crash Protection, Null Safety, and Pro Schema Support.
  * Organization: Gyan Amala | App: UPSCSuperApp
@@ -10,7 +10,7 @@ const Adapter = {
     /**
      * Main entry point to normalize a subject file.
      * wrapping in try-catch to prevent global app crash on bad data.
-     * @param {Object} rawData - The JSON object loaded from fetch()
+     * @param {Object|Array} rawData - The JSON object loaded from fetch()
      */
     normalize(rawData) {
         // 1. Safety Check: Is the data completely empty or null?
@@ -19,17 +19,27 @@ const Adapter = {
             return [];
         }
 
-        // 2. Safety Check: Does it have the 'questions' array?
-        if (!Array.isArray(rawData.questions)) {
-            console.error("Adapter: Invalid Data Format - 'questions' array missing.", rawData);
+        // 2. Universal Fix: Handle both Array and Object formats
+        let questionsArray = [];
+
+        if (Array.isArray(rawData)) {
+            // Case A: The file is just a list [{}, {}, {}]
+            // This matches your current ancient_history.json format
+            questionsArray = rawData;
+        } else if (rawData && Array.isArray(rawData.questions)) {
+            // Case B: The file is an object { questions: [...] }
+            // This is for future compatibility
+            questionsArray = rawData.questions;
+        } else {
+            console.error("Adapter: Invalid Data Format - No array found.", rawData);
             return [];
         }
 
-        console.log(`Adapter: Processing ${rawData.questions.length} items from ${rawData.subject || 'Unknown Subject'}...`);
+        console.log(`Adapter: Processing ${questionsArray.length} items...`);
 
         // 3. Process each question safely
         // We use .reduce instead of .map to filter out invalid items immediately
-        return rawData.questions.reduce((validQuestions, q, index) => {
+        return questionsArray.reduce((validQuestions, q, index) => {
             try {
                 const normalized = this._normalizeQuestion(q, index);
                 if (normalized) {
@@ -42,7 +52,6 @@ const Adapter = {
         }, []);
     },
 
-    // ... Continues in Batch 2 ...
     /**
      * Normalizes a single question object with defensive programming.
      * @param {Object} q - Raw question object
