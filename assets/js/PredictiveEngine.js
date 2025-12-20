@@ -1,193 +1,222 @@
 /**
- * PREDICTIVE-ENGINE.JS - The Oracle
- * Version: 5.0.0 (Behavioral Analytics Edition)
- * Uses Client-Side Heuristics & Weighted Regression to predict exam scores.
- * Privacy: All calculations happen locally. No data leaves the device.
+ * PREDICTIVE_ENGINE.JS - The AI Analyst
+ * Version: 5.2.0 (Statistical Real-Time Analysis)
+ * Core Logic: Weighted Exponential Moving Average (WEMA)
+ * Purpose: Predicts future performance based on past behavior, not just averages.
  * Organization: Gyan Amala | App: UPSCSuperApp
  */
 
 const PredictiveEngine = {
-    // ============================================================
-    // 1. PUBLIC API
-    // ============================================================
+    
+    // Configuration for the Algorithm
+    _config: {
+        minTestsForPrediction: 3, // Need at least 3 tests to form a trend
+        recentWeight: 0.6,        // Recent tests account for 60% of the weight
+        decayFactor: 0.95,        // Score decays by 5% every week of inactivity
+        optimalTimePerQ: 45       // Seconds (Ideal speed for high accuracy)
+    },
 
     /**
-     * Generates a "Scary Accurate" prediction for a specific subject
-     * @param {String} subjectId - The ID of the subject (e.g., 'polity')
-     * @returns {Object} - { projectedScore, confidence, factors, message }
+     * The Main Oracle Function.
+     * Called by UI.js (Stats Dashboard).
+     * @param {String} subjectId - 'gs_overall', 'csat', or specific subject ID
+     * @param {Array} fullHistory - Raw history array from Store.getHistory()
      */
-    async predictScore(subjectId) {
-        console.log(`🔮 Oracle: Analyzing past for ${subjectId}...`);
-        
-        // 1. Fetch Data
-        const history = Store.get('history', []);
-        
-        // Filter for specific subject (or use all for General Studies prediction)
-        const subjectHistory = subjectId === 'gs_overall' 
-            ? history 
-            : history.filter(h => h.subject === subjectId);
-
-        // COLD START: Not enough data (Need at least 3 tests)
-        if (subjectHistory.length < 3) {
-            return {
-                status: 'cold_start',
-                projectedScore: 'N/A',
-                trend: 'stable',
-                message: "Need 3+ tests to unlock predictions.",
-                factors: []
-            };
+    async predictScore(subjectId, fullHistory) {
+        // 1. Safety Check
+        if (!fullHistory || !Array.isArray(fullHistory) || fullHistory.length === 0) {
+            return this._getColdStartResponse();
         }
 
-        // 2. BASELINE: Calculate Weighted Mastery (Recent tests matter more)
-        const baseMetrics = this._calculateWeightedMastery(subjectHistory);
-        
-        // 3. CONTEXTUAL MODIFIERS (The "Secret Sauce")
-        // These adjustments define the "Oracle" accuracy
-        const forgettingFactor = this._calculateForgettingCurve(subjectHistory[0]); // Most recent attempt
-        const sleepFactor = this._inferSleepQuality();
-        const timeFactor = this._analyzeTimeOfDayPerformance(history);
-        const fatigueFactor = this._detectBurnout(history);
+        // 2. Filter Data based on Context
+        const relevantData = this._filterData(subjectId, fullHistory);
 
-        // 4. FINAL REGRESSION FORMULA
-        // Predicted = Base * Forgetting * Sleep * Time * Fatigue
-        let rawPrediction = baseMetrics.score * forgettingFactor.val * sleepFactor.val * timeFactor.val * fatigueFactor.val;
+        // 3. Check sufficiency
+        if (relevantData.length < this._config.minTestsForPrediction) {
+            return this._getColdStartResponse(relevantData.length);
+        }
+
+        // 4. Run Analysis Modules (Batches 2 & 3)
+        // We calculate base metrics here for use in next batches
+        const metrics = this._calculateMetrics(relevantData);
         
-        // Clamp result (0 to 200 for GS standards)
-        rawPrediction = Math.max(0, Math.min(200, rawPrediction));
+        // Return promise resolving to the final prediction (to be built in Batch 3)
+        return this._generatePrediction(metrics);
+    },
+
+    /**
+     * INTERNAL: Filters history based on the requested subject scope.
+     */
+    _filterData(subjectId, history) {
+        // Sort by date ascending (oldest -> newest) for trend analysis
+        const sorted = [...history].sort((a, b) => a.timestamp - b.timestamp);
+
+        if (subjectId === 'gs_overall') {
+            // Include all subjects EXCEPT CSAT/Math
+            return sorted.filter(h => h.subject !== 'csat' && h.subject !== 'quant' && h.subject !== 'reasoning');
+        } else if (subjectId === 'csat_overall') {
+            return sorted.filter(h => h.subject === 'csat' || h.subject === 'quant' || h.subject === 'reasoning');
+        } else {
+            // Specific subject match
+            return sorted.filter(h => h.subject === subjectId);
+        }
+    },
+
+    /**
+     * INTERNAL: Calculates the Weighted Average Score.
+     * Uses a linear decay weight so recent tests matter most.
+     */
+    _calculateMetrics(data) {
+        let weightedScoreSum = 0;
+        let weightedAccuracySum = 0;
+        let totalWeight = 0;
+        let speedSum = 0;
+
+        data.forEach((test, index) => {
+            // Weight increases with index (Older = 1, Newest = data.length)
+            // This makes the latest test the most significant factor.
+            const weight = index + 1; 
+            
+            weightedScoreSum += (test.score * weight);
+            weightedAccuracySum += (test.accuracy * weight);
+            
+            // Calculate Average Time Per Question
+            const questionCount = test.correct + test.wrong + test.skipped;
+            const avgTime = questionCount > 0 ? (test.totalDuration / questionCount) : 0;
+            speedSum += avgTime;
+
+            totalWeight += weight;
+        });
+
+        // Basic Linear Regression (Slope) for Trend
+        // Simple comparison: First half vs Second half average
+        const midPoint = Math.floor(data.length / 2);
+        const firstHalf = data.slice(0, midPoint);
+        const secondHalf = data.slice(midPoint);
+        
+        const avgFirst = firstHalf.reduce((acc, t) => acc + t.score, 0) / (firstHalf.length || 1);
+        const avgSecond = secondHalf.reduce((acc, t) => acc + t.score, 0) / (secondHalf.length || 1);
 
         return {
-            status: 'success',
-            projectedScore: rawPrediction.toFixed(1),
-            baseMastery: baseMetrics.score.toFixed(1),
-            trend: baseMetrics.trend, // 'rising', 'falling', 'stable'
-            factors: [
-                forgettingFactor,
-                sleepFactor,
-                timeFactor,
-                fatigueFactor
-            ].filter(f => f.impact !== 'neutral'), // Only show relevant insights
-            message: this._generateInsightMessage(forgettingFactor, sleepFactor, fatigueFactor)
+            projectedScore: weightedScoreSum / totalWeight,
+            projectedAccuracy: weightedAccuracySum / totalWeight,
+            avgSpeed: speedSum / data.length,
+            trendSlope: avgSecond - avgFirst, // Positive = Improving, Negative = Declining
+            testCount: data.length,
+            lastTestDate: data[data.length - 1].timestamp
         };
     },
 
-    // ============================================================
-    // 2. CORE ALGORITHMS
-    // ============================================================
-
+    // ... Continues in Batch 2 ...
     /**
-     * Calculates score based on recency-weighted average.
-     * Last test counts 40%, previous 30%, etc.
+     * INTERNAL: Identifies Positive/Negative performance drivers.
+     * Returns an array of factors for the UI Oracle Card.
      */
-    _calculateWeightedMastery(attempts) {
-        // Take last 5 attempts
-        const recent = attempts.slice(0, 5);
-        
-        // Weights for last 5: [0.4, 0.25, 0.2, 0.1, 0.05]
-        const weights = [0.4, 0.25, 0.2, 0.1, 0.05];
-        let totalScore = 0;
-        let totalWeight = 0;
+    _identifyFactors(metrics) {
+        const factors = [];
 
-        recent.forEach((attempt, i) => {
-            if (weights[i]) {
-                // Normalize score to 200 scale if stored differently
-                const score = attempt.totalMarks || (attempt.score * 2); // Fallback assumption
-                totalScore += score * weights[i];
-                totalWeight += weights[i];
+        // 1. Analyze Speed (The "Rushing" Factor)
+        if (metrics.avgSpeed < 30) {
+            // Too fast (<30s per question)
+            if (metrics.projectedAccuracy < 60) {
+                factors.push({ label: 'Rushing', impact: 'negative' });
+            } else {
+                factors.push({ label: 'Rapid Fire', impact: 'positive' });
             }
-        });
+        } else if (metrics.avgSpeed > 80) {
+            // Too slow (>80s per question)
+            factors.push({ label: 'Overthinking', impact: 'negative' });
+        }
 
-        const weightedScore = totalScore / totalWeight;
+        // 2. Analyze Trend (The "Consistency" Factor)
+        if (metrics.trendSlope > 5) {
+            factors.push({ label: 'Improving', impact: 'positive' });
+        } else if (metrics.trendSlope < -5) {
+            factors.push({ label: 'Sliding', impact: 'negative' });
+        } else {
+            factors.push({ label: 'Stable', impact: 'positive' });
+        }
 
-        // Determine Trend (Is the latest score better than the weighted average?)
-        const latest = recent[0].totalMarks || (recent[0].score * 2);
-        const trend = latest > weightedScore + 5 ? 'rising' : 
-                      latest < weightedScore - 5 ? 'falling' : 'stable';
+        // 3. Analyze Sleep Impact (Cross-Reference with StudyTracker)
+        // We check if StudyTracker exists and has data
+        if (window.StudyTracker) {
+            const sleep = StudyTracker.getLastSleepData();
+            if (sleep.quality === 'Poor') {
+                factors.push({ label: 'Fatigue', impact: 'negative' });
+            } else if (sleep.quality === 'Optimal') {
+                factors.push({ label: 'Well Rested', impact: 'positive' });
+            }
+        }
 
-        return { score: weightedScore, trend };
+        return factors;
     },
 
     /**
-     * Ebbinghaus Forgetting Curve Implementation
-     * Checks days since last test in this subject.
+     * INTERNAL: Default response for new users (Cold Start).
      */
-    _calculateForgettingCurve(lastAttempt) {
-        if (!lastAttempt) return { val: 1.0, impact: 'neutral' };
+    _getColdStartResponse(count = 0) {
+        return {
+            status: 'cold_start',
+            projectedScore: 'N/A',
+            projectedAccuracy: 0,
+            trend: 'collecting_data',
+            factors: [],
+            message: `Need ${this._config.minTestsForPrediction - count} more tests to calibrate AI.`
+        };
+    },
 
-        const lastDate = new Date(lastAttempt.savedAt);
-        const now = new Date();
-        const diffDays = (now - lastDate) / (1000 * 60 * 60 * 24);
-
-        // Logic: Retention drops by ~5% every 7 days of inactivity
-        if (diffDays > 21) return { val: 0.85, label: 'Memory Decay', impact: 'negative', text: 'Long gap since revision' };
-        if (diffDays > 14) return { val: 0.90, label: 'Rusty', impact: 'negative', text: '2 weeks since last test' };
-        if (diffDays > 7)  return { val: 0.95, label: 'Slight Decay', impact: 'negative', text: '1 week since last test' };
+    // ... Continues in Batch 3 ...
+    /**
+     * INTERNAL: Assembles the final prediction object.
+     * Applies time-decay (Forgetting Curve) to the raw metrics.
+     */
+    _generatePrediction(metrics) {
+        // 1. Calculate Forgetting Curve Penalty
+        // How many days since the last test?
+        const now = Date.now();
+        const daysSinceLast = (now - metrics.lastTestDate) / (1000 * 60 * 60 * 24);
         
-        // Bonus for recent practice
-        if (diffDays < 2) return { val: 1.02, label: 'Fresh Mind', impact: 'positive', text: 'Recently revised' };
-
-        return { val: 1.0, impact: 'neutral' };
-    },
-
-    /**
-     * BEHAVIORAL BIOMETRICS: Inferred Sleep Tracking
-     * Uses the data stored by StudyTracker.js
-     */
-    _inferSleepQuality() {
-        const sleepData = Store.get('last_sleep');
+        let decayMultiplier = 1.0;
         
-        if (!sleepData) return { val: 1.0, impact: 'neutral' };
-
-        // Impact Logic
-        switch (sleepData.quality) {
-            case 'Poor': // < 5 hours
-                return { val: 0.92, label: 'Sleep Deprived', impact: 'negative', text: 'Low accuracy risk' };
-            case 'Optimal': // 7-9 hours
-                return { val: 1.05, label: 'Well Rested', impact: 'positive', text: 'High focus likely' };
-            case 'Overslept': // > 9 hours (Grogginess)
-                return { val: 0.98, label: 'Overslept', impact: 'negative', text: 'Potential lethargy' };
-            default:
-                return { val: 1.0, impact: 'neutral' };
-        }
-    },
-
-    /**
-     * Analyzes if user performs better in Morning, Afternoon, or Night
-     * (Simplified heuristic for MVP)
-     */
-    _analyzeTimeOfDayPerformance(history) {
-        if (history.length < 10) return { val: 1.0, impact: 'neutral' };
-
-        // This is a placeholder for a more complex clustering algorithm.
-        // For now, we return neutral to keep calculations fast.
-        return { val: 1.0, impact: 'neutral' }; 
-    },
-
-    /**
-     * Detects "Burnout" based on rapid test taking frequency
-     */
-    _detectBurnout(history) {
-        // If user has taken > 5 tests in the last 24 hours, apply penalty
-        const oneDayAgo = Date.now() - (24 * 60 * 60 * 1000);
-        const recentTests = history.filter(h => new Date(h.savedAt).getTime() > oneDayAgo).length;
-
-        if (recentTests > 6) {
-            return { val: 0.88, label: 'High Burnout', impact: 'negative', text: 'Heavy testing volume today' };
-        }
-        if (recentTests > 4) {
-            return { val: 0.94, label: 'Fatigue Risk', impact: 'negative', text: 'Multiple tests taken recently' };
+        if (daysSinceLast > 7) {
+            // After 1 week, knowledge starts decaying by 5% per week
+            const weeksInactive = Math.floor(daysSinceLast / 7);
+            decayMultiplier = Math.pow(this._config.decayFactor, weeksInactive);
         }
 
-        return { val: 1.0, impact: 'neutral' };
-    },
+        // Apply decay to score (but not accuracy, as skill remains, memory fades)
+        const finalScore = Math.round(metrics.projectedScore * decayMultiplier);
 
-    _generateInsightMessage(forgetting, sleep, fatigue) {
-        if (sleep.impact === 'negative') return "⚠️ You seem sleep deprived. Expect a 8-10% score drop.";
-        if (fatigue.impact === 'negative') return "⚠️ High test volume detected. Take a break to restore focus.";
-        if (forgetting.impact === 'negative') return `⚠️ It's been a while since you studied this. Revision needed.`;
-        if (sleep.impact === 'positive') return "🚀 You are well rested! Prime condition for a high score.";
-        return "✨ You are consistent. Keep pushing your limits.";
+        // 2. Determine Trend String
+        let trend = 'stable';
+        if (metrics.trendSlope > 2) trend = 'rising';
+        if (metrics.trendSlope < -2) trend = 'falling';
+
+        // 3. Generate Insight Message
+        let message = "Consistency is your superpower.";
+        if (decayMultiplier < 0.9) {
+            message = "Resume practice! Your recall is fading.";
+        } else if (metrics.projectedAccuracy > 80 && metrics.avgSpeed > 60) {
+            message = "High accuracy. Try increasing speed.";
+        } else if (metrics.projectedAccuracy < 50) {
+            message = "Focus on concepts, not just speed.";
+        } else if (trend === 'rising') {
+            message = "Excellent momentum! Keep pushing.";
+        }
+
+        // 4. Return Final Data Structure (Matched to UI.js requirements)
+        return {
+            status: 'active',
+            projectedScore: finalScore,
+            projectedAccuracy: Math.round(metrics.projectedAccuracy),
+            trend: trend,
+            factors: this._identifyFactors(metrics), // From Batch 2
+            message: message,
+            confidence: decayMultiplier * 100 // Internal metric
+        };
     }
 };
 
 // Expose to Window
 window.PredictiveEngine = PredictiveEngine;
+
