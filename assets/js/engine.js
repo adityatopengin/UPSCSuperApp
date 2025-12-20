@@ -42,37 +42,46 @@ const Engine = {
      * THE BRIDGE: Fetches, Normalizes, and Starts the Session.
      * This is the function Main.js is trying to call.
      * @param {String} subjectId - e.g. 'history', 'polity'
+          /**
+     * THE BRIDGE: Fetches, Normalizes, and Starts the Session.
+     * NOW FIXED: Looks up the exact filename from CONFIG.
      */
     async startSession(subjectId) {
         console.log(`Engine: Attempting to load [${subjectId}]...`);
         
-        // 1. Construct the Path (Standardized to assets/data/)
-        // We assume your files are named exactly like the ID (e.g., history.json)
-        const path = `assets/data/${subjectId}.json`;
+        // 1. GET CORRECT FILENAME FROM CONFIG
+        // This fixes the mismatch (e.g., converting 'geo_ind' -> 'indian_geo.json')
+        let fileName = subjectId + '.json'; // Default fallback
+        
+        if (typeof CONFIG !== 'undefined' && CONFIG.getFileName) {
+            const configName = CONFIG.getFileName(subjectId);
+            if (configName) fileName = configName;
+        }
+
+        // 2. Construct the Path
+        const path = `assets/data/${fileName}`;
 
         try {
-            // 2. Fetch the File
+            // 3. Fetch the File
             const response = await fetch(path);
             
-            // 3. Handle 404 (File Not Found)
             if (!response.ok) {
                 console.error(`Engine: 404 Error. File not found at ${path}`);
-                if (typeof UI !== 'undefined') UI.showToast("Data file missing. Check assets.", "error");
+                if (typeof UI !== 'undefined') UI.showToast(`Missing file: ${fileName}`, "error");
                 return false;
             }
 
             // 4. Parse JSON
             const rawData = await response.json();
 
-            // 5. Normalize (Using Adapter.js)
-            // This prevents crashes if the JSON structure varies
+            // 5. Normalize
             if (typeof Adapter === 'undefined') {
                 console.error("Engine: Adapter.js missing!");
                 return false;
             }
             const cleanQuestions = Adapter.normalize(rawData);
 
-            // 6. Initialize the Session with clean data
+            // 6. Initialize
             return this.init(cleanQuestions, 'test');
 
         } catch (error) {
@@ -80,6 +89,7 @@ const Engine = {
             return false;
         }
     },
+
 
     /**
      * Initialize the internal state with loaded questions.
