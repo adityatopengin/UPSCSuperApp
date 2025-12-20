@@ -101,7 +101,7 @@ const Main = {
     // ... Continues in Part 2 (The Render Logic) ...
         /**
      * INTERNAL: Handles the actual DOM updates for views.
-     * This was missing in the previous version, causing the "Infinite Spinner" crash.
+     * FIX: This function contains the 'finally' block that removes the loading screen.
      */
     async _renderView(viewId, isNavigation = true) {
         // Safety: If UI module isn't loaded yet, abort.
@@ -132,11 +132,10 @@ const Main = {
                     UI._renderSettings(container);
                     break;
                 case 'quiz':
-                    // Quiz UI is handled separately by startQuiz, 
-                    // but we keep this case to prevent default fallbacks.
+                    // Quiz UI is handled by startQuiz
                     break;
                 case 'result':
-                    // Result UI is handled by showResult.
+                    // Result UI is handled by showResult
                     break;
                 default:
                     console.warn(`Main: Unknown view '${viewId}', defaulting to Home.`);
@@ -144,11 +143,10 @@ const Main = {
             }
         } catch (e) {
             console.error(`Main: Error rendering view '${viewId}'`, e);
-            container.innerHTML = `<div class="p-8 text-center text-rose-500">Error loading content. Please reload.</div>`;
+            container.innerHTML = `<div class="p-8 text-center text-rose-500">Error loading content.</div>`;
         } finally {
-            // 4. CRITICAL: Hide Loading Screen
-            // This specific line resolves the "Infinite Spinner" issue.
-            // We use a small timeout to ensure the DOM has painted.
+            // 4. CRITICAL FIX: Hide Loading Screen
+            // This is the specific part that removes the "Initializing AI Core" overlay.
             setTimeout(() => {
                 UI.hideLoading();
             }, 300);
