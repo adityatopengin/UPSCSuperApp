@@ -1,36 +1,48 @@
 /**
  * UI.js - The Visual Controller
- * Handles all DOM manipulation, animations, and the new Intro/Modal systems.
+ * Version: 6.1.0 (Linear Flow Edition)
+ * Handles: DOM Manipulation, Animations, Swipe Deck, and Modals.
+ * Updates: Implements "Butter-Smooth" transitions and Auto-Swipe Logic.
  */
-var UI = {
-    // State to track active modals and audio players
-    activeModal: null,
-    audioPlayer: null,
 
+var UI = {
+    // ============================================================
+    // 0. UI STATE TRACKING
+    // ============================================================
+    activeModal: null,      // Tracks the currently open modal overlay
+    audioPlayer: null,      // Tracks the generic Audio object (for cleanup)
+    
     // ============================================================
     // 1. GLOBAL HELPERS (Loading & Toast)
     // ============================================================
 
     /**
-     * Shows the global loading spinner (The "Curtain")
+     * Shows the global loading spinner (The "Curtain").
+     * Used during initialization and data fetching.
      */
     showLoading() {
-        // We look for 'loading-overlay' which we fixed in index.html
         const loader = document.getElementById('loading-overlay');
         if (loader) {
+            // Remove hidden class to make it exist in layout
             loader.classList.remove('hidden');
-            loader.classList.remove('opacity-0');
+            // Remove opacity-0 to make it fully visible (Fade In)
+            // Small timeout ensures the browser registers the removal of 'hidden' first
+            requestAnimationFrame(() => {
+                loader.classList.remove('opacity-0');
+            });
         }
     },
 
     /**
-     * Hides the global loading spinner
+     * Hides the global loading spinner with a smooth fade-out.
      */
     hideLoading() {
         const loader = document.getElementById('loading-overlay');
         if (loader) {
+            // 1. Add opacity-0 to trigger CSS transition (Fade Out)
             loader.classList.add('opacity-0');
-            // Wait for transition to finish before hiding completely
+            
+            // 2. Wait for transition (500ms) before hiding element completely
             setTimeout(() => {
                 loader.classList.add('hidden');
             }, 500);
@@ -38,85 +50,114 @@ var UI = {
     },
 
     /**
-     * Shows a temporary toast message at the bottom
+     * Shows a temporary toast message at the bottom of the screen.
+     * @param {String} msg - The message text
+     * @param {String} type - 'info', 'success', or 'error'
      */
     showToast(msg, type = 'info') {
+        // Create the toast element dynamically
         const toast = document.createElement('div');
-        toast.className = `fixed bottom-24 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-full shadow-xl z-50 text-sm font-bold flex items-center gap-2 animate-slide-up ${
-            type === 'error' ? 'bg-rose-500 text-white' : 
-            type === 'success' ? 'bg-emerald-500 text-white' : 
-            'bg-slate-800 text-white'
-        }`;
+        
+        // Define colors based on type
+        let colorClass = 'bg-slate-800 text-white'; // Default
+        let iconClass = 'fa-info-circle';
+
+        if (type === 'error') {
+            colorClass = 'bg-rose-500 text-white';
+            iconClass = 'fa-circle-exclamation';
+        } else if (type === 'success') {
+            colorClass = 'bg-emerald-500 text-white';
+            iconClass = 'fa-check-circle';
+        }
+
+        // Apply Tailwind classes for positioning and animation
+        toast.className = `fixed bottom-24 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-full shadow-xl z-[9999] text-sm font-bold flex items-center gap-2 animate-slide-up ${colorClass}`;
         
         toast.innerHTML = `
-            <i class="fa-solid ${type === 'error' ? 'fa-circle-exclamation' : type === 'success' ? 'fa-check-circle' : 'fa-info-circle'}"></i>
+            <i class="fa-solid ${iconClass}"></i>
             <span>${msg}</span>
         `;
 
+        // Inject into DOM
         document.body.appendChild(toast);
-        setTimeout(() => toast.remove(), 3000);
+
+        // Remove after 3 seconds
+        setTimeout(() => {
+            // Optional: Add fade out animation here if desired
+            toast.remove();
+        }, 3000);
     },
 
+    // ... Continues in Part 2 ...
     // ============================================================
     // 2. MODAL SYSTEM (The Envelope Logic)
     // ============================================================
 
     /**
      * Opens a generic modal with custom HTML content.
+     * Used for Orientation, Privacy Policy, and Results.
      * @param {String} htmlContent - The HTML to inject inside the envelope
      */
     openModal(htmlContent) {
         const overlay = document.getElementById('modal-overlay');
         const contentBox = document.getElementById('modal-content');
 
+        // Safety Check: Ensure elements exist in index.html
         if (!overlay || !contentBox) {
             console.error("UI: Modal containers missing in DOM!");
             return;
         }
 
-        // 1. Inject Content
+        // 1. Inject Content into the box
         contentBox.innerHTML = htmlContent;
 
-        // 2. Show Overlay
+        // 2. Reveal the Overlay
         overlay.classList.remove('hidden');
         
-        // 3. Close Logic (Clicking outside closes it)
+        // 3. Setup Close Logic (Clicking the dark background closes it)
         overlay.onclick = (e) => {
+            // Only close if clicked on the overlay itself, not the content box
             if (e.target === overlay) {
                 this.closeModal();
             }
         };
 
-        // 4. Trap 'Escape' key
+        // 4. Setup Keyboard Logic (Escape key closes it)
         document.onkeydown = (e) => {
             if (e.key === 'Escape') this.closeModal();
         };
 
+        // Track active modal
         this.activeModal = overlay;
     },
 
     /**
-     * Closes the currently open modal and cleans up audio.
+     * Closes the currently open modal and cleans up resources.
      */
     closeModal() {
         const overlay = document.getElementById('modal-overlay');
+        
+        // 1. Hide Overlay
         if (overlay) {
             overlay.classList.add('hidden');
         }
 
-        // Stop Audio if playing (Safety cleanup)
+        // 2. Stop Audio if playing (Crucial for Orientation)
+        // If the user closes the modal while audio is playing, silence it immediately.
         if (this.audioPlayer) {
             this.audioPlayer.pause();
-            this.audioPlayer = null;
+            this.audioPlayer = null; // garbage collect
         }
 
+        // 3. Cleanup Event Listeners
         document.onkeydown = null;
         this.activeModal = null;
     },
 
-    // ... Continues in Part 2 ...
+    // ... Continues in Part 3 ...
+
     // ============================================================
-    // 3. SWIPE DECK SYSTEM (The Intro Logic)
+    // 3. SWIPE DECK SYSTEM (The Linear Flow Logic)
     // ============================================================
 
     /**
@@ -130,59 +171,55 @@ var UI = {
         deckContainer.classList.remove('hidden');
 
         // 2. Define the Story Cards
+        // The last card is special: No button, just a swipe prompt.
         const cardsData = [
             {
-                id: 'card-ai',
                 title: 'The Brain',
                 body: "Don't Just Guess. Predict.<br><br>Our WEMA-based AI analyzes your speed and accuracy to predict your actual UPSC score.",
                 icon: 'fa-brain',
                 color: 'from-indigo-600 to-purple-600'
             },
             {
-                id: 'card-privacy',
                 title: 'The Fortress',
                 body: "Your Data. Your Device.<br><br>Zero Cloud. Zero Tracking. 100% Offline. Your study patterns never leave this phone.",
                 icon: 'fa-shield-halved',
                 color: 'from-emerald-600 to-teal-600'
             },
             {
-                id: 'card-sensor',
                 title: 'The Sensor',
                 body: "More Than Just Hours.<br><br>We infer your sleep quality and focus levels to tell you *when* to study, not just *what*.",
                 icon: 'fa-heart-pulse',
                 color: 'from-rose-500 to-pink-600'
             },
             {
-                id: 'card-final',
                 title: 'Ready?',
-                body: "System Primed. Connection Established.<br>Begin your journey now.",
+                body: "System Primed. Connection Established.<br>Swipe this card to begin.",
                 icon: 'fa-power-off',
                 color: 'from-slate-700 to-slate-900',
-                isLast: true // Special flag for the button
+                isLast: true
             }
         ];
 
-        // 3. Render Cards (Reverse order so first is on top)
+        // 3. Render Cards (Reverse order so first is on top in the stack)
         deckContainer.innerHTML = '';
         cardsData.reverse().forEach((card, index) => {
             const el = document.createElement('div');
             el.className = `swipe-card bg-gradient-to-br ${card.color} text-white`;
-            el.style.zIndex = index + 10; // Stack order
+            el.style.zIndex = index + 10; // Higher index = On Top
             
-            // Mark the top card (last in DOM because of reverse)
+            // Mark the top card as 'current'
             if (index === cardsData.length - 1) el.classList.add('current');
             else el.classList.add('next');
 
+            // NOTE: We replaced the button with a simple swipe instruction for smooth flow
             el.innerHTML = `
                 <i class="fa-solid ${card.icon} text-6xl mb-6 opacity-80 animate-float"></i>
                 <h2 class="text-3xl font-display font-bold mb-4">${card.title}</h2>
                 <p class="text-lg opacity-90 leading-relaxed">${card.body}</p>
-                ${card.isLast ? 
-                    `<button onclick="UI.finishIntro()" class="mt-8 px-8 py-3 bg-white text-slate-900 font-bold rounded-full shadow-lg hover:scale-105 transition-transform animate-pulse">
-                        INITIALIZE SYSTEM
-                    </button>` 
-                    : '<div class="mt-8 text-sm opacity-50 uppercase tracking-widest"><i class="fa-solid fa-arrow-right"></i> Swipe</div>'
-                }
+                
+                <div class="mt-8 text-sm opacity-50 uppercase tracking-widest animate-pulse">
+                    <i class="fa-solid fa-arrow-right"></i> Swipe to Continue
+                </div>
             `;
             deckContainer.appendChild(el);
         });
@@ -192,26 +229,28 @@ var UI = {
     },
 
     /**
-     * Internal: Handles the Drag & Drop Physics
+     * Internal: Handles the Drag & Drop Physics and Auto-Trigger
      */
     _attachSwipeListeners(container) {
         let startX = 0, currentX = 0;
         let activeCard = container.querySelector('.current');
 
         const handleStart = (e) => {
-            activeCard = container.querySelector('.current'); // Refresh ref
+            activeCard = container.querySelector('.current'); // Always get the top card
             if (!activeCard) return;
+            // Support both Touch and Mouse
             startX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
-            activeCard.style.transition = 'none'; // Disable transition for instant drag
+            activeCard.style.transition = 'none'; // Disable transition for instant drag feel
         };
 
         const handleMove = (e) => {
             if (!activeCard) return;
-            e.preventDefault(); // Stop scrolling
+            e.preventDefault(); // Stop scrolling while swiping
+            
             currentX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
             const deltaX = currentX - startX;
             
-            // Calculate Rotation (max 15 degrees)
+            // Calculate Rotation (max 15 degrees for natural feel)
             const rotate = deltaX * 0.05;
             
             // Apply Transform
@@ -221,27 +260,36 @@ var UI = {
         const handleEnd = (e) => {
             if (!activeCard) return;
             const deltaX = currentX - startX;
-            const threshold = 100; // Pixels to trigger swipe
+            const threshold = 100; // Pixels needed to trigger a swipe
 
             if (Math.abs(deltaX) > threshold) {
-                // Fly Away!
+                // SWIPE CONFIRMED: Fly Away!
                 const direction = deltaX > 0 ? 'fly-right' : 'fly-left';
                 activeCard.classList.add(direction);
                 
-                // Promote next card
-                setTimeout(() => {
-                    activeCard.remove();
-                    const nextCard = container.lastElementChild; // Since we reversed logic
-                    if (nextCard) {
-                        nextCard.classList.remove('next');
-                        nextCard.classList.add('current');
-                        // Reset vars for next card
-                        activeCard = nextCard; 
-                        startX = 0; currentX = 0;
-                    }
-                }, 300);
+                // CHECK: Is this the last card?
+                // We check if there are any '.next' cards left underneath.
+                const remainingCards = container.querySelectorAll('.next');
+                
+                if (remainingCards.length === 0) {
+                    // CASE A: Last Card Swiped -> Trigger "Auto-Initiation"
+                    this.finishIntro(); 
+                } else {
+                    // CASE B: Normal Card -> Promote next card
+                    setTimeout(() => {
+                        activeCard.remove();
+                        const nextCard = container.lastElementChild; // In reverse stack, last child is top
+                        if (nextCard) {
+                            nextCard.classList.remove('next');
+                            nextCard.classList.add('current');
+                            // Reset vars for next card
+                            activeCard = nextCard; 
+                            startX = 0; currentX = 0;
+                        }
+                    }, 300);
+                }
             } else {
-                // Snap Back
+                // SWIPE FAILED: Snap Back
                 activeCard.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
                 activeCard.style.transform = 'translateX(0) rotate(0)';
             }
@@ -254,21 +302,23 @@ var UI = {
     },
 
     /**
-     * Called when user clicks "Initialize System" on the last card.
+     * Called automatically when the 4th card is swiped away.
+     * Starts the linear sequence: Intro -> Orientation.
      */
     finishIntro() {
         const deck = document.getElementById('intro-deck');
-        if (deck) {
-            deck.classList.add('hidden'); // Hide deck
+        
+        // Wait 400ms for the card to fly off-screen before switching scenes
+        // This prevents the "Hanging" visual glitch
+        setTimeout(() => {
+            if (deck) deck.classList.add('hidden'); // Hide black background
             
             // Trigger the Orientation Modal immediately
-            setTimeout(() => {
-                this.modals.orientation(); 
-            }, 500);
-        }
+            this.modals.orientation(); 
+        }, 400);
     },
 
-    // ... Continues in Part 3 ...
+    // ... Continues in Part 4 ...
     // ============================================================
     // 4. MODAL CONTENT GENERATORS (The "Letters" inside the Envelope)
     // ============================================================
@@ -276,7 +326,7 @@ var UI = {
     modals: {
         /**
          * STEP 1: ORIENTATION (Audio Experience)
-         * Triggered after Intro Deck.
+         * Triggered automatically after the Intro Deck finishes.
          */
         orientation() {
             const html = `
@@ -304,7 +354,7 @@ var UI = {
 
         /**
          * STEP 2: THE COVENANT (Disclaimer & Privacy)
-         * Triggered by "I am Ready"
+         * Triggered by "I am Ready" in Orientation.
          */
         disclaimer() {
             const html = `
@@ -316,7 +366,7 @@ var UI = {
                     
                     <div class="h-64 overflow-y-auto pr-2 text-sm text-slate-600 dark:text-slate-300 space-y-4 mb-6 font-serif border-l-2 border-rose-100 pl-4">
                         <p><strong>1. Non-Liability:</strong> This system uses AI to generate questions. While accuracy is high, the Creator (Aspirant) is not liable for errors in the real examination.</p>
-                        <p><strong>2. Data Sovereignty:</strong> Your data (Scores, Sleep Patterns, Weaknesses) lives locally on this device. We do not own it. You do.</p>
+                        <p><strong>2. Data Sovereignty:</strong> Your data (Scores, Sleep Patterns, Weaknesses) lives locally on this device. We do not own it. You do. By continuing, you agree to local storage usage.</p>
                         <p><strong>3. The Goal:</strong> This tool is built to assist, not replace, standard text-books.</p>
                     </div>
 
@@ -330,7 +380,7 @@ var UI = {
 
         /**
          * STEP 3: THE MOTIVE (Vision)
-         * Triggered by "Accept & Begin"
+         * Triggered by "Accept & Begin".
          */
         motive() {
             const html = `
@@ -352,7 +402,7 @@ var UI = {
 
         /**
          * EXTRA: ABOUT CREATOR (Profile Card)
-         * Accessed via Settings Menu
+         * Accessed via Settings Menu later (Not part of Intro flow).
          */
         aboutCreator() {
             const html = `
@@ -377,8 +427,8 @@ var UI = {
                             "Do not offer me security guard roles! I am currently serving the RAJA OF DHOLAKPUR."
                         </div>
 
-                        <button class="w-full py-2 border-2 border-indigo-500 text-indigo-500 font-bold rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-900/30">
-                            Offer a Job (Plan B)
+                        <button onclick="UI.closeModal()" class="w-full py-2 border-2 border-indigo-500 text-indigo-500 font-bold rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-900/30">
+                            Close Profile
                         </button>
                     </div>
                 </div>
@@ -387,8 +437,7 @@ var UI = {
         }
     },
 
-    // ... Continues in Part 4 ...
-
+    // ... Continues in Part 5 ...
     // ============================================================
     // 5. AUDIO PLAYER & JOURNEY LOGIC
     // ============================================================
@@ -414,7 +463,7 @@ var UI = {
         if (!this.audioPlayer) {
             this.audioPlayer = new Audio(src);
             
-            // Handle End of Track
+            // Handle End of Track (Reset button UI)
             this.audioPlayer.onended = () => {
                 btn.classList.remove('playing');
                 icon.classList.remove('fa-pause');
@@ -437,13 +486,13 @@ var UI = {
 
     /**
      * Called when the user clicks "Enter the Dojo".
-     * Saves the flag and reveals the Dashboard.
+     * Saves the flag and reveals the Dashboard WITHOUT reloading.
      */
     _finalizeJourney() {
-        // 1. Save to Persistent Store
+        // 1. Save to Persistent Store (The Handshake)
         if (window.Store) {
-            // Get current settings, update 'is_initiated', and save back
             const settings = Store.getAppSettings('settings', {});
+            // Set 'is_initiated' to true so Intro never shows again
             Store.setAppSettings('settings', { ...settings, is_initiated: true });
         }
 
@@ -453,7 +502,8 @@ var UI = {
         // 3. Show Success Toast
         this.showToast("Welcome to the brotherhood.", "success");
 
-        // 4. Trigger Home Render (Navigate to Home)
+        // 4. Smooth Transition to Home
+        // We call Main.navigate instead of location.reload() to prevent the "White Screen" flash
         if (window.Main) {
             Main.navigate('home');
         }
@@ -468,43 +518,46 @@ var UI = {
      * @param {HTMLElement} container - The main app container
      */
     async _renderHome(container) {
-        // 1. Get Data from Store
-        const name = Store.getAppSettings('user_name', 'Future Officer');
-        const streak = Store.getAppSettings('streak', 0);
+        // 1. Get Data from Store (Safe defaults if Store is missing)
+        const name = (window.Store) ? Store.getAppSettings('user_name', 'Future Officer') : 'Future Officer';
+        const streak = (window.Store) ? Store.getAppSettings('streak', 0) : 0;
         
         // 2. Build the Resume Card HTML (The "Continue" Section)
         let resumeHTML = '';
-        const lastResult = await Store.getLastResult(); // Async fetch
-        
-        if (lastResult) {
-            resumeHTML = `
-                <div class="mb-8 p-6 bg-gradient-to-r from-indigo-600 to-indigo-800 rounded-3xl shadow-xl shadow-indigo-200 dark:shadow-none text-white relative overflow-hidden group cursor-pointer" onclick="Main.showResult('${lastResult.id}')">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-white opacity-5 rounded-full -mr-16 -mt-16 transform group-hover:scale-110 transition-transform"></div>
-                    <div class="relative z-10">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <h3 class="text-xs font-bold uppercase tracking-wider opacity-70 mb-1">Continue Learning</h3>
-                                <p class="text-xl font-display font-bold">${lastResult.subject || 'General Studies'}</p>
+        if (window.Store) {
+            const lastResult = await Store.getHistory(1); // Get most recent test
+            
+            if (lastResult && lastResult.length > 0) {
+                const res = lastResult[0];
+                resumeHTML = `
+                    <div class="mb-8 p-6 bg-gradient-to-r from-indigo-600 to-indigo-800 rounded-3xl shadow-xl shadow-indigo-200 dark:shadow-none text-white relative overflow-hidden group cursor-pointer" onclick="Main.showResult('${res.id}')">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-white opacity-5 rounded-full -mr-16 -mt-16 transform group-hover:scale-110 transition-transform"></div>
+                        <div class="relative z-10">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h3 class="text-xs font-bold uppercase tracking-wider opacity-70 mb-1">Continue Learning</h3>
+                                    <p class="text-xl font-display font-bold capitalize">${res.subject || 'General Studies'}</p>
+                                </div>
+                                <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                                    <i class="fa-solid fa-play text-sm"></i>
+                                </div>
                             </div>
-                            <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
-                                <i class="fa-solid fa-play text-sm"></i>
+                            <div class="flex items-center gap-4 text-sm">
+                                <span class="bg-indigo-500/50 px-3 py-1 rounded-lg">Score: ${res.score.toFixed(1)}</span>
+                                <span class="opacity-70">${new Date(res.timestamp).toLocaleDateString()}</span>
                             </div>
-                        </div>
-                        <div class="flex items-center gap-4 text-sm">
-                            <span class="bg-indigo-500/50 px-3 py-1 rounded-lg">Score: ${lastResult.score.toFixed(1)}</span>
-                            <span class="opacity-70">${new Date(lastResult.date).toLocaleDateString()}</span>
                         </div>
                     </div>
-                </div>
-            `;
-        } else {
-            // Empty State
-            resumeHTML = `
-                <div class="mb-8 p-6 bg-slate-100 dark:bg-slate-800 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-3xl text-center">
-                    <p class="text-slate-500 font-bold">No active sessions.</p>
-                    <p class="text-xs text-slate-400 mt-1">Select a subject to start.</p>
-                </div>
-            `;
+                `;
+            } else {
+                // Empty State
+                resumeHTML = `
+                    <div class="mb-8 p-6 bg-slate-100 dark:bg-slate-800 border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-3xl text-center">
+                        <p class="text-slate-500 font-bold">No active sessions.</p>
+                        <p class="text-xs text-slate-400 mt-1">Select a subject to start.</p>
+                    </div>
+                `;
+            }
         }
 
         // 3. Inject Full Home HTML
@@ -517,8 +570,8 @@ var UI = {
                         </h1>
                         <p class="text-sm text-slate-500 font-bold mt-1"><i class="fa-solid fa-fire text-orange-500 mr-1"></i> ${streak} Day Streak</p>
                     </div>
-                    <div class="w-12 h-12 rounded-full bg-indigo-100 dark:bg-slate-800 border-2 border-white dark:border-slate-700 shadow-lg overflow-hidden cursor-pointer" onclick="Main.navigate('settings')">
-                        <img src="assets/img/profile.jpg" onerror="this.src='https://ui-avatars.com/api/?name=AS&background=0D8ABC&color=fff'" class="w-full h-full object-cover">
+                    <div class="w-12 h-12 rounded-full bg-indigo-100 dark:bg-slate-800 border-2 border-white dark:border-slate-700 shadow-lg overflow-hidden cursor-pointer flex items-center justify-center text-indigo-500" onclick="Main.navigate('settings')">
+                        <i class="fa-solid fa-gear"></i>
                     </div>
                 </header>
 
@@ -537,20 +590,24 @@ var UI = {
         `;
     },
 
-    // ... Continues in Part 5 ...
     /**
      * INTERNAL: Generates the Subject Cards HTML based on Config.
+     * Uses defensive coding to check if CONFIG exists.
      */
     _generateSubjectGrid() {
-        if (!window.CONFIG) return '<p class="text-rose-500">Config Error</p>';
+        if (!window.CONFIG || !CONFIG.subjectsGS1) {
+            return '<p class="text-rose-500 text-sm col-span-2">Config Error: Subjects not loaded.</p>';
+        }
         
-        return CONFIG.subjects.map(sub => `
+        // Combine GS and CSAT for the grid, or just show GS1
+        // For now, let's show GS1 subjects as the main modules
+        return CONFIG.subjectsGS1.map(sub => `
             <div onclick="Main.startQuiz('${sub.id}')" class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md active:scale-95 transition-all cursor-pointer group">
                 <div class="w-12 h-12 rounded-xl bg-${sub.color}-100 dark:bg-${sub.color}-900/30 flex items-center justify-center text-${sub.color}-600 dark:text-${sub.color}-400 mb-4 group-hover:rotate-6 transition-transform">
                     <i class="fa-solid ${sub.icon} text-xl"></i>
                 </div>
                 <h3 class="font-bold text-slate-700 dark:text-slate-200 text-sm">${sub.name}</h3>
-                <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mt-1">${sub.count} Qs</p>
+                <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mt-1">Start Mock</p>
             </div>
         `).join('');
     },
@@ -585,6 +642,7 @@ var UI = {
         `;
     },
 
+    // ... Continues in Part 6 ...
     // ============================================================
     // 7. QUIZ INTERFACE RENDERER
     // ============================================================
@@ -595,6 +653,7 @@ var UI = {
      */
     _drawQuiz(container) {
         // 1. Get Current Question Data from Engine
+        // Engine.getCurrentQuestion() returns the normalized question object
         const q = Engine.getCurrentQuestion();
         const progress = Engine.getProgress(); // Returns { current, total, percentage }
         
@@ -604,9 +663,12 @@ var UI = {
         }
 
         // 2. Build Options HTML
-        // We check if an option is selected to style it (Blue if selected)
+        // We check Engine state to see if an option is already selected (for persistence)
         const optionsHTML = q.options.map((opt, idx) => {
-            const isSelected = (Engine.state.answers[q.id] === idx);
+            // Engine.state.userAnswers is an array of objects. We check the current index.
+            const userAnsObj = Engine.state.userAnswers[progress.current];
+            const isSelected = (userAnsObj && userAnsObj.selected === idx);
+            
             return `
                 <button onclick="Main.handleAnswer(${idx})" class="w-full text-left p-4 rounded-xl border-2 transition-all mb-3 relative overflow-hidden group ${
                     isSelected 
@@ -678,7 +740,6 @@ var UI = {
         if (el) el.innerText = timeString;
     },
 
-    // ... Continues in Part 6 ...
     // ============================================================
     // 8. RESULT ANALYSIS & SETTINGS
     // ============================================================
@@ -686,14 +747,23 @@ var UI = {
     /**
      * Renders the detailed Analysis View after a quiz.
      * @param {HTMLElement} container - App container
-     * @param {String} resultId - ID of the result to fetch
+     * @param {String} resultId - ID of the result to fetch from Store
      */
     async _drawAnalysis(container, resultId) {
         // 1. Fetch Result from Store
-        const result = await Store.getResult(resultId);
+        // Uses the Store's history fetch logic.
+        // NOTE: Since Store.getHistory() returns an array, we might need a specific 'getResult(id)' 
+        // helper in Store, or we iterate history. 
+        // For efficiency in this version, we will fetch history and find the ID.
+        let result = null;
+        if (window.Store) {
+            const history = await Store.getHistory(50); // Fetch recent history
+            result = history.find(r => r.id === resultId);
+        }
+
         if (!result) {
-            this.showToast("Result not found.", "error");
-            Main.navigate('home');
+            this.showToast("Result not found. It may not have saved.", "error");
+            if (window.Main) Main.navigate('home');
             return;
         }
 
@@ -721,43 +791,70 @@ var UI = {
 
                 <h3 class="font-bold text-slate-800 dark:text-white mb-4">Detailed Solutions</h3>
                 <div class="space-y-4">
-                    ${result.questions.map((q, idx) => {
-                        const isCorrect = (q.userAnswer === q.correctAnswer);
-                        const isSkipped = (q.userAnswer === -1);
-                        const statusColor = isCorrect ? 'emerald' : isSkipped ? 'slate' : 'rose';
-                        const statusIcon = isCorrect ? 'fa-check' : isSkipped ? 'fa-minus' : 'fa-xmark';
-
-                        return `
-                        <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-100 dark:border-slate-700">
-                            <div class="flex gap-3">
-                                <div class="mt-1 w-6 h-6 rounded-full bg-${statusColor}-100 dark:bg-${statusColor}-900/30 text-${statusColor}-500 flex items-center justify-center flex-shrink-0">
-                                    <i class="fa-solid ${statusIcon} text-xs"></i>
-                                </div>
-                                <div>
-                                    <h4 class="text-sm font-bold text-slate-800 dark:text-slate-200 mb-2">Q${idx + 1}. ${q.text}</h4>
-                                    <div class="flex flex-wrap gap-2 mb-3">
-                                        <span class="text-[10px] px-2 py-1 rounded bg-slate-100 dark:bg-slate-700 text-slate-500">
-                                            Your: ${isSkipped ? 'Skipped' : ['A','B','C','D'][q.userAnswer]}
-                                        </span>
-                                        <span class="text-[10px] px-2 py-1 rounded bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600">
-                                            Correct: ${['A','B','C','D'][q.correctAnswer]}
-                                        </span>
-                                    </div>
-                                    <p class="text-xs text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900 p-3 rounded-lg border border-slate-100 dark:border-slate-800">
-                                        <strong class="block text-indigo-500 mb-1">Explanation:</strong>
-                                        ${q.explanation || 'No explanation provided.'}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        `;
-                    }).join('')}
+                    ${this._generateSolutionsHTML(result)}
                 </div>
             </div>
         `;
 
-        // 3. Initialize Mini Chart (Accuracy Donut)
-        // We use a timeout to ensure DOM is painted
+        // 3. Initialize Chart.js
+        this._initResultChart(result);
+    },
+
+    /**
+     * Helper to generate the solution cards list.
+     */
+    _generateSolutionsHTML(result) {
+        // We need to fetch the original question text. 
+        // Result object usually contains full question snapshots in mistakes, 
+        // OR we might need to rely on what Engine saved.
+        // In Engine v6.1, we only saved 'mistakes' with full data. 
+        // Ideally, we should save the full Q&A in the result object for valid analysis.
+        // For this version, we will try to display 'mistakes' which contain full context.
+        
+        // If result.mistakes exists, we show those. 
+        // If we want FULL review (correct & incorrect), Engine needs to save full question array in result.
+        // Assuming Engine v6.1 saves 'mistakes' array specifically.
+        
+        if (!result.mistakes || result.mistakes.length === 0) {
+            return `<div class="p-4 text-center text-slate-500">Great job! No mistakes found to review.</div>`;
+        }
+
+        return result.mistakes.map((q, idx) => {
+            const isCorrect = (q.userSelected === q.correctIndex);
+            // Since this is the mistakes array, isCorrect should technically be false, 
+            // but we check just in case.
+            
+            return `
+            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-100 dark:border-slate-700">
+                <div class="flex gap-3">
+                    <div class="mt-1 w-6 h-6 rounded-full bg-rose-100 dark:bg-rose-900/30 text-rose-500 flex items-center justify-center flex-shrink-0">
+                        <i class="fa-solid fa-xmark text-xs"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-bold text-slate-800 dark:text-slate-200 mb-2">${q.text}</h4>
+                        <div class="flex flex-wrap gap-2 mb-3">
+                            <span class="text-[10px] px-2 py-1 rounded bg-slate-100 dark:bg-slate-700 text-slate-500">
+                                Your: ${q.userSelected === null ? 'Skipped' : ['A','B','C','D'][q.userSelected]}
+                            </span>
+                            <span class="text-[10px] px-2 py-1 rounded bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600">
+                                Correct: ${['A','B','C','D'][q.correctIndex]}
+                            </span>
+                        </div>
+                        <div class="text-xs text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900 p-3 rounded-lg border border-slate-100 dark:border-slate-800">
+                            <strong class="block text-indigo-500 mb-1">Explanation:</strong>
+                            ${q.explanation.core || q.explanation || 'No explanation available.'}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `;
+        }).join('');
+    },
+
+    /**
+     * Helper to initialize the Chart.js instance safely.
+     */
+    _initResultChart(result) {
         setTimeout(() => {
             const ctx = document.getElementById('resultChart');
             if (ctx && window.Chart) {
@@ -766,7 +863,7 @@ var UI = {
                     data: {
                         labels: ['Correct', 'Wrong', 'Skipped'],
                         datasets: [{
-                            data: [result.stats.correct, result.stats.wrong, result.stats.skipped],
+                            data: [result.correct, result.wrong, result.skipped],
                             backgroundColor: ['#ffffff', 'rgba(255,255,255,0.5)', 'rgba(255,255,255,0.2)'],
                             borderRadius: 4,
                             barThickness: 12
@@ -789,7 +886,6 @@ var UI = {
      * Renders the Settings Menu.
      */
     _renderSettings(container) {
-        // Current Theme State
         const isDark = document.documentElement.classList.contains('dark');
 
         container.innerHTML = `
@@ -800,7 +896,7 @@ var UI = {
                      <div class="absolute top-0 right-0 w-32 h-32 bg-white opacity-10 rounded-full -mr-10 -mt-10"></div>
                      <div class="flex items-center gap-4 relative z-10">
                         <div class="w-16 h-16 rounded-full bg-white/20 border-2 border-white/30 overflow-hidden">
-                            <img src="assets/img/profile.jpg" onerror="this.src='https://ui-avatars.com/api/?name=AS&background=random'" class="w-full h-full object-cover">
+                            <img src="assets/img/profile.jpg" onerror="this.src='https://ui-avatars.com/api/?name=User&background=random'" class="w-full h-full object-cover">
                         </div>
                         <div>
                             <h2 class="font-bold text-lg">Future Officer</h2>
@@ -828,15 +924,8 @@ var UI = {
                         </div>
                         <span class="font-bold text-slate-700 dark:text-slate-200">Replay Orientation</span>
                     </button>
-
-                    <button onclick="UI.modals.aboutCreator()" class="w-full flex items-center gap-3 p-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm active:bg-slate-50 transition-colors">
-                        <div class="w-10 h-10 rounded-full bg-amber-50 dark:bg-slate-700 text-amber-500 flex items-center justify-center">
-                            <i class="fa-solid fa-code"></i>
-                        </div>
-                        <span class="font-bold text-slate-700 dark:text-slate-200">About Developer</span>
-                    </button>
                     
-                     <button onclick="localStorage.clear(); location.reload();" class="w-full flex items-center gap-3 p-4 mt-8 rounded-2xl border border-rose-100 dark:border-rose-900/30 bg-rose-50 dark:bg-rose-900/10 active:bg-rose-100 transition-colors">
+                    <button onclick="Store.clearAll()" class="w-full flex items-center gap-3 p-4 mt-8 rounded-2xl border border-rose-100 dark:border-rose-900/30 bg-rose-50 dark:bg-rose-900/10 active:bg-rose-100 transition-colors">
                         <div class="w-10 h-10 rounded-full bg-rose-100 dark:bg-rose-900 text-rose-500 flex items-center justify-center">
                             <i class="fa-solid fa-trash"></i>
                         </div>
@@ -850,7 +939,6 @@ var UI = {
 
     /**
      * Updates global theme classes on the HTML tag.
-     * @param {Boolean} isDark 
      */
     updateTheme(isDark) {
         const html = document.documentElement;
@@ -861,3 +949,6 @@ var UI = {
         }
     }
 };
+
+// Expose UI to the global window object
+window.UI = UI;
