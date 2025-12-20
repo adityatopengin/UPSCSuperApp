@@ -1,7 +1,7 @@
 /**
  * Main.js - The Application Controller
- * Version: 6.0.0
- * * Orchestrates interaction between:
+ * Version: 6.1.0 (Seamless Boot Edition)
+ * Orchestrates interaction between:
  * 1. UI (View Layer)
  * 2. Store (Data Layer)
  * 3. Engine (Logic Layer)
@@ -23,6 +23,7 @@ var Main = {
     
     /**
      * Called by window.onload when all scripts are ready.
+     * Determines if the user is a Recruit (Intro) or Officer (Dashboard).
      */
     init: function() {
         console.log("Main: System Booting...");
@@ -31,43 +32,43 @@ var Main = {
         if (typeof Store !== 'undefined') {
             Store.init();
         } else {
-            console.error("Main: Store.js not found!");
+            console.error("Main: Critical - Store.js not found!");
+            document.body.innerHTML = "<h1 style='color:red; text-align:center; margin-top:50px'>Error: Data Layer Missing</h1>";
+            return;
         }
         
         // 2. Initialize Logic Layer (Safe Check)
-        if (typeof Engine !== 'undefined') {
-            Engine.init();
-        } else {
-            console.error("Main: Engine.js not found!");
+        // Note: Engine.init() is now internal; we don't call it here without data.
+        if (typeof Engine === 'undefined') {
+            console.error("Main: Critical - Engine.js not found!");
         }
 
-        // 3. Apply Theme Preference (Dark/Light)
+        // 3. Apply Theme Preference (Dark/Light) immediately to prevent white flash
         this._applyTheme();
 
-        // 4. Determine Start Screen (The Intro Deck Logic)
-        // We check if the user has completed the "Initiation"
-        if (typeof Store !== 'undefined') {
-            const settings = Store.getAppSettings('settings', {});
-            const isInitiated = settings.is_initiated; 
+        // 4. Determine Start Screen (The Fork in the Road)
+        // We check the persistent flag in the Store
+        const settings = Store.getAppSettings('settings', {});
+        const isInitiated = settings.is_initiated; 
 
-            if (!isInitiated) {
-                // CASE A: New User -> Launch Intro Swipe Deck
-                console.log("Main: New User Detected. Preparing Intro.");
-                
-                // We use a timeout to let the UI finish painting
-                setTimeout(function() {
-                    if (typeof UI !== 'undefined') {
-                        UI.hideLoading();
-                        UI.initSwipeDeck(); // Launch the Cards
-                    }
-                }, 1200);
-            } else {
-                // CASE B: Returning User -> Go to Dashboard
-                console.log("Main: Returning User. Loading Dashboard.");
-                this.navigate('home');
-            }
+        if (!isInitiated) {
+            // CASE A: New User -> Launch The Intro Deck
+            // We do NOT load the dashboard yet. We wait for the user to finish the "Covenant".
+            console.log("Main: New Recruit Detected. Launching Intro Sequence.");
+            
+            // Wait slightly for the DOM to paint the black background
+            setTimeout(function() {
+                if (typeof UI !== 'undefined') {
+                    UI.hideLoading(); // Lift the curtain
+                    UI.initSwipeDeck(); // Start the Cards
+                }
+            }, 800);
+
         } else {
-            // Fallback: If Store is broken, just go Home
+            // CASE B: Returning Officer -> Go straight to Dashboard
+            console.log("Main: Officer Detected. Loading Dashboard.");
+            
+            // Navigate immediately
             this.navigate('home');
         }
 
@@ -76,12 +77,13 @@ var Main = {
             console.error('Global Error: ' + msg + ' at line ' + line);
             // Try to show a toast if UI is alive
             if (typeof UI !== 'undefined' && UI.showToast) {
-                UI.showToast("System Error. Reloading...", "error");
+                UI.showToast("System Stability Error. Check Console.", "error");
             }
             return false;
         };
     },
 
+    // ... Continues in Part 2 ...
     // ============================================================
     // 3. NAVIGATION ROUTER
     // ============================================================
@@ -96,7 +98,7 @@ var Main = {
 
         console.log('Main: Navigating to [' + viewId + ']');
 
-        // A. Cleanup: Stop any running quiz timers if leaving the quiz
+        // A. Cleanup: Stop any running quiz timers if leaving the quiz view
         if (this.currentView === 'quiz' && viewId !== 'quiz') {
             this._stopQuizTimer();
         }
@@ -105,7 +107,6 @@ var Main = {
         this.currentView = viewId;
 
         // C. Render the requested View
-        // We ensure UI exists before calling it
         if (typeof UI === 'undefined') return;
 
         switch (viewId) {
@@ -123,11 +124,11 @@ var Main = {
                 break;
 
             case 'stats':
-                // Placeholder for Stats View
+                // Placeholder for Stats View (Coming in v6.2)
                 app.innerHTML = '<div class="p-8 text-center mt-20 animate-view-enter">' +
                     '<i class="fa-solid fa-chart-pie text-6xl text-slate-200 dark:text-slate-700 mb-4"></i>' +
                     '<h2 class="text-xl font-display font-bold text-slate-800 dark:text-white">Analytics Module</h2>' +
-                    '<p class="text-slate-500 mb-6">Detailed insights coming in Update v6.1</p>' +
+                    '<p class="text-slate-500 mb-6">Detailed insights coming in next update.</p>' +
                     '<button onclick="Main.navigate(\'home\')" class="text-indigo-500 font-bold">Return Home</button>' +
                     '</div>' +
                     UI._generateFooter('stats');
@@ -148,7 +149,7 @@ var Main = {
                 UI._renderHome(app);
         }
 
-        // D. Final Polish: Ensure Loading Screen is gone & Scroll up
+        // D. Final Polish: Ensure Loading Screen is gone & Scroll to top
         UI.hideLoading();
         window.scrollTo(0, 0);
     },
@@ -161,7 +162,6 @@ var Main = {
      * INTERNAL: Applies the saved theme on boot
      */
     _applyTheme: function() {
-        // Check LocalStorage first, then System Preference
         var savedTheme = localStorage.getItem('theme');
         var systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
@@ -189,7 +189,7 @@ var Main = {
     },
 
     // ============================================================
-    // 5. QUIZ WORKFLOW LOGIC
+    // 5. QUIZ WORKFLOW LOGIC (The Fixed Handshake)
     // ============================================================
 
     /**
@@ -207,12 +207,12 @@ var Main = {
             // 2. Initialize Engine Session
             if (typeof Engine === 'undefined') throw new Error("Engine missing");
 
-            // Engine.startSession loads questions and resets state
-            // We await it because it might fetch data asynchronously
+            // CRITICAL FIX: We now call Engine.startSession which handles the fetching.
+            // This connects Main.js -> Engine.js -> File System
             var success = await Engine.startSession(subjectId);
 
             if (!success) {
-                throw new Error("Engine returned false");
+                throw new Error("Engine failed to load questions.");
             }
 
             // 3. Update Main State
@@ -236,11 +236,12 @@ var Main = {
             console.error("Main: Failed to start quiz", error);
             if (typeof UI !== 'undefined') {
                 UI.hideLoading();
-                UI.showToast("Failed to load module. Check connection.", "error");
+                UI.showToast("Could not download questions. Check assets/data folder.", "error");
             }
         }
     },
 
+    // ... Continues in Part 3 ...
     /**
      * Handles User Selection during Quiz.
      * Called when user clicks an Option button.
@@ -278,9 +279,11 @@ var Main = {
             // Engine.endSession returns the ID of the saved result
             var resultId = await Engine.endSession();
 
+            if (!resultId) throw new Error("Result generation failed");
+
             // 4. Navigate to Analysis View
-            // We wait 1 sec to make it feel like "Calculating..."
-            var self = this; // Capture 'this' context for timeout
+            // We wait 1 sec to make it feel like "Calculating..." (UX Best Practice)
+            var self = this; 
             setTimeout(function() {
                 self.showResult(resultId);
             }, 1000);
@@ -295,13 +298,12 @@ var Main = {
         }
     },
 
-    // ... Continues in Part 3 ...
     // ============================================================
     // 6. TIMER & RESULT HELPERS
     // ============================================================
 
     /**
-     * INTERNAL: Starts the MM:SS timer.
+     * INTERNAL: Starts the MM:SS timer loop.
      */
     _startQuizTimer: function() {
         // Clear any existing timer first to prevent doubles
@@ -309,9 +311,7 @@ var Main = {
 
         var seconds = 0;
         
-        // We use arrow function to keep 'this' bound to Main object,
-        // or we can use 'var self = this' if we wanted strictly ES5.
-        // Since we are using modern JS features elsewhere, arrow func is fine.
+        // We use arrow function to keep 'this' bound to Main object
         this.quizTimerInterval = setInterval(() => {
             seconds++;
             
@@ -356,7 +356,8 @@ var Main = {
         var app = document.getElementById('app-container');
         
         if (typeof UI !== 'undefined') {
-            UI._drawAnalysis(app, resultId)
+            // Since _drawAnalysis might be async depending on implementation, handle promises
+            Promise.resolve(UI._drawAnalysis(app, resultId))
                 .then(() => {
                     UI.hideLoading();
                     window.scrollTo(0, 0);
@@ -399,6 +400,8 @@ window.addEventListener('load', function() {
         if (typeof Main !== 'undefined' && Main.currentView !== 'home') {
             // Instead of leaving the app, go back to Home Dashboard
             Main.navigate('home');
+            // Push state back so the history stack isn't empty (keeps user in app)
+            history.pushState(null, null, location.href);
         }
     });
 
@@ -406,5 +409,4 @@ window.addEventListener('load', function() {
     // This makes the app feel more native and prevents losing quiz progress
     document.body.style.overscrollBehavior = 'none';
 });
-
 
