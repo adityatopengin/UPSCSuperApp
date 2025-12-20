@@ -47,16 +47,15 @@
     <link rel="stylesheet" href="assets/css/style.css">
 
     <style>
-        /* Floating Debug Button */
         #debug-toggler {
             position: fixed;
-            bottom: 120px; /* Above the footer */
+            bottom: 120px; 
             left: 20px;
             z-index: 9999;
             width: 40px;
             height: 40px;
             background: rgba(0, 0, 0, 0.8);
-            color: #4ade80; /* Green-400 */
+            color: #4ade80; 
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -67,20 +66,15 @@
             cursor: pointer;
             opacity: 0.5;
         }
-        #debug-toggler:hover, #debug-toggler.active {
-            opacity: 1;
-            transform: scale(1.1);
-            background: black;
-        }
+        #debug-toggler:hover, #debug-toggler.active { opacity: 1; transform: scale(1.1); background: black; }
 
-        /* The Hidden Console Panel */
         #debug-panel {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 35vh; /* Takes up bottom 35% of screen when open */
-            background: rgba(15, 23, 42, 0.95); /* Slate-900 */
+            height: 35vh; 
+            background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(10px);
             border-top: 1px solid #334155;
             z-index: 9998;
@@ -89,16 +83,12 @@
             font-size: 10px;
             color: #cbd5e1;
             overflow-y: auto;
-            transform: translateY(100%); /* Hidden by default */
+            transform: translateY(100%); 
             transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             display: flex;
-            flex-direction: column-reverse; /* New logs at bottom */
+            flex-direction: column-reverse; 
         }
-        #debug-panel.open {
-            transform: translateY(0);
-        }
-
-        /* Log Entry Styles */
+        #debug-panel.open { transform: translateY(0); }
         .log-entry { margin-bottom: 4px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 2px; }
         .log-info { color: #94a3b8; }
         .log-warn { color: #facc15; }
@@ -107,7 +97,6 @@
     </style>
 </head>
 <body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 transition-colors duration-300 min-h-screen selection:bg-indigo-500 selection:text-white">
-
     <div id="loading-overlay" class="fixed inset-0 z-[100] bg-white dark:bg-slate-900 flex flex-col items-center justify-center transition-opacity duration-500">
         <div class="relative">
             <div class="w-16 h-16 border-4 border-indigo-100 dark:border-indigo-900/30 rounded-full"></div>
@@ -123,6 +112,14 @@
     <main id="app-container" class="max-w-md mx-auto min-h-screen relative shadow-2xl shadow-slate-200 dark:shadow-black/50 bg-white dark:bg-slate-900 overflow-hidden">
         </main>
 
+    <div id="intro-deck" class="fixed inset-0 z-[90] hidden bg-slate-900 flex items-center justify-center overflow-hidden touch-none">
+        </div>
+
+    <div id="modal-overlay" class="fixed inset-0 z-[95] hidden bg-slate-900/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-4 transition-all duration-300">
+        <div id="modal-content" class="w-full max-w-sm bg-white dark:bg-slate-800 rounded-[32px] shadow-2xl overflow-hidden transform transition-all scale-100 opacity-100 animate-slide-up">
+            </div>
+    </div>
+
     <div id="debug-toggler" onclick="toggleConsole()">
         <i class="fa-solid fa-terminal text-sm"></i>
     </div>
@@ -134,7 +131,6 @@
         </div>
 
     <script>
-        // A. Toggle Functionality
         function toggleConsole() {
             const panel = document.getElementById('debug-panel');
             const btn = document.getElementById('debug-toggler');
@@ -142,58 +138,26 @@
             btn.classList.toggle('active');
         }
 
-        // B. Console Override (Pipe logs to screen)
         (function() {
             const panel = document.getElementById('debug-panel');
-            
-            // Helper to add log line
             function addLog(message, type) {
                 const line = document.createElement('div');
                 line.className = 'log-entry ' + type;
-                
-                // Timestamp
-                const time = new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute:'2-digit', second:'2-digit' });
-                
-                // Format objects nicely
                 let text = message;
-                if (typeof message === 'object') {
-                    try { text = JSON.stringify(message); } catch(e) { text = '[Object]'; }
-                }
-                
+                if (typeof message === 'object') { try { text = JSON.stringify(message); } catch(e) { text = '[Object]'; } }
+                const time = new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute:'2-digit', second:'2-digit' });
                 line.innerHTML = `<span class="opacity-50">[${time}]</span> ${text}`;
-                panel.prepend(line); // Newest at bottom visually due to flex-direction: column-reverse
+                panel.prepend(line);
             }
-
-            // Capture 'console.log'
             const oldLog = console.log;
-            console.log = function(...args) {
-                oldLog.apply(console, args);
-                addLog(args.join(' '), 'log-info');
-            };
-
-            // Capture 'console.warn'
+            console.log = function(...args) { oldLog.apply(console, args); addLog(args.join(' '), 'log-info'); };
             const oldWarn = console.warn;
-            console.warn = function(...args) {
-                oldWarn.apply(console, args);
-                addLog(args.join(' '), 'log-warn');
-            };
-
-            // Capture 'console.error'
+            console.warn = function(...args) { oldWarn.apply(console, args); addLog(args.join(' '), 'log-warn'); };
             const oldError = console.error;
-            console.error = function(...args) {
-                oldError.apply(console, args);
-                addLog(args.join(' '), 'log-error');
-            };
-            
-            // Capture 'console.info' (Green for success usually)
-            console.info = function(...args) {
-                oldLog.apply(console, args); // Use standard log for browser
-                addLog(args.join(' '), 'log-success');
-            };
-
+            console.error = function(...args) { oldError.apply(console, args); addLog(args.join(' '), 'log-error'); };
+            console.info = function(...args) { oldLog.apply(console, args); addLog(args.join(' '), 'log-success'); };
         })();
     </script>
-
     <script src="assets/js/config.js" defer></script>
     <script src="assets/js/store.js" defer></script> 
     
@@ -221,3 +185,4 @@
     </script>
 </body>
 </html>
+
