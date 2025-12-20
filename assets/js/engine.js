@@ -1,9 +1,8 @@
 /**
  * ENGINE.JS - The Core Logic
- * Version: 5.1.0 (Bulletproof Edition)
- * Handles Quiz State, Drift-Proof Timing, and Scoring Metrics.
- * Features: State Validation, Memory Leak Protection, and Metric Tracking.
- * Organization: Gyan Amala | App: UPSCSuperApp
+ * Version: 6.1.0 (The Bridge Edition)
+ * * Fixed: Added startSession() to fetch data from assets/data/
+ * * Fixed: Connected Main.js trigger to actual file loading
  */
 
 const Engine = {
@@ -11,17 +10,17 @@ const Engine = {
     // 1. STATE MANAGEMENT
     // ============================================================
     state: {
-        // Core Data
+        // Data Containers
         questions: [],          // The active set of questions
         totalQuestions: 0,
         
-        // Navigation State
+        // Navigation Trackers
         currentIndex: 0,        // 0-based index
         
-        // Performance Tracking
+        // Performance Data
         userAnswers: [],        // Array of { qId, selected, timeSpent }
         
-        // Timing Systems
+        // Timer System
         timer: {
             totalSeconds: 0,    // Duration allowed
             remaining: 0,       // Seconds left
@@ -30,55 +29,100 @@ const Engine = {
             isActive: false     // Is timer running?
         },
         
-        // Granular Metrics (For Predictive Engine)
+        // Granular Metrics
         currentQuestionStart: null, // Timestamp when specific Q was shown
         sessionStart: null          // Timestamp when quiz began
     },
 
+    // ============================================================
+    // 1.5 DATA FETCHING (THE MISSING HANDSHAKE)
+    // ============================================================
+
     /**
-     * Initialize a new Quiz Session
-     * @param {Array} questions - Normalized question array from Adapter
-     * @param {String} mode - 'test' or 'learning' (from CONFIG)
+     * THE BRIDGE: Fetches, Normalizes, and Starts the Session.
+     * This is the function Main.js is trying to call.
+     * @param {String} subjectId - e.g. 'history', 'polity'
+     */
+    async startSession(subjectId) {
+        console.log(`Engine: Attempting to load [${subjectId}]...`);
+        
+        // 1. Construct the Path (Standardized to assets/data/)
+        // We assume your files are named exactly like the ID (e.g., history.json)
+        const path = `assets/data/${subjectId}.json`;
+
+        try {
+            // 2. Fetch the File
+            const response = await fetch(path);
+            
+            // 3. Handle 404 (File Not Found)
+            if (!response.ok) {
+                console.error(`Engine: 404 Error. File not found at ${path}`);
+                if (typeof UI !== 'undefined') UI.showToast("Data file missing. Check assets.", "error");
+                return false;
+            }
+
+            // 4. Parse JSON
+            const rawData = await response.json();
+
+            // 5. Normalize (Using Adapter.js)
+            // This prevents crashes if the JSON structure varies
+            if (typeof Adapter === 'undefined') {
+                console.error("Engine: Adapter.js missing!");
+                return false;
+            }
+            const cleanQuestions = Adapter.normalize(rawData);
+
+            // 6. Initialize the Session with clean data
+            return this.init(cleanQuestions, 'test');
+
+        } catch (error) {
+            console.error("Engine: Critical Fetch Error", error);
+            return false;
+        }
+    },
+
+    /**
+     * Initialize the internal state with loaded questions.
+     * @param {Array} questions - Normalized question array
+     * @param {String} mode - 'test' or 'learning'
      */
     init(questions, mode = 'test') {
         // 1. Bulletproof Validation
         if (!questions || !Array.isArray(questions) || questions.length === 0) {
-            console.error("Engine: Init failed. Invalid questions array.");
-            alert("Quiz Data Error: No questions available to start.");
+            console.error("Engine: Init failed. Empty or invalid question set.");
             return false;
         }
 
         // 2. Reset State (Clean Slate)
         this._resetState();
 
-        // 3. Load Data
+        // 3. Load Data into State
         this.state.questions = questions;
         this.state.totalQuestions = questions.length;
         this.state.userAnswers = new Array(questions.length).fill(null);
         this.state.sessionStart = Date.now();
 
         // 4. Configure Timer Strategy
-        // Logic: Heuristic check for CSAT (Math) vs GS
-        // Safety: Check if CONFIG exists, fallback to defaults if not
+        // We check if CONFIG exists (defined in config.js), otherwise use safe defaults
         const defaults = (window.CONFIG && CONFIG.defaults) ? CONFIG.defaults : { timer: { gs1: 72, csat: 90 } };
         
         const firstQ = questions[0];
+        // Heuristic: If tags include 'math', treat as CSAT
         const isCsat = firstQ.tags && (firstQ.tags.includes('math') || firstQ.tags.includes('aptitude'));
         const timePerQ = isCsat ? defaults.timer.csat : defaults.timer.gs1;
         
         this.state.timer.totalSeconds = questions.length * timePerQ;
         this.state.timer.remaining = this.state.timer.totalSeconds;
         
-        console.log(`⚙️ Engine: Initialized ${questions.length} Qs. Mode: ${mode}. Time: ${this.state.timer.totalSeconds}s`);
+        console.log(`⚙️ Engine: Ready. ${questions.length} Qs loaded. Mode: ${mode}`);
         return true;
     },
 
     /**
-     * Internal: Resets all state variables to prevent data bleeding
-     * between different tests.
+     * Internal: Resets all state variables.
      */
     _resetState() {
-        this.stopTimer(); // Ensure no old timers are ticking
+        this.stopTimer(); // Stop any running clocks
         this.state.questions = [];
         this.state.totalQuestions = 0;
         this.state.currentIndex = 0;
@@ -93,7 +137,7 @@ const Engine = {
         this.state.currentQuestionStart = null;
     },
 
-    // ... Continues in Batch 2 ...
+    // ... Continues in Part 2 ...
     // ============================================================
     // 2. DRIFT-PROOF TIMER & TIME TRACKING
     // ============================================================
@@ -104,32 +148,33 @@ const Engine = {
      * @param {Function} endCallback - Called when time runs out
      */
     startTimer(tickCallback, endCallback) {
+        // Prevent double-starting
         if (this.state.timer.isActive) this.stopTimer();
 
         this.state.timer.isActive = true;
         this.state.timer.startTime = Date.now();
         this.state.timer.expected = Date.now() + 1000;
         
-        // Start tracking the first question immediately
+        // Start tracking time for the first question immediately
         this.state.currentQuestionStart = Date.now();
 
-        // The recursive step function
+        // The recursive step function (Self-correcting loop)
         const step = () => {
             if (!this.state.timer.isActive) return;
 
             const now = Date.now();
-            const dt = now - this.state.timer.expected; // The drift
+            const dt = now - this.state.timer.expected; // The drift (lag)
 
-            // If drift is huge (>1s), browser was likely sleeping.
-            // We accept the time loss (exam simulation) but reset the drift target.
+            // If drift is huge (>1s), browser was likely sleeping/tab switched.
+            // We accept the time loss (keep exam clock true to wall clock)
+            // but reset the expectation to avoid a burst of fast ticks.
             if (dt > 1000) {
-                // Optional: You could pause here, but for UPSC mocks, clock keeps ticking.
                 this.state.timer.expected = now;
             }
 
             this.state.timer.remaining--;
 
-            // Execute UI Callback (Update Timer Display)
+            // Execute UI Callback (Update the visual display)
             if (tickCallback) {
                 try {
                     tickCallback(this.state.timer.remaining);
@@ -143,7 +188,7 @@ const Engine = {
                 this.stopTimer();
                 if (endCallback) endCallback();
             } else {
-                // Schedule next tick, subtracting the drift time
+                // Schedule next tick, subtracting the drift time to stay accurate
                 this.state.timer.expected += 1000;
                 this.state.timer.intervalId = setTimeout(step, Math.max(0, 1000 - dt));
             }
@@ -153,6 +198,9 @@ const Engine = {
         this.state.timer.intervalId = setTimeout(step, 1000);
     },
 
+    /**
+     * Stops the timer completely.
+     */
     stopTimer() {
         if (this.state.timer.intervalId) {
             clearTimeout(this.state.timer.intervalId);
@@ -165,6 +213,9 @@ const Engine = {
     // 3. INTERACTION & NAVIGATION LOGIC
     // ============================================================
 
+    /**
+     * Returns the current active question object.
+     */
     getCurrentQuestion() {
         // Safety check
         if (!this.state.questions || !this.state.questions[this.state.currentIndex]) {
@@ -174,41 +225,60 @@ const Engine = {
     },
 
     /**
+     * Gets simple progress stats for the UI progress bar.
+     */
+    getProgress() {
+        return {
+            current: this.state.currentIndex,
+            total: this.state.totalQuestions,
+            percent: ((this.state.currentIndex + 1) / this.state.totalQuestions) * 100
+        };
+    },
+
+    /**
      * Records the user's answer and the time spent on that specific question.
      * @param {Number} answerIndex - The index of the selected option (0-3)
      */
     submitAnswer(answerIndex) {
         const now = Date.now();
-        // Calculate time spent on THIS question since it was displayed
+        // Calculate how long user looked at THIS question since entry
         const timeSpentOnThis = (now - this.state.currentQuestionStart) / 1000; 
 
         // Update the userAnswers array safely
         this.state.userAnswers[this.state.currentIndex] = {
             qId: this.state.questions[this.state.currentIndex].id,
             selected: answerIndex,
-            // Accumulate time if they visited this question before
+            // Accumulate time if they visited this question before (e.g., navigated back)
             timeSpent: (this.state.userAnswers[this.state.currentIndex]?.timeSpent || 0) + parseFloat(timeSpentOnThis.toFixed(1))
         };
         
-        // Reset the question timer for accurate tracking if they stay on page
+        // Reset the question timer (so we don't double count if they change answer)
         this.state.currentQuestionStart = Date.now();
     },
 
+    /**
+     * Moves to the next question.
+     * @returns {Boolean} True if moved, False if at end.
+     */
     nextQuestion() {
         if (this.state.currentIndex < this.state.questions.length - 1) {
-            this._updateTimeSpentBeforeMove(); // Record time for current Q before leaving
+            this._updateTimeSpentBeforeMove(); // Save time stats before leaving
             this.state.currentIndex++;
-            this.state.currentQuestionStart = Date.now(); // Start timer for new Q
+            this.state.currentQuestionStart = Date.now(); // Start clock for new Q
             return true;
         }
         return false;
     },
 
+    /**
+     * Moves to the previous question.
+     * @returns {Boolean} True if moved, False if at start.
+     */
     prevQuestion() {
         if (this.state.currentIndex > 0) {
-            this._updateTimeSpentBeforeMove(); // Record time for current Q before leaving
+            this._updateTimeSpentBeforeMove(); // Save time stats before leaving
             this.state.currentIndex--;
-            this.state.currentQuestionStart = Date.now(); // Start timer for previous Q
+            this.state.currentQuestionStart = Date.now(); // Start clock for prev Q
             return true;
         }
         return false;
@@ -216,7 +286,7 @@ const Engine = {
 
     /**
      * Internal: Updates the time spent on the current question before navigating away.
-     * Ensures that time spent "thinking" but not answering is still captured.
+     * Ensures "thinking time" is captured even if no answer is selected yet.
      */
     _updateTimeSpentBeforeMove() {
         const now = Date.now();
@@ -232,7 +302,7 @@ const Engine = {
         this.state.userAnswers[this.state.currentIndex] = existingRecord;
     },
 
-    // ... Continues in Batch 3 ...
+    // ... Continues in Part 3 ...
     // ============================================================
     // 4. SCORING & ANALYTICS
     // ============================================================
@@ -257,7 +327,12 @@ const Engine = {
             csat: { correct: 2.5, wrong: 0.833 }
         };
 
-        const isCsatSchema = (subjectId === 'csat' || questions[0]?.tags?.includes('math'));
+        // Auto-detect CSAT based on subject ID or tags
+        const isCsatSchema = (subjectId === 'csat' || 
+                             subjectId === 'quant' || 
+                             subjectId === 'reasoning' || 
+                             questions[0]?.tags?.includes('math'));
+                             
         const schema = isCsatSchema ? defaults.csat : defaults.gs1;
 
         let correct = 0;
@@ -282,17 +357,18 @@ const Engine = {
                 } else {
                     wrong++;
                     // Push full question to mistakes array for Revision Mode
+                    // We attach the user's wrong answer for context
                     mistakes.push({
                         ...q, 
-                        userSelected: userAns.selected // Store what they guessed
+                        userSelected: userAns.selected 
                     });
                 }
             }
         });
 
-        // Score Calculation
+        // Score Calculation (Negative Marking)
         const rawScore = (correct * schema.correct) - (wrong * schema.wrong);
-        // Clamp to 0 (No negative total scores in this app logic)
+        // Clamp to 0 (No negative total scores allowed in UI)
         const finalScore = Math.max(0, parseFloat(rawScore.toFixed(2))); 
         
         // Accuracy Calculation
@@ -314,22 +390,48 @@ const Engine = {
             timestamp: Date.now()
         };
     },
+    
+    // ============================================================
+    // 5. SESSION SAVER (THE HANDSHAKE END)
+    // ============================================================
 
     /**
-     * Utility: Jump to specific question index
-     * Used by the Question Palette (Future Feature)
+     * Calculates and saves the result to Store.js.
+     * Called by Main.js when user clicks "Submit Test".
+     * @returns {Promise<String>} The Result ID (for navigation)
      */
-    jumpTo(index) {
-        if (index >= 0 && index < this.state.questions.length) {
-            this._updateTimeSpentBeforeMove();
-            this.state.currentIndex = index;
-            this.state.currentQuestionStart = Date.now();
-            return true;
+    async endSession() {
+        if (typeof Store === 'undefined') {
+            console.error("Engine: Store missing! Cannot save results.");
+            return null;
         }
-        return false;
+
+        // 1. Identify Subject
+        // We retrieve the active subject from Main.js since Engine doesn't store the ID string directly
+        const subject = (typeof Main !== 'undefined') ? Main.activeQuizSubject : 'unknown';
+        
+        // 2. Calculate Stats
+        const result = this.calculateResult(subject);
+
+        // 3. Save to Database (Async Handshake)
+        try {
+            const resultId = await Store.saveResult(result);
+            
+            // 4. Save Mistakes to Revision Deck
+            if (result.mistakes && result.mistakes.length > 0) {
+                Store.saveMistakes(result.mistakes);
+            }
+
+            console.log(`Engine: Session saved. Score: ${result.score}`);
+            return resultId;
+
+        } catch (error) {
+            console.error("Engine: Save failed", error);
+            return null;
+        }
     }
 };
 
-// Expose to Window
+// Expose to Window so Main.js can find it
 window.Engine = Engine;
 
