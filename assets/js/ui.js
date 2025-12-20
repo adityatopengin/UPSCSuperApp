@@ -2,7 +2,7 @@
  * UI.js - The Visual Controller
  * Handles all DOM manipulation, animations, and the new Intro/Modal systems.
  */
-const UI = {
+var UI = {
     // State to track active modals and audio players
     activeModal: null,
     audioPlayer: null,
