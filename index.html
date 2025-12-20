@@ -6,7 +6,8 @@
     
     <title>UPSC SuperApp | Gyan Amala</title>
     <meta name="description" content="AI-Powered UPSC Preparation Tracker & Mock Test Engine">
-    <meta name="theme-color" content="#4f46e5"> <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#4f46e5"> 
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" href="assets/img/favicon.png">
@@ -19,7 +20,8 @@
                 extend: {
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
-                        display: ['Lexend', 'sans-serif'] // Used in UI.js headings
+                        display: ['Lexend', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'] 
                     },
                     animation: {
                         'float': 'float 6s ease-in-out infinite',
@@ -40,14 +42,71 @@
     </script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&family=Lexend:wght@400;600;800&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&family=Lexend:wght@400;600;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
+
+    <style>
+        /* Floating Debug Button */
+        #debug-toggler {
+            position: fixed;
+            bottom: 120px; /* Above the footer */
+            left: 20px;
+            z-index: 9999;
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #4ade80; /* Green-400 */
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            border: 1px solid rgba(74, 222, 128, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            opacity: 0.5;
+        }
+        #debug-toggler:hover, #debug-toggler.active {
+            opacity: 1;
+            transform: scale(1.1);
+            background: black;
+        }
+
+        /* The Hidden Console Panel */
+        #debug-panel {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 35vh; /* Takes up bottom 35% of screen when open */
+            background: rgba(15, 23, 42, 0.95); /* Slate-900 */
+            backdrop-filter: blur(10px);
+            border-top: 1px solid #334155;
+            z-index: 9998;
+            padding: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: #cbd5e1;
+            overflow-y: auto;
+            transform: translateY(100%); /* Hidden by default */
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column-reverse; /* New logs at bottom */
+        }
+        #debug-panel.open {
+            transform: translateY(0);
+        }
+
+        /* Log Entry Styles */
+        .log-entry { margin-bottom: 4px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 2px; }
+        .log-info { color: #94a3b8; }
+        .log-warn { color: #facc15; }
+        .log-error { color: #f87171; font-weight: bold; }
+        .log-success { color: #4ade80; }
+    </style>
 </head>
-    <body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 transition-colors duration-300 min-h-screen selection:bg-indigo-500 selection:text-white">
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 transition-colors duration-300 min-h-screen selection:bg-indigo-500 selection:text-white">
 
     <div id="loading-screen" class="fixed inset-0 z-[100] bg-white dark:bg-slate-900 flex flex-col items-center justify-center transition-opacity duration-500">
         <div class="relative">
@@ -63,6 +122,77 @@
 
     <main id="app-container" class="max-w-md mx-auto min-h-screen relative shadow-2xl shadow-slate-200 dark:shadow-black/50 bg-white dark:bg-slate-900 overflow-hidden">
         </main>
+
+    <div id="debug-toggler" onclick="toggleConsole()">
+        <i class="fa-solid fa-terminal text-sm"></i>
+    </div>
+
+    <div id="debug-panel">
+        <div class="text-center text-[9px] text-slate-500 pb-2 border-b border-slate-700 mb-2">
+            --- SYSTEM LOGS START ---
+        </div>
+        </div>
+
+    <script>
+        // A. Toggle Functionality
+        function toggleConsole() {
+            const panel = document.getElementById('debug-panel');
+            const btn = document.getElementById('debug-toggler');
+            panel.classList.toggle('open');
+            btn.classList.toggle('active');
+        }
+
+        // B. Console Override (Pipe logs to screen)
+        (function() {
+            const panel = document.getElementById('debug-panel');
+            
+            // Helper to add log line
+            function addLog(message, type) {
+                const line = document.createElement('div');
+                line.className = 'log-entry ' + type;
+                
+                // Timestamp
+                const time = new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute:'2-digit', second:'2-digit' });
+                
+                // Format objects nicely
+                let text = message;
+                if (typeof message === 'object') {
+                    try { text = JSON.stringify(message); } catch(e) { text = '[Object]'; }
+                }
+                
+                line.innerHTML = `<span class="opacity-50">[${time}]</span> ${text}`;
+                panel.prepend(line); // Newest at bottom visually due to flex-direction: column-reverse
+            }
+
+            // Capture 'console.log'
+            const oldLog = console.log;
+            console.log = function(...args) {
+                oldLog.apply(console, args);
+                addLog(args.join(' '), 'log-info');
+            };
+
+            // Capture 'console.warn'
+            const oldWarn = console.warn;
+            console.warn = function(...args) {
+                oldWarn.apply(console, args);
+                addLog(args.join(' '), 'log-warn');
+            };
+
+            // Capture 'console.error'
+            const oldError = console.error;
+            console.error = function(...args) {
+                oldError.apply(console, args);
+                addLog(args.join(' '), 'log-error');
+            };
+            
+            // Capture 'console.info' (Green for success usually)
+            console.info = function(...args) {
+                oldLog.apply(console, args); // Use standard log for browser
+                addLog(args.join(' '), 'log-success');
+            };
+
+        })();
+    </script>
 
     <script src="assets/js/config.js" defer></script>
     <script src="assets/js/store.js" defer></script> 
@@ -80,77 +210,14 @@
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./service-worker.js')
-                    .then(reg => console.log('✅ Service Worker Registered. Scope:', reg.scope))
-                    .catch(err => console.error('❌ Service Worker Registration Failed:', err));
+                    .then(reg => {
+                        console.info('✅ Service Worker Registered. Scope:', reg.scope);
+                    })
+                    .catch(err => {
+                        console.error('❌ Service Worker Registration Failed:', err);
+                    });
             });
         }
     </script>
-        <div id="debug-console" style="
-    position: fixed; 
-    bottom: 0; 
-    left: 0; 
-    width: 100%; 
-    height: 35vh; 
-    background: rgba(0, 0, 0, 0.9); 
-    color: #00ff00; 
-    font-family: 'Courier New', monospace; 
-    font-size: 11px; 
-    padding: 10px; 
-    overflow-y: scroll; 
-    z-index: 99999; 
-    border-top: 2px solid #00ff00;
-    word-wrap: break-word;
-">
-    <div style="color: #fff; font-weight: bold; border-bottom: 1px solid #333; padding-bottom: 5px; margin-bottom: 5px;">
-        ⚠️ LIVE DEBUGGER ACTIVE
-    </div>
-</div>
-
-<script>
-    (function() {
-        const debugBox = document.getElementById('debug-console');
-
-        function printToScreen(message, color) {
-            const div = document.createElement('div');
-            div.style.color = color;
-            div.style.marginBottom = '4px';
-            div.style.borderBottom = '1px solid #222';
-            div.innerText = `> ${message}`;
-            debugBox.appendChild(div);
-            debugBox.scrollTop = debugBox.scrollHeight; // Auto-scroll to bottom
-        }
-
-        // 1. Capture Standard Logs
-        const oldLog = console.log;
-        console.log = function(...args) {
-            const msg = args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ');
-            printToScreen(msg, '#ffffff'); // White text
-            oldLog.apply(console, args);
-        };
-
-        // 2. Capture Errors (The most important part)
-        const oldError = console.error;
-        console.error = function(...args) {
-            const msg = args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ');
-            printToScreen(`❌ ERROR: ${msg}`, '#ff4444'); // Red text
-            oldError.apply(console, args);
-        };
-
-        // 3. Capture "Silent" Syntax Errors (e.g., missing brackets)
-        window.onerror = function(message, source, lineno, colno, error) {
-            const file = source ? source.split('/').pop() : 'Unknown';
-            printToScreen(`☠️ CRITICAL: ${message} \n   at ${file}:${lineno}`, '#ff00ff'); // Magenta text
-        };
-        
-        // 4. Capture Unhandled Promise Rejections (Async errors)
-        window.addEventListener('unhandledrejection', function(event) {
-            printToScreen(`⚠️ ASYNC ERROR: ${event.reason}`, '#ffa500'); // Orange text
-        });
-
-        console.log("Debug Console Ready. Waiting for App...");
-    })();
-</script>
-
 </body>
 </html>
-
