@@ -58,7 +58,7 @@ const UI = {
 
     renderHeader(container, user) {
         const timeOfDay = new Date().getHours() < 12 ? 'Good Morning' : 'Good Evening';
-        const streak = window.Store ? Store.get('streak', 1) : 1; // Safety check for Store
+        const streak = window.Store ? Store.getAppSettings('streak', 1) : 1; // Safety check for Store
         
         container.innerHTML = `
         <div class="flex items-center justify-between pb-6 animate-fade-in-down select-none">
