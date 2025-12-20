@@ -1,97 +1,33 @@
-{
-  "subject": "Ancient History",
-  "questions": [
-    {
-      "id": "anc_001",
-      "question": "Regarding the Indus Valley Civilization (IVC), which of the following statements is/are correct?\n1. The inhabitants used both cotton and wool.\n2. The civilization was primarily secular; religious elements, though present, did not dominate the social scene.\n3. Harappans were the first to produce silver in the world.",
-      "options": [
-        "1 and 2 only",
-        "2 and 3 only",
-        "1 and 3 only",
-        "1, 2, and 3"
-      ],
-      "answer": 0,
-      "topic": "Indus Valley Civilization",
-      "difficulty": "Moderate",
-      "tags": ["IVC", "Culture"],
-      "explanation": {
-        "core": "Spindles and whorls found in excavations prove the use of cotton and wool. While the 'Proto-Shiva' seal and Mother Goddess figurines exist, there is no evidence of large temples or a dominant priestly class, making it secular in social organization. Silver was indeed used, but its production 'first in the world' is traditionally attributed to the Chalcolithic cultures of the Near East or specifically identified later; however, in a UPSC context, statement 3 is often considered debatable or false compared to the definitive nature of 1 and 2.",
-        "expert_note": "Focus on the absence of monumental religious structures (like Ziggurats of Mesopotamia) to distinguish IVC from other contemporary civilizations.",
-        "elimination": "Statement 3 is often a trap. While Harappans used silver, the 'first in the world' claim is a common distractor used by UPSC to test specific archaeological certainty."
-      }
-    },
-    {
-      "id": "anc_002",
-      "question": "With reference to the religious history of India, consider the following statements:\n1. Sautantrika and Sammitya were the sects of Jainism.\n2. Sarvastivadin held that the constituents of phenomena were not wholly momentary, but existed forever in a latent form.",
-      "options": [
-        "1 only",
-        "2 only",
-        "Both 1 and 2",
-        "Neither 1 nor 2"
-      ],
-      "answer": 1,
-      "topic": "Buddhism & Jainism",
-      "difficulty": "Hard",
-      "tags": ["Buddhism", "Sects"],
-      "explanation": {
-        "core": "Sautantrika and Sammitya are actually sub-sects of Buddhism, not Jainism. The Sarvastivada school (a branch of Theravada) believed that all things (dharmas) exist in the past, present, and future, which aligns with statement 2.",
-        "expert_note": "UPSC frequently swaps names of sects between Buddhism and Jainism. Memorize the 'S-sect' names carefully.",
-        "mnemonics": "S-S-B: Sautantrika, Sammitya, Sarvastivada = Buddhism."
-      }
-    },
-    {
-      "id": "anc_003",
-      "question": "Which of the following phrases defines the nature of 'Hundi' generally referred to in the sources of the post-Harsha period?",
-      "options": [
-        "An advisory issued by the king to his subordinates",
-        "A diary to be maintained for daily accounts",
-        "A bill of exchange",
-        "An order from the feudal lord to his vassals"
-      ],
-      "answer": 2,
-      "topic": "Economic History",
-      "difficulty": "Easy",
-      "tags": ["Economy", "Terms"],
-      "explanation": {
-        "core": "A Hundi is a financial instrument developed in Medieval India for use in trade and credit transactions. It served as a bill of exchange—a written order by one person directing another to pay a specific sum to a third party.",
-        "expert_note": "Terminologies are a high-yield area. Always maintain a glossary of terms found in the New NCERTs (Class 6 and 12)."
-      }
-    },
-    {
-      "id": "anc_004",
-      "question": "The concept of 'Eight-fold Path' forms the theme of:",
-      "options": [
-        "Dipavamsa",
-        "Divyavadana",
-        "Mahaparinibbana Sutta",
-        "Dharma Chakra Pravartana Sutta"
-      ],
-      "answer": 3,
-      "topic": "Buddhism",
-      "difficulty": "Moderate",
-      "tags": ["Philosophy"],
-      "explanation": {
-        "core": "The Ashtangika Marga (Eight-fold Path) was first introduced by Buddha in his first sermon at Sarnath. This sermon is recorded in the Dharma Chakra Pravartana Sutta (The Setting in Motion of the Wheel of Dharma).",
-        "expert_note": "Do not confuse the Suttas. Mahaparinibbana deals with Buddha's death, while Dharma Chakra deals with the core philosophy of Four Noble Truths."
-      }
-    },
-    {
-      "id": "anc_005",
-      "question": "Consider the following pairs:\n1. Ashoka - Devanampiya\n2. Chandragupta Maurya - Sandrocottus\n3. Bindusara - Amitraghata\nWhich of the pairs given above is/are correctly matched?",
-      "options": [
-        "1 only",
-        "1 and 2 only",
-        "3 only",
-        "1, 2 and 3"
-      ],
-      "answer": 3,
-      "topic": "Mauryan Empire",
-      "difficulty": "Easy",
-      "tags": ["Mauryas", "Titles"],
-      "explanation": {
-        "core": "All three are correct titles. Ashoka was 'Beloved of the Gods' (Devanampiya). Chandragupta was identified by Greek scholars as Sandrocottus. Bindusara was known as Amitraghata (Slayer of foes).",
-        "expert_note": "These titles are fundamental. Mauryan administration and nomenclature are frequent targets for 'Match the Following' questions."
-      }
+[
+  {
+    "id": 1,
+    "question": "Which of the following Harappan sites is known for the discovery of a 'Great Bath'?",
+    "options": ["Kalibangan", "Lothal", "Mohenjo-daro", "Harappa"],
+    "answer": 2,
+    "difficulty": "Easy",
+    "tags": ["Indus Valley", "Architecture"],
+    "explanation": {
+        "core": "The Great Bath is one of the most well-known structures among the ruins of the ancient Indus Valley Civilization at Mohenjo-daro in Sindh, Pakistan.",
+        "expert_note": "It is cited as the earliest 'public water tank' of the ancient world."
     }
-  ]
-}
+  },
+  {
+    "id": 2,
+    "question": "The famous 'Gayatri Mantra' is addressed to which deity?",
+    "options": ["Indra", "Savitr", "Varuna", "Agni"],
+    "answer": 1,
+    "difficulty": "Moderate",
+    "tags": ["Vedic Period", "Culture"],
+    "explanation": "The Gayatri Mantra is a highly revered mantra from the Rig Veda, dedicated to Savitr, the sun deity."
+  },
+  {
+    "id": 3,
+    "question": "Who among the following was the court poet of Harsha?",
+    "options": ["Banabhatta", "Kalidasa", "Chand Bardai", "Bhavabhuti"],
+    "answer": 0,
+    "difficulty": "Easy",
+    "tags": ["Gupta Age", "Literature"],
+    "explanation": "Banabhatta was the Asthana Kavi (Court Poet) in the court of King Harsha-Vardhana. He wrote the 'Harshacharita'."
+  }
+]
+ 
